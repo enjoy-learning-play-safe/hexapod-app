@@ -1,7 +1,14 @@
 import React from 'react';
 
+import TitleBar from './components/TitleBar';
+
 function App() {
-  return <div>Hello I am react!</div>;
+  return (
+    <div>
+      <TitleBar />
+      Hello I am react!
+    </div>
+  );
 }
 
 export default App;

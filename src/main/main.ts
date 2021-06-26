@@ -3,16 +3,23 @@
  */
 import * as path from 'path';
 import * as url from 'url';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserWindow, app } from 'electron';
 
 let mainWindow: Electron.BrowserWindow | null;
 
-function createWindow(): void {
+async function createWindow(): Promise<void> {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
+    autoHideMenuBar: true,
+    titleBarStyle: 'hiddenInset',
+    trafficLightPosition: {
+      x: 20,
+      y: 32,
+    },
     webPreferences: {
       webSecurity: false,
       devTools: process.env.NODE_ENV !== 'production',
@@ -20,13 +27,22 @@ function createWindow(): void {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, './index.html'),
-      protocol: 'file:',
-      slashes: true,
-    }),
-  ).finally(() => { /* no action */ });
+  if (process.env.NODE_ENV === 'development') {
+    await mainWindow.loadURL('http://localhost:4000');
+    mainWindow.webContents.openDevTools();
+  } else {
+    mainWindow
+      .loadURL(
+        url.format({
+          pathname: path.join(__dirname, './index.html'),
+          protocol: 'file:',
+          slashes: true,
+        })
+      )
+      .finally(() => {
+        /* no action */
+      });
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
