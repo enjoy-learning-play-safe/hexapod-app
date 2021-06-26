@@ -4,18 +4,12 @@
     "browser": true,
     "node": true
   },
-  "extends": [
-    "airbnb",
-    "airbnb/hooks"
-  ],
+  "extends": ["airbnb", "airbnb/hooks"],
   "rules": {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": [
-          "**/webpack.*",
-          "test/**/*"
-        ]
+        "devDependencies": ["**/webpack.*", "test/**/*"]
       }
     ],
     "max-len": [
@@ -29,12 +23,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
       "webpack": {
         "config": "./webpack.config.js"
@@ -43,17 +32,12 @@
   },
   "overrides": [
     {
-      "files": [
-        "**/*.ts",
-        "**/*.tsx"
-      ],
+      "files": ["**/*.ts", "**/*.tsx"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "project": "./tsconfig.json"
       },
-      "plugins": [
-        "@typescript-eslint"
-      ],
+      "plugins": ["@typescript-eslint"],
       "extends": [
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
@@ -62,11 +46,37 @@
       "rules": {
         // This rule is already covered by the TypeScript compiler.
         "import/default": "off",
-        // This rule is already covered by the TypeScript compiler.
+        "import/order": [
+          "error",
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              ["index", "sibling", "parent", "object"]
+            ],
+            // default is builtin, external; but we want to divide up externals into groups also
+            "pathGroupsExcludedImportTypes": ["builtin"],
+            // define material-ui group that will appear separately after other main externals
+            "pathGroups": [
+              {
+                "pattern": "@material-ui/**",
+                "group": "external",
+                "position": "after"
+              }
+            ],
+            "newlines-between": "always-and-inside-groups",
+            "alphabetize": { "order": "asc", "caseInsensitive": true }
+          }
+        ],
+        "import/extensions": "off",
         "import/no-unresolved": "off",
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": "warn",
-        "react/jsx-filename-extension": "off"
+        "react/jsx-filename-extension": "off",
+        "sort-imports": "off",
+        "comma-dangle": "off",
+        "arrow-body-style": "off"
       }
     }
   ]

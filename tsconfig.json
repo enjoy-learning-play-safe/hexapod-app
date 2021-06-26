@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "baseUrl": ".",
     "paths": {
@@ -17,7 +16,8 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "sourceMap": true,
-    "target": "esnext"
+    "target": "es5",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules"]
 }
