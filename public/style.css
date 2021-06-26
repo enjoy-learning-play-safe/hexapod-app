@@ -1,8 +1,12 @@
+body {
+  margin: 0;
+}
+
 .app {
   color: grey;
 }
 
 .electron-draggable {
-  -webkit-user-select: none;
+  user-select: none;
   -webkit-app-region: drag;
 }

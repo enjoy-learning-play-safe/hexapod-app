@@ -1,4 +1,5 @@
 const path = require('path');
+const ReactRefreshTypeScript = require('react-refresh-typescript');
 
 function srcPaths(src) {
   return path.join(__dirname, src);
@@ -29,7 +30,16 @@ const commonConfig = {
       {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
-        loader: 'ts-loader',
+        use: [
+          {
+            loader: require.resolve('ts-loader'),
+            options: {
+              getCustomTransformers: () => ({
+                before: isEnvDevelopment ? [ReactRefreshTypeScript()] : [],
+              }),
+            },
+          },
+        ],
       },
       {
         test: /\.(scss|css)$/,

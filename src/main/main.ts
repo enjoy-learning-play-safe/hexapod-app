@@ -21,7 +21,8 @@ async function createWindow(): Promise<void> {
       y: 32,
     },
     webPreferences: {
-      webSecurity: false,
+      // webSecurity: false,
+      nodeIntegration: true,
       devTools: process.env.NODE_ENV !== 'production',
     },
   });
