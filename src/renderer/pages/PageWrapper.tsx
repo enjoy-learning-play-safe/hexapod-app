@@ -1,15 +1,22 @@
 import React from 'react';
 
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 
-interface Props {
+interface Props extends FlexProps {
   children: React.ReactNode;
 }
 
 const PageWrapper = (props: Props): JSX.Element => {
-  const { children } = props;
+  const { children, ...passedProps } = props;
   return (
-    <Flex flexDirection="column" p={4} flexDir="column">
+    <Flex
+      flexDirection="column"
+      flex={1}
+      p={4}
+      flexDir="column"
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...passedProps}
+    >
       {children}
     </Flex>
   );

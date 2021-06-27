@@ -493,7 +493,7 @@
     "@chakra-ui/checkbox" "1.5.3"
     "@chakra-ui/utils" "1.8.0"
 
-"@chakra-ui/system@1.7.0":
+"@chakra-ui/system@1.7.0", "@chakra-ui/system@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@chakra-ui/system/-/system-1.7.0.tgz#2cd05beabeb5a2ceceaaa628760b194093ab93f4"
   integrity sha512-/ke6XjsZ5RwSuxQh9BKdAZZ36buDmUjZb6lcYgYdPW365L9ZwFnT9jlIv3ch729O4xfzXPuIh1pCdrv+iu4PWw==

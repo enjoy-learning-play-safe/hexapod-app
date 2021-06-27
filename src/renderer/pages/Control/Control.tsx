@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 
-import { Flex, Heading } from '@chakra-ui/react';
+// eslint-disable-next-line object-curly-newline
+import { Heading } from '@chakra-ui/react';
 
-import ControlSlider from './ControlSlider';
+import PageWrapper from '../PageWrapper';
+import ControlInput from './ControlInput';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
@@ -12,15 +14,13 @@ const Control = (props: Props): JSX.Element => {
   const axes = ['X', 'Y', 'Z', 'Roll', 'Pitch', 'Yaw'];
 
   return (
-    <Flex p={4} flexDir="column" alignItems="center">
+    <PageWrapper>
       <Heading variant="h3" mb={6}>
-        Control
+        Control Hexapod™
       </Heading>
 
-      {axes.map((axisName) => (
-        <ControlSlider axisName={axisName} />
-      ))}
-    </Flex>
+      <ControlInput axes={axes} />
+    </PageWrapper>
   );
 };
 

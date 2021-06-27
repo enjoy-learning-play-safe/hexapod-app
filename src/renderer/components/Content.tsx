@@ -1,5 +1,6 @@
-import { Flex } from '@chakra-ui/react';
 import React from 'react';
+
+import { Flex } from '@chakra-ui/react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 const Content = (props: Props) => {
   const { children } = props;
   return (
-    <Flex flex={1} flexDirection="column">
+    <Flex flex={1} flexDirection="column" alignSelf="stretch">
       {children}
     </Flex>
   );

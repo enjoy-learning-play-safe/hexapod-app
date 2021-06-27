@@ -1,6 +1,7 @@
 // eslint-disable-next-line object-curly-newline
-import { Flex, Icon as ChakraIcon, Spacer, Text } from '@chakra-ui/react';
 import React from 'react';
+
+import { Flex, Icon as ChakraIcon, Spacer, Text } from '@chakra-ui/react';
 // eslint-disable-next-line object-curly-newline
 import {
   IoHome,
@@ -80,7 +81,7 @@ const SideBar = (props: Props) => {
       </SidebarItem>
       <SidebarItem href="">
         <Icon as={IoBagHandle} />
-        Shop Upgrades
+        Upgrade Hexapod
       </SidebarItem>
       <Spacer />
       <SidebarItem href="/user-guide">
