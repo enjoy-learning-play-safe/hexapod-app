@@ -1,5 +1,6 @@
 appId: com.hexapod.app
 productName: Hexapod
+publish: null
 directories:
   app: ./dist/
   output: ./out/
