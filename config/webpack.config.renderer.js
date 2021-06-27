@@ -21,8 +21,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'),
     }),
-    isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
-    isEnvDevelopment && new ReactRefreshWebpackPlugin(),
+    ...(isEnvDevelopment
+      ? [
+          new webpack.HotModuleReplacementPlugin(),
+          new ReactRefreshWebpackPlugin(),
+        ]
+      : []),
   ],
   devServer: {
     contentBase: path.join(__dirname, '../dist/renderer'),
