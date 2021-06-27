@@ -1,0 +1,28 @@
+name: Greetings
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  greeting:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node env
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Transpile, build and dist electron bundles
+        run: |
+          yarn run quickbuild:freshen
+
+      - name: Create Release with Artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,7 @@
 git:
   commitMessage: "Release: v${version}"
-  tagAnnotation: Release ${version}
+  tagName: "v${version}"
+  tagAnnotation: "Release v${version}"
 github:
   release: false
 npm:
