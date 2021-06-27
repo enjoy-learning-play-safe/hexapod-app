@@ -8,10 +8,11 @@ const TitleBar = (props: Props) => {
       className="electron-draggable"
       style={{
         width: '100%',
-        height: 32,
+        height: 40,
+        backgroundColor: 'cyan',
       }}
     >
-      i am TitleBar.ts !!!!
+      titlebar goes here
     </div>
   );
 };

@@ -11,7 +11,8 @@ const isEnvDevelopment = process.env.NODE_ENV === 'development';
 module.exports = {
   ...commonConfig,
   entry: './src/renderer/renderer.tsx',
-  target: 'electron-renderer',
+  // target: 'electron-renderer',
+  target: 'web',
   output: {
     ...commonConfig.output,
     filename: 'renderer.bundle.js',
