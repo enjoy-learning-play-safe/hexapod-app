@@ -8,6 +8,7 @@ import {
   IoHammer,
   IoCog,
   IoBagHandle,
+  IoGameController,
 } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -31,15 +32,16 @@ interface SidebarItemProps {
 
 const SidebarItem = (props: SidebarItemProps) => {
   const { children, href } = props;
+  const { pathname } = useLocation();
 
-  const active = useLocation().pathname === href;
+  const active = `/${pathname.split('/')[1]}` === href;
   return (
     <Link to={href}>
       <Flex
         my={2}
         py={2}
         px={2}
-        bg={active ? 'brand.600' : 'gray.800'}
+        bg={active ? 'brand.500' : 'gray.800'}
         borderRadius="sm"
         justifyContent="flex-start"
         alignItems="center"
@@ -58,14 +60,18 @@ interface Props {}
 
 const SideBar = (props: Props) => {
   return (
-    <Flex flex="0 0 12em" flexDirection="column" px={2} pt={2} bg="gray.900">
+    <Flex flex="0 0 13em" flexDirection="column" px={2} pt={2} bg="gray.900">
       <SidebarItem href="/">
         <Icon as={IoHome} />
         Home
       </SidebarItem>
-      <SidebarItem href="/axis-assignment">
+      <SidebarItem href="/control">
+        <Icon as={IoGameController} />
+        Control
+      </SidebarItem>
+      <SidebarItem href="/axis-config">
         <Icon as={IoAnalytics} />
-        Axis Assignment
+        Axis Configuration
       </SidebarItem>
       <SidebarItem href="/debug">
         <Icon as={IoHammer} />
@@ -73,7 +79,7 @@ const SideBar = (props: Props) => {
       </SidebarItem>
       <SidebarItem href="/buy/dlc">
         <Icon as={IoBagHandle} />
-        Buy DLC
+        Get DLC
       </SidebarItem>
       <Spacer />
       <SidebarItem href="/settings">
