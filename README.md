@@ -1,9 +1,20 @@
 # Hexapod-app
 
-Cross-platform electron app for controlling Hexapod.
+[![Build Executables](https://github.com/enjoy-learning-play-safe/hexapod-app/actions/workflows/build.yml/badge.svg)](https://github.com/enjoy-learning-play-safe/hexapod-app/actions/workflows/build.yml)
 
-This boilerplate currently works on macOS and Windows. If something doesn't
-work, please [file an issue](https://github.com/enjoy-learning-play-safe/hexapod-app/issues/new).
+💻 &nbsp; Cross-platform electron app for controlling Hexapod.
+
+💬 &nbsp; Check out the official blog for the Hexapod project: [https://blogs.ntu.edu.sg/ps9888-2021-g03/](https://blogs.ntu.edu.sg/ps9888-2021-g03/)
+
+🗳 &nbsp; If something doesn't work, please [file an issue](https://github.com/enjoy-learning-play-safe/hexapod-app/issues/new).
+
+## Releases:
+
+✨ &nbsp; Grab the latest (and greatest) release here: [https://github.com/enjoy-learning-play-safe/hexapod-app/releases/latest](https://github.com/enjoy-learning-play-safe/hexapod-app/releases/latest)
+
+💽 &nbsp; All releases are available here: [https://github.com/enjoy-learning-play-safe/hexapod-app/releases](https://github.com/enjoy-learning-play-safe/hexapod-app/releases)
+
+🚀 &nbsp; Built and released with Github Actions!
 
 ## Getting started
 
@@ -62,7 +73,7 @@ The build scripts are pre-configured to build 64 bit installers since 64 bit
 should be the standard for a modern applications. 32 bit builds are still
 possible by changing the build scripts in `package.json` as below:
 
-```json
+```jsonc
 // from
 "scripts": {
     ...
