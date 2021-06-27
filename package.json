@@ -1,7 +1,9 @@
 {
   "name": "electron-react-typescript-webpack-boilerplate",
-  "version": "3.0.0",
-  "description": "Pre-configured boilerplate for Electron + React + TypeScript",
+  "version": "0.0.1",
+  "description": "Electron app for hexapod",
+  "author": "Enjoy Learning Play Safe",
+  "license": "MIT",
   "main": "./dist/main.bundle.js",
   "scripts": {
     "quickstart": "yarn run dev",
@@ -15,34 +17,13 @@
     "prod:main": "cross-env NODE_ENV=production webpack --progress --mode production --color --config config/webpack.config.main.js",
     "prod:renderer": "cross-env NODE_ENV=production webpack --progress --mode production --color --config config/webpack.config.renderer.js",
     "build": "concurrently \" yarn run build:win \" \" yarn run build:mac \"",
-    "build:win": "electron-builder build --win --x64",
-    "build:mac": "electron-builder build --mac --x64",
+    "build:common": "electron-builder build --config config/electron-builder.json",
+    "build:win": "yarn run build:common --win --x64",
+    "build:mac": "yarn run build:common --mac --x64",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register \"test/**/*.ts\"",
     "clean": "rimraf dist/ node_modules/",
     "freshen": "yarn run clean && yarn install"
   },
-  "build": {
-    "appId": "com.devtography.electron_boilerplate",
-    "productName": "Electron+React+TypeScript Boilerplate",
-    "directories": {
-      "app": "./dist/",
-      "output": "./out/"
-    },
-    "mac": {
-      "target": "dmg"
-    },
-    "win": {
-      "target": "nsis",
-      "asar": true
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    },
-    "buildVersion": "1"
-  },
-  "author": "Wing Chau @Devtography",
-  "license": "MIT",
   "dependencies": {
     "normalize.css": "^8.0.1",
     "react": "^17.0.1",
@@ -94,17 +75,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Devtography/electron-react-typescript-webpack-boilerplate"
+    "url": "git+https://github.com/enjoy-learning-play-safe/hexapod-app"
   },
   "keywords": [
-    "boilerplate",
+    "Hexapod",
+    "Stewart Platform",
+    "GUI",
+    "Windows",
+    "Mac",
+    "Cross-platform",
     "Electron",
     "React",
     "Typescript",
     "Webpack"
   ],
   "bugs": {
-    "url": "https://github.com/Devtography/electron-react-typescript-webpack-boilerplate/issues"
+    "url": "https://github.com/enjoy-learning-play-safe/hexapod-app/issues"
   },
-  "homepage": "https://github.com/Devtography/electron-react-typescript-webpack-boilerplate#readme"
+  "homepage": "https://github.com/enjoy-learning-play-safe/hexapod-app#readme"
 }
