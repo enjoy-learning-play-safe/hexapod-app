@@ -77,7 +77,7 @@ const SideBar = (props: Props) => {
         <Icon as={IoHammer} />
         Test/Debug
       </SidebarItem>
-      <SidebarItem href="/buy/dlc">
+      <SidebarItem href="">
         <Icon as={IoBagHandle} />
         Get DLC
       </SidebarItem>
