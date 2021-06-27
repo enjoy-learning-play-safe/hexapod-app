@@ -8,7 +8,7 @@
   "scripts": {
     "quickstart": "yarn run dev",
     "quickstart:freshen": "yarn run freshen && yarn run quickstart",
-    "dev": "rimraf dist && concurrently \" yarn run dev:renderer \" \" yarn wait-on http://localhost:4000 && yarn run dev:main \" \" yarn wait-on dist/ && yarn run electron \" ",
+    "dev": "rimraf dist && concurrently --names \"renderer,--main--,electron\" \" yarn run dev:renderer \" \" yarn wait-on http://localhost:4000 && yarn run dev:main \" \" yarn wait-on dist/ && yarn run electron \" ",
     "dev:main": "cross-env NODE_ENV=development webpack --watch --mode development --color --config config/webpack.config.main.js",
     "dev:renderer": "cross-env NODE_ENV=development webpack serve --mode development --color --config config/webpack.config.renderer.js",
     "electron": "cross-env NODE_ENV=development electron ./dist/main.bundle.js",
@@ -23,12 +23,19 @@
     "build:mac": "yarn run build:common --mac --x64",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register \"test/**/*.ts\"",
     "clean": "rimraf dist/ node_modules/ out/",
-    "freshen": "yarn run clean && yarn install"
+    "freshen": "yarn run clean && yarn install",
+    "eslint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.6.4",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "focus-visible": "^5.2.0",
+    "framer-motion": "^4",
     "normalize.css": "^8.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },

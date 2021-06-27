@@ -57,9 +57,14 @@
               ["index", "sibling", "parent", "object"]
             ],
             // default is builtin, external; but we want to divide up externals into groups also
-            "pathGroupsExcludedImportTypes": ["builtin"],
+            "pathGroupsExcludedImportTypes": ["builtin", "react"],
             // define material-ui group that will appear separately after other main externals
             "pathGroups": [
+              {
+                "pattern": "react",
+                "group": "external",
+                "position": "before"
+              },
               {
                 "pattern": "@material-ui/**",
                 "group": "external",
