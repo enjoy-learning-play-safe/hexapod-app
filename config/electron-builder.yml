@@ -1,0 +1,15 @@
+appId: com.hexapod.app
+productName: Hexapod
+directories:
+  app: ./dist/
+  output: ./out/
+mac:
+  target: dmg
+  identity: null # change this to your signing identity
+win:
+  target: nsis
+  asar: true
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+buildVersion: "1"

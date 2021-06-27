@@ -18,11 +18,11 @@
     "prod:main": "cross-env NODE_ENV=production webpack --progress --mode production --color --config config/webpack.config.main.js",
     "prod:renderer": "cross-env NODE_ENV=production webpack --progress --mode production --color --config config/webpack.config.renderer.js",
     "build": "concurrently \" yarn run build:win \" \" yarn run build:mac \"",
-    "build:common": "electron-builder build --config config/electron-builder.json",
+    "build:common": "electron-builder build --config config/electron-builder.yml",
     "build:win": "yarn run build:common --win --x64",
     "build:mac": "yarn run build:common --mac --x64",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register \"test/**/*.ts\"",
-    "clean": "rimraf dist/ node_modules/",
+    "clean": "rimraf dist/ node_modules/ out/",
     "freshen": "yarn run clean && yarn install"
   },
   "dependencies": {
