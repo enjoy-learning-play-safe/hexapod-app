@@ -13,6 +13,7 @@
     "dev:renderer": "cross-env NODE_ENV=development webpack serve --mode development --color --config config/webpack.config.renderer.js",
     "electron": "cross-env NODE_ENV=development electron ./dist/main.bundle.js",
     "quickbuild": "yarn run prod && yarn run build",
+    "quickbuild:freshen": "yarn run freshen && yarn run prod && yarn run build",
     "prod": "rimraf dist && yarn run prod:main && yarn run prod:renderer",
     "prod:main": "cross-env NODE_ENV=production webpack --progress --mode production --color --config config/webpack.config.main.js",
     "prod:renderer": "cross-env NODE_ENV=production webpack --progress --mode production --color --config config/webpack.config.renderer.js",

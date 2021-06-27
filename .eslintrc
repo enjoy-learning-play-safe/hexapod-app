@@ -6,6 +6,7 @@
   },
   "extends": ["airbnb", "airbnb/hooks"],
   "rules": {
+    "indent": "off",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -44,7 +45,7 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
       ],
       "rules": {
-        // This rule is already covered by the TypeScript compiler.
+        // This rule is already covered by the TypeScript compiler.,
         "import/default": "off",
         "import/order": [
           "error",
