@@ -1,0 +1,7 @@
+git:
+  commitMessage: "Release: v${version}"
+  tagAnnotation: Release ${version}
+github:
+  release: false
+npm:
+  publish: false
