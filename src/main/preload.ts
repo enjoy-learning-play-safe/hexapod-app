@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
 console.log('hello, i am preload.ts (hopefully transpiled!)');
 
-export {};
+// TODO: add ipc code here
+
+export {}; // make this a module file
