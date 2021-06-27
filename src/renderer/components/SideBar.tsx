@@ -9,6 +9,7 @@ import {
   IoCog,
   IoBagHandle,
   IoGameController,
+  IoBook,
 } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -79,9 +80,13 @@ const SideBar = (props: Props) => {
       </SidebarItem>
       <SidebarItem href="">
         <Icon as={IoBagHandle} />
-        Get DLC
+        Shop Upgrades
       </SidebarItem>
       <Spacer />
+      <SidebarItem href="/user-guide">
+        <Icon as={IoBook} />
+        User Guide
+      </SidebarItem>
       <SidebarItem href="/settings">
         <Icon as={IoCog} />
         Settings

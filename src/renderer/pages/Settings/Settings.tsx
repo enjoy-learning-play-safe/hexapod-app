@@ -1,5 +1,7 @@
-import { Button, Flex, Heading, Spacer, Text } from '@chakra-ui/react';
+import { Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
+
+import HexapodMicrocontroller from './HexapodMicrocontroller';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
@@ -14,10 +16,7 @@ const Settings = (props: Props) => {
         General
       </Heading>
       <Text>Main settings go here</Text>
-      <Heading variant="h5" mt={6} mb={2}>
-        Microcontroller
-      </Heading>
-      <Button width={300}>Connect via serialport (USB)</Button>
+      <HexapodMicrocontroller />
     </Flex>
   );
 };

@@ -23,7 +23,8 @@
     "build:mac": "yarn run build:common --mac --x64",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register \"test/**/*.ts\"",
     "clean": "rimraf dist/ node_modules/ out/",
-    "freshen": "yarn run clean && yarn install"
+    "freshen": "yarn run clean && yarn install",
+    "eslint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.4",

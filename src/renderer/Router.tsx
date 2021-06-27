@@ -1,17 +1,14 @@
-import React, { useEffect } from 'react';
-import { Switch, Route, useLocation } from 'react-router-dom';
+import React from 'react';
+
+import { Switch, Route } from 'react-router-dom';
 
 import AxisConfig from './pages/AxisConfig';
-import Control from './pages/Control/Control';
+import Control from './pages/Control';
 import Home from './pages/Home';
 import Settings from './pages/Settings';
+import UserGuide from './pages/UserGuide';
 
 const Router: React.FC = () => {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    console.log('router pathname', pathname);
-  }, [pathname]);
-
   return (
     <Switch>
       <Route exact path="/">
@@ -25,6 +22,9 @@ const Router: React.FC = () => {
       </Route>
       <Route path="/debug">
         <div />
+      </Route>
+      <Route path="/user-guide">
+        <UserGuide />
       </Route>
       <Route path="/settings">
         <Settings />
