@@ -1,6 +1,6 @@
 {
   "name": "electron-react-typescript-webpack-boilerplate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Electron app for hexapod",
   "author": "Enjoy Learning Play Safe",
   "license": "MIT",
