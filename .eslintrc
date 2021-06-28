@@ -4,7 +4,8 @@
     "browser": true,
     "node": true
   },
-  "extends": ["airbnb", "airbnb/hooks"],
+  "extends": ["airbnb", "airbnb/hooks", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
     "indent": "off",
     "import/no-extraneous-dependencies": [
@@ -19,7 +20,8 @@
         "ignoreUrls": true
       }
     ],
-    "sort-imports": "warn"
+    "sort-imports": "warn",
+    "prettier/prettier": ["error"]
   },
   "settings": {
     "import/resolver": {

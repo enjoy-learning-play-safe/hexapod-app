@@ -1,6 +1,7 @@
 // eslint-disable-next-line object-curly-newline
-import { Box, Button, Heading, Icon, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
+
+import { Box, Button, Heading, Icon, Text } from '@chakra-ui/react';
 import { IoCheckmark, IoClose } from 'react-icons/io5';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -19,16 +20,17 @@ const HexapodMicrocontroller = (props: Props) => {
       <Heading variant="h5" mt={6} mb={2}>
         Hexapod Microcontroller
       </Heading>
+      <Text fontSize="0.9em" mb={2}>
+        Connect to Hexapod via Microcontroller over USB
+      </Text>
       <Text mb={2}>
-        Status:
-        {' '}
+        Status:{' '}
         <Text
           fontWeight="medium"
           display="inline"
           color={connectionState ? 'green.500' : 'red.500'}
         >
-          <Icon as={connectionState ? IoCheckmark : IoClose} mb={1} />
-          {' '}
+          <Icon as={connectionState ? IoCheckmark : IoClose} mb={1} />{' '}
           {connectionState ? 'Connected' : 'Not connected'}
         </Text>
       </Text>
@@ -37,9 +39,7 @@ const HexapodMicrocontroller = (props: Props) => {
         onClick={handleClickConnectSerialport}
         alignSelf="flex-start"
       >
-        {connectionState ? 'Disconnect' : 'Connect'}
-        {' '}
-        serialport (USB)
+        {connectionState ? 'Disconnect' : 'Connect'} serialport (USB)
       </Button>
     </Box>
   );

@@ -2,6 +2,7 @@ import { Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import HexapodMicrocontroller from './HexapodMicrocontroller';
+import HexapodServer from './HexapodServer';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
@@ -17,6 +18,7 @@ const Settings = (props: Props) => {
       </Heading>
       <Text>Main settings go here</Text>
       <HexapodMicrocontroller />
+      <HexapodServer />
     </Flex>
   );
 };

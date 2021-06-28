@@ -19,12 +19,14 @@ import SliderCenteredFilledTrack from '../../components/SliderCenteredFilledTrac
 
 interface Props {
   axisName: string;
+  sliderValue: number;
+  setSliderValue: (value: number) => void;
+  setSliderValueOnEndChange: (value: number) => Promise<void>;
 }
 
 const ControlSlider = (props: Props): JSX.Element => {
-  const { axisName } = props;
-
-  const [sliderValue, setSliderValue] = useState(0);
+  const { axisName, sliderValue, setSliderValue, setSliderValueOnEndChange } =
+    props;
 
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +37,8 @@ const ControlSlider = (props: Props): JSX.Element => {
     setLoading(true);
   };
 
-  const handleSliderChangeEnd = () => {
+  const handleSliderChangeEnd = async (val: number) => {
+    await setSliderValueOnEndChange(val);
     setTimeout(() => {
       setLoading(false);
     }, 1500);
@@ -47,7 +50,6 @@ const ControlSlider = (props: Props): JSX.Element => {
         <Heading variant="h6" mr={2} w="3em" textAlign="center">
           {axisName}
         </Heading>
-
         <Flex flexDir="column" flex={1} ml={4} my={4} mr={4}>
           <Slider
             min={-180}
@@ -55,6 +57,7 @@ const ControlSlider = (props: Props): JSX.Element => {
             aria-label="slider-ex-2"
             colorScheme="brand"
             defaultValue={sliderValue}
+            value={sliderValue}
             onChange={handleSliderChange}
             onChangeEnd={handleSliderChangeEnd}
           >
