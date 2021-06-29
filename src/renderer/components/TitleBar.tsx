@@ -9,7 +9,7 @@ const TitleBar = (props: Props) => {
   return (
     <Flex
       flexDirection="row"
-      height={12}
+      height={10}
       width="100%"
       px={20}
       alignItems="center"
@@ -19,7 +19,7 @@ const TitleBar = (props: Props) => {
     >
       <Text fontWeight="600" color="black">
         <Icon as={IoGameController} mr={2} mb={1} boxSize="1.25em" />
-        Hexapod Controller
+        AluMata Controller
       </Text>
     </Flex>
   );

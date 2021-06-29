@@ -16,11 +16,12 @@ async function createWindow(): Promise<void> {
     width: 800,
     backgroundColor: '#1A202C',
     autoHideMenuBar: true,
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: 'hidden',
     trafficLightPosition: {
       x: 20,
-      y: 32,
+      y: 27,
     },
+    frame: false,
     webPreferences: {
       devTools: process.env.NODE_ENV !== 'production',
       preload: path.join(__dirname, './preload.bundle.js'),

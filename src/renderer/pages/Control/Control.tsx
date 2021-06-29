@@ -9,6 +9,7 @@ import {
   Text,
   Button,
   Fade,
+  Select,
 } from '@chakra-ui/react';
 
 import PageWrapper from '../PageWrapper';
@@ -94,12 +95,32 @@ const Control = (props: Props): JSX.Element => {
     setAxesState(AxesInitialState);
   };
 
+  const [selectedConfig, setSelectedConfig] = useState('hexapod');
+
+  const handleSelectonfig: React.ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
+    setSelectedConfig(event.target.value);
+  };
+
   return (
     <PageWrapper>
-      <Flex>
-        <Heading variant="h3" mb={6}>
-          Control Hexapod™
-        </Heading>
+      <Flex mb={4} alignItems="center">
+        <Select
+          value="hexapod"
+          placeholder="Select config"
+          mt={1}
+          w={160}
+          size="md"
+          variant="filled"
+          borderRadius="lg"
+          onChange={handleSelectonfig}
+          fontWeight="600"
+        >
+          <option value="hexapod">Hexapod</option>
+          <option value="septapod">Septapod</option>
+          <option value="octopod">Octopod</option>
+        </Select>
         <Spacer />
         <Flex alignItems="center" alignSelf="flex-start" mt={1}>
           <Fade in={!liveInput}>
