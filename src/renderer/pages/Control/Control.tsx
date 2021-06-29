@@ -114,7 +114,7 @@ const Control = (props: Props): JSX.Element => {
             size="md"
             isChecked={liveInput}
             onChange={handleChangeLiveInput}
-            colorScheme="whatsapp"
+            colorScheme="blue"
           />
         </Flex>
       </Flex>

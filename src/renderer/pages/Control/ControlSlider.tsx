@@ -44,6 +44,8 @@ const ControlSlider = (props: Props): JSX.Element => {
     }, 1500);
   };
 
+  const limit = axisName.length === 1 ? 100 : 45;
+
   return (
     <Box alignSelf="stretch" mb={6}>
       <Flex alignItems="center">
@@ -52,8 +54,8 @@ const ControlSlider = (props: Props): JSX.Element => {
         </Heading>
         <Flex flexDir="column" flex={1} ml={4} my={4} mr={4}>
           <Slider
-            min={-180}
-            max={180}
+            min={0 - limit}
+            max={limit}
             aria-label="slider-ex-2"
             colorScheme="brand"
             defaultValue={sliderValue}
@@ -76,7 +78,7 @@ const ControlSlider = (props: Props): JSX.Element => {
             </SliderThumb>
             <SliderTrack>
               {/* <SliderFilledTrack /> */}
-              <SliderCenteredFilledTrack value={sliderValue} />
+              <SliderCenteredFilledTrack value={sliderValue} limit={limit} />
             </SliderTrack>
           </Slider>
           <Box mt={-6} h={8} alignSelf="center">
@@ -91,11 +93,11 @@ const ControlSlider = (props: Props): JSX.Element => {
       </Flex>
       <Flex mt={-10} height={7}>
         <Text ml={14} mt={5} fontSize="0.75em" fontWeight="medium">
-          -180
+          -{limit}
         </Text>
         <Spacer />
         <Text mr={5} mt={5} fontSize="0.75em" fontWeight="medium">
-          +180
+          +{limit}
         </Text>
       </Flex>
     </Box>

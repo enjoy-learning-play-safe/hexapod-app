@@ -9,7 +9,7 @@ const TitleBar = (props: Props) => {
   return (
     <Flex
       flexDirection="row"
-      height={10}
+      height={12}
       width="100%"
       px={20}
       alignItems="center"

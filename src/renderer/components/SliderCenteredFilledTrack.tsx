@@ -6,14 +6,15 @@ import { Box } from '@chakra-ui/react';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
   value: number;
+  limit: number;
 }
 
 const SliderCenteredFilledTrack = (props: Props): JSX.Element => {
-  const { value } = props;
+  const { value, limit } = props;
 
-  const leftNegPercent = ((value + 180) / 360) * 100;
+  const leftNegPercent = ((value + limit) / (limit * 2)) * 100;
 
-  const widthNegPercentage = (Math.abs(value) / 360) * 100;
+  const widthNegPercentage = (Math.abs(value) / (limit * 2)) * 100;
 
   return (
     <Box
