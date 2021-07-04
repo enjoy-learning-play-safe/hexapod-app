@@ -11,6 +11,13 @@ import Wrapper from './components/Wrapper';
 import theme from './config/theme';
 import Router from './Router';
 
+declare global {
+  // add electron to the window interface
+  interface Window {
+    electron: any;
+  }
+}
+
 function App() {
   return (
     <ChakraProvider theme={theme}>

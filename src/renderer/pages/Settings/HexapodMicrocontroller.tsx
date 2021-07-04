@@ -1,7 +1,7 @@
 // eslint-disable-next-line object-curly-newline
 import React, { useState } from 'react';
 
-import { Box, Button, Heading, Icon, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Icon, Text, Flex } from '@chakra-ui/react';
 import { IoCheckmark, IoClose } from 'react-icons/io5';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -10,9 +10,10 @@ interface Props {}
 const HexapodMicrocontroller = (props: Props) => {
   const [connectionState, setConnectionState] = useState(false);
 
-  const handleClickConnectSerialport = () => {
+  const handleClickConnectSerialport = async () => {
     // todo: handle ipcRenderer here (after adding ipcMain)
     setConnectionState(!connectionState);
+    await window.electron.ipcRenderer.invoke('serialport', 'myData');
   };
 
   return (
@@ -23,8 +24,8 @@ const HexapodMicrocontroller = (props: Props) => {
       <Text fontSize="0.9em" mb={2}>
         Connect to Hexapod via Microcontroller over USB
       </Text>
-      <Text mb={2}>
-        Status:{' '}
+      <Flex>
+        <Text mb={2}>Status: </Text>
         <Text
           fontWeight="medium"
           display="inline"
@@ -33,7 +34,7 @@ const HexapodMicrocontroller = (props: Props) => {
           <Icon as={connectionState ? IoCheckmark : IoClose} mb={1} />{' '}
           {connectionState ? 'Connected' : 'Not connected'}
         </Text>
-      </Text>
+      </Flex>
       <Button
         w="16em"
         onClick={handleClickConnectSerialport}

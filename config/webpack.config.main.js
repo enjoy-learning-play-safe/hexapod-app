@@ -40,6 +40,7 @@ module.exports = [
     ...commonConfig,
     entry: './src/main/preload.ts',
     target: 'electron-preload',
+    devtool: 'inline-source-map',
     output: {
       ...commonConfig.output,
       filename: 'preload.bundle.js',

@@ -5,7 +5,16 @@ import * as path from 'path';
 import * as url from 'url';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
+
+// * IPC
+
+ipcMain.handle('serialport', async (event, data) => {
+  // console.log('ipc-serialport -> event', event); // verbose!
+  console.log('ipc-serialport -> data', data);
+});
+
+// Main Window
 
 let mainWindow: Electron.BrowserWindow | null;
 
@@ -25,6 +34,7 @@ async function createWindow(): Promise<void> {
     webPreferences: {
       devTools: process.env.NODE_ENV !== 'production',
       preload: path.join(__dirname, './preload.bundle.js'),
+      contextIsolation: true,
     },
   });
 

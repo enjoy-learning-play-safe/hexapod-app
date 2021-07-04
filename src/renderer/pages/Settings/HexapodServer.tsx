@@ -72,8 +72,8 @@ const HexapodServer = (props: Props) => {
       <Text fontSize="0.9em" mb={2}>
         Connect to Hexapod via REST API Server
       </Text>
-      <Text mb={2}>
-        Status:{' '}
+      <Flex>
+        <Text mb={2}>Status: </Text>
         <Text
           fontWeight="medium"
           display="inline"
@@ -82,7 +82,7 @@ const HexapodServer = (props: Props) => {
           <Icon as={connectionState ? IoCheckmark : IoClose} mb={1} />{' '}
           {connectionState ? 'Connected' : 'Not connected'}
         </Text>
-      </Text>
+      </Flex>
       <Flex>
         <Input
           value={serverUrl}
