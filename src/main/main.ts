@@ -7,11 +7,23 @@ import * as url from 'url';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserWindow, app, ipcMain } from 'electron';
 
+const SerialPort = require('serialport');
+
 // * IPC
 
 ipcMain.handle('serialport', async (event, data) => {
   // console.log('ipc-serialport -> event', event); // verbose!
   console.log('ipc-serialport -> data', data);
+
+  // create new serialport connector
+  const { action, payload } = data;
+
+  switch (action) {
+    case 'list':
+      return await SerialPort.list();
+    default:
+      return 'no action was passed to the ipc handlerr';
+  }
 });
 
 // Main Window

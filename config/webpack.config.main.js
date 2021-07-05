@@ -1,4 +1,5 @@
 const CopyPlugin = require('copy-webpack-plugin');
+const { NormalModuleReplacementPlugin } = require('webpack');
 
 const commonConfig = require('./webpack.config.base');
 
@@ -12,6 +13,16 @@ module.exports = [
       filename: 'main.bundle.js',
     },
     plugins: [
+      new CopyPlugin({
+        patterns: [
+          // 'node_modules/serialport/build/Release/serialport.node',
+          'node_modules/@serialport/bindings/build/Release/bindings.node',
+        ],
+      }),
+      new NormalModuleReplacementPlugin(
+        /^bindings$/,
+        `${__dirname}/../src/bindings`
+      ),
       new CopyPlugin({
         patterns: [
           {

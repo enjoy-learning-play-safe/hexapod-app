@@ -24,8 +24,9 @@
     "generate-icons": "cross-env-shell electron-icon-builder --flatten --input=$INIT_CWD/icons/appIcon.png --output=./build/",
     "release": "release-it --config config/release-it.yml",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register \"test/**/*.ts\"",
+    "rebuild": "electron-rebuild -f -w serialport",
     "clean": "rimraf dist/ node_modules/ out/ build/",
-    "freshen": "yarn run clean && yarn install",
+    "freshen": "yarn run clean && yarn install && yarn run rebuild",
     "eslint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -39,7 +40,8 @@
     "react-dom": "^17.0.1",
     "react-icons": "^4.2.0",
     "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "serialport": "^9.2.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
@@ -48,6 +50,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.6",
+    "@types/serialport": "^8.0.1",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
     "concurrently": "^6.2.0",
@@ -57,6 +60,7 @@
     "electron": "^11.1.1",
     "electron-builder": "^22.9.1",
     "electron-icon-builder": "^2.0.1",
+    "electron-rebuild": "^2.3.5",
     "eslint": "^7.16.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
