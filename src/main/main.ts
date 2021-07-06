@@ -11,6 +11,8 @@ const SerialPort = require('serialport');
 
 // * IPC
 
+let port: any; // TODO: convert to class
+
 ipcMain.handle('serialport', async (event, data) => {
   // console.log('ipc-serialport -> event', event); // verbose!
   console.log('ipc-serialport -> data', data);
@@ -21,6 +23,25 @@ ipcMain.handle('serialport', async (event, data) => {
   switch (action) {
     case 'list':
       return await SerialPort.list();
+    //   .filter((device: { vendorId: string }) =>
+    //   payload.vendorId ? device.vendorId === payload.vendorId : true
+    // );
+    case 'open':
+      const { port: devPort, baudRate = 57600 } = payload;
+      port = new SerialPort(devPort, {
+        baudRate,
+      });
+      return { status: 'success' };
+    case 'write':
+      port &&
+        port.write('main screen turn on', (err: any) => {
+          if (err) {
+            console.log('Error on write: ', err.message);
+            return { status: 'failed' };
+          }
+          console.log('message written');
+        });
+      return { status: 'success' };
     default:
       return 'no action was passed to the ipc handlerr';
   }
