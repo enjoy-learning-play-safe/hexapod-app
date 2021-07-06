@@ -65,7 +65,8 @@ async function createWindow(): Promise<void> {
     },
     frame: false,
     webPreferences: {
-      devTools: process.env.NODE_ENV !== 'production',
+      // devTools: process.env.NODE_ENV !== 'production',
+      devTools: true,
       preload: path.join(__dirname, './preload.bundle.js'),
       contextIsolation: true,
     },

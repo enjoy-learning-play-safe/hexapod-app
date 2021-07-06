@@ -32,10 +32,15 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, '../dist/renderer'),
     historyApiFallback: true,
-
     compress: true,
     hot: true,
     port: 4000,
     publicPath: '/',
+  },
+  performance: {
+    maxAssetSize: 17000000,
+    assetFilter: (assetFilename) => {
+      return assetFilename.endsWith('.js');
+    },
   },
 };
