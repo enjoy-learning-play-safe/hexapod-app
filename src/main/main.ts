@@ -6,6 +6,9 @@ import * as url from 'url';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserWindow, app, ipcMain } from 'electron';
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+} from 'electron-devtools-installer';
 
 const SerialPort = require('serialport');
 
@@ -23,27 +26,70 @@ ipcMain.handle('serialport', async (event, data) => {
   switch (action) {
     case 'list':
       return await SerialPort.list();
-    //   .filter((device: { vendorId: string }) =>
-    //   payload.vendorId ? device.vendorId === payload.vendorId : true
-    // );
+    case 'isOpen':
+      return { isOpen: port.isOpen };
     case 'open':
-      const { port: devPort, baudRate = 57600 } = payload;
+      const { port: devPort, baudRate = 9600 } = payload;
+      port && port.close(); // close any existing port before opening a new one
       port = new SerialPort(devPort, {
         baudRate,
       });
       return { status: 'success' };
-    case 'write':
-      port &&
-        port.write('main screen turn on', (err: any) => {
-          if (err) {
-            console.log('Error on write: ', err.message);
-            return { status: 'failed' };
-          }
-          console.log('message written');
-        });
+    case 'update': // change baudrate of port
+      const { baudRate: br } = payload;
+      port.update({ baudRate: br });
       return { status: 'success' };
+    case 'set': // change options of an open port
+      port.set(payload);
+      return { status: 'success' };
+    case 'get': // change options of an open port
+      port.get((err: any, data: any) => {
+        if (err) {
+          return {
+            status: 'error',
+            error: err,
+          };
+        }
+        return { status: 'success', data };
+      });
+    case 'write':
+      const { message } = payload;
+      if (port) {
+        port.write(message, (err: any) => {
+          if (err) {
+            console.log('Error on port write: ', err.message);
+            return {
+              status: 'failed',
+              error: 'ERROR: failed to write to port',
+            };
+          }
+          console.log('message written to port');
+        });
+        return { status: 'success' };
+      } else {
+        return { status: 'failed', error: 'ERROR: No port connected' };
+      }
+    case 'flush':
+      port.flush((err: any) => {
+        return { status: 'error', error: err };
+      });
+      return { status: 'success' };
+    case 'drain':
+      port.flush((err: any) => {
+        return { status: 'error', error: err };
+      });
+      return { status: 'success' };
+    case 'close':
+      port.close((err: any) => {
+        return { status: 'failed', error: err };
+      });
+      return { status: 'success', info: 'Port closed successfully' };
+    case 'pause':
+      port.pause();
+    case 'resume':
+      port.resume();
     default:
-      return 'no action was passed to the ipc handlerr';
+      return 'unknown action was passed to the ipc handler method';
   }
 });
 
@@ -52,6 +98,14 @@ ipcMain.handle('serialport', async (event, data) => {
 let mainWindow: Electron.BrowserWindow | null;
 
 async function createWindow(): Promise<void> {
+  if (process.env.NODE_ENV !== 'production') {
+    await installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name: string) => console.log(`Added Extension:  ${name}`))
+      .catch((err: PromiseRejectionEvent) =>
+        console.log('An error occurred: ', err)
+      );
+  }
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 600,

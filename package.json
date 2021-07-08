@@ -8,7 +8,7 @@
   "scripts": {
     "quickstart": "yarn run dev",
     "quickstart:freshen": "yarn run freshen && yarn run quickstart",
-    "dev": "rimraf dist && concurrently --names \"renderer,  main  ,electron\"  -c \"cyan,yellow,blue\"  \" yarn run dev:renderer \" \" yarn wait-on http://localhost:4000 && yarn run dev:main \" \" yarn wait-on dist/ && yarn run electron \" ",
+    "dev": "rimraf dist && concurrently --names \"renderer,  main  ,electron\"  -c \"cyan,yellow,blue\"  \" yarn run dev:renderer \" \" yarn wait-on http://localhost:4000 && yarn run dev:main \" \" yarn wait-on ./dist/main.bundle.js && yarn wait-on ./dist/preload.bundle.js && yarn run electron \" ",
     "dev:main": "cross-env NODE_ENV=development webpack --watch --mode development --color --config config/webpack.config.main.js",
     "dev:renderer": "cross-env NODE_ENV=development webpack serve --mode development --color --config config/webpack.config.renderer.js",
     "electron": "cross-env NODE_ENV=development electron ./dist/main.bundle.js",
@@ -24,9 +24,10 @@
     "generate-icons": "cross-env-shell electron-icon-builder --flatten --input=$INIT_CWD/icons/appIcon.png --output=./build/",
     "release": "release-it --config config/release-it.yml",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register \"test/**/*.ts\"",
-    "rebuild": "electron-rebuild -f -w serialport",
+    "rebuild": "electron-rebuild",
+    "rebuild:serialport": "electron-rebuild -f -w serialport",
     "clean": "rimraf dist/ node_modules/ out/ build/",
-    "freshen": "yarn run clean && yarn install && yarn run rebuild",
+    "freshen": "yarn run clean && yarn install && yarn run rebuild:serialport",
     "eslint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -59,6 +60,7 @@
     "css-loader": "^5.0.1",
     "electron": "^11.1.1",
     "electron-builder": "^22.9.1",
+    "electron-devtools-installer": "^3.2.0",
     "electron-icon-builder": "^2.0.1",
     "electron-rebuild": "^2.3.5",
     "eslint": "^7.16.0",
@@ -86,6 +88,7 @@
     "tsconfig-paths": "^3.9.0",
     "type-fest": "^1.2.1",
     "typescript": "^4.1.3",
+    "use-reducer-async": "^2.0.1",
     "wait-on": "^5.3.0",
     "webpack": "^5.11.0",
     "webpack-cli": "^4.3.0",

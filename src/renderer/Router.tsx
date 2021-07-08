@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import AxisConfig from './pages/AxisConfig';
 import Control from './pages/Control';
 import Home from './pages/Home';
+import Debug from './pages/Debug';
 import Settings from './pages/Settings';
 import UserGuide from './pages/UserGuide';
 
@@ -21,7 +22,7 @@ const Router: React.FC = () => {
         <AxisConfig />
       </Route>
       <Route path="/debug">
-        <div />
+        <Debug />
       </Route>
       <Route path="/user-guide">
         <UserGuide />

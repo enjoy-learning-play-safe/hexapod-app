@@ -3,13 +3,14 @@ import React from 'react';
 
 import HexapodMicrocontroller from './HexapodMicrocontroller';
 import HexapodServer from './HexapodServer';
+import PageWrapper from '../PageWrapper';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
 
 const Settings = (props: Props) => {
   return (
-    <Flex flexDirection="column" p={4} flexDir="column">
+    <PageWrapper>
       <Heading variant="h3" textAlign="center" mb={4}>
         Settings
       </Heading>
@@ -19,7 +20,7 @@ const Settings = (props: Props) => {
       <Text>Main settings go here</Text>
       <HexapodMicrocontroller />
       <HexapodServer />
-    </Flex>
+    </PageWrapper>
   );
 };
 
