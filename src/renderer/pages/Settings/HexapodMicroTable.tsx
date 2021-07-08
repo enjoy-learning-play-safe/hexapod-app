@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Table,
   Thead,
@@ -8,8 +8,9 @@ import {
   Th,
   Td,
   TableCaption,
+  Button,
 } from '@chakra-ui/react';
-import { Port } from '_/renderer/context';
+import { Port, SerialportContext } from '_/renderer/context';
 
 type DataItem = Port;
 
@@ -19,6 +20,13 @@ interface Props {
 
 const HexapodMicroTable = (props: Props) => {
   const { data } = props;
+
+  const { state, dispatch } = useContext(SerialportContext);
+
+  const handleConnectButtonClick = (path: string) => {
+    dispatch({ type: 'OPEN', port: path });
+  };
+
   return (
     <Table variant="simple">
       <TableCaption>Imperial to metric conversion factors</TableCaption>
@@ -28,6 +36,7 @@ const HexapodMicroTable = (props: Props) => {
           <Th>path</Th>
           <Th>productId</Th>
           <Th>vendorId</Th>
+          <Th size="sm">Connect</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -38,6 +47,11 @@ const HexapodMicroTable = (props: Props) => {
               <Td>{item.path}</Td>
               <Td>{item.productId}</Td>
               <Td>{item.vendorId}</Td>
+              <Td>
+                <Button onClick={() => handleConnectButtonClick(item.path)}>
+                  Connect
+                </Button>
+              </Td>
             </Tr>
           </React.Fragment>
         ))}

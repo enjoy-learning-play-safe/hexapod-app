@@ -11,10 +11,12 @@ import installExtension, {
 } from 'electron-devtools-installer';
 
 const SerialPort = require('serialport');
+const Readline = require('@serialport/parser-readline');
 
 // * IPC
 
 let port: any; // TODO: convert to class
+const portParser = new Readline({ delimiter: '\r\n' });
 
 ipcMain.handle('serialport', async (event, data) => {
   // console.log('ipc-serialport -> event', event); // verbose!
@@ -29,12 +31,15 @@ ipcMain.handle('serialport', async (event, data) => {
     case 'isOpen':
       return { isOpen: port.isOpen };
     case 'open':
-      const { port: devPort, baudRate = 9600 } = payload;
-      port && port.close(); // close any existing port before opening a new one
+      const { port: devPort, baudRate = 250000 } = payload;
+      // port && port.close(); // close any existing port before opening a new one
       port = new SerialPort(devPort, {
         baudRate,
       });
-      return { status: 'success' };
+      const response = port.read();
+      console.log('response'), response;
+      return { status: 'success', response };
+
     case 'update': // change baudrate of port
       const { baudRate: br } = payload;
       port.update({ baudRate: br });
@@ -43,29 +48,29 @@ ipcMain.handle('serialport', async (event, data) => {
       port.set(payload);
       return { status: 'success' };
     case 'get': // change options of an open port
-      port.get((err: any, data: any) => {
-        if (err) {
-          return {
-            status: 'error',
-            error: err,
-          };
-        }
-        return { status: 'success', data };
+      let getResponse;
+      return await new Promise(function (resolve, reject) {
+        port.get((err: any, data: any) => {
+          getResponse = { err, data };
+          console.log('main.ts -> get -> ', { err, data });
+          console.log('main.ts -> get -> ', getResponse);
+        });
       });
+      return { status: 'success', response: getResponse };
+
     case 'write':
       const { message } = payload;
       if (port) {
-        port.write(message, (err: any) => {
-          if (err) {
-            console.log('Error on port write: ', err.message);
-            return {
-              status: 'failed',
-              error: 'ERROR: failed to write to port',
-            };
-          }
-          console.log('message written to port');
+        const writeResponse = await new Promise(function (resolve, reject) {
+          port.write('G0\n', function () {
+            console.log('message written');
+            portParser.on('data', (data: any) => {
+              console.log(data);
+              resolve(data);
+            });
+          });
         });
-        return { status: 'success' };
+        return { status: 'success', response: writeResponse };
       } else {
         return { status: 'failed', error: 'ERROR: No port connected' };
       }
@@ -79,15 +84,17 @@ ipcMain.handle('serialport', async (event, data) => {
         return { status: 'error', error: err };
       });
       return { status: 'success' };
-    case 'close':
+    case 'close': // ! NOT WORKING
       port.close((err: any) => {
         return { status: 'failed', error: err };
       });
       return { status: 'success', info: 'Port closed successfully' };
     case 'pause':
       port.pause();
+      return { status: 'success', info: 'paused' };
     case 'resume':
       port.resume();
+      return { status: 'success', info: 'resumed' };
     default:
       return 'unknown action was passed to the ipc handler method';
   }

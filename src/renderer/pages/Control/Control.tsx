@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
 
 // eslint-disable-next-line object-curly-newline
 import {
@@ -14,6 +14,7 @@ import {
 
 import PageWrapper from '../PageWrapper';
 import ControlInput from './ControlInput';
+import { SerialportContext } from '_/renderer/context';
 
 export const axisNames = {
   x: 'X',
@@ -103,6 +104,17 @@ const Control = (props: Props): JSX.Element => {
     setSelectedConfig(event.target.value);
   };
 
+  /////
+
+  const { state, dispatch } = useContext(SerialportContext);
+
+  const handleInitClick = () => {
+    dispatch({ type: 'INITIALIZE' });
+  };
+  const handleHomeClick = () => {
+    dispatch({ type: 'HOME' });
+  };
+
   return (
     <PageWrapper>
       <Flex mb={4} alignItems="center">
@@ -121,6 +133,13 @@ const Control = (props: Props): JSX.Element => {
           <option value="septapod">Septapod</option>
           <option value="octopod">Octopod</option>
         </Select>
+        <Spacer />
+        <Flex>
+          <Button mr={2} onClick={handleInitClick}>
+            Initialize
+          </Button>
+          <Button onClick={handleHomeClick}>Home</Button>
+        </Flex>
         <Spacer />
         <Flex alignItems="center" alignSelf="flex-start" mt={1}>
           <Fade in={!liveInput}>

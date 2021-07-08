@@ -29,6 +29,8 @@ export const initialState: State = {
 export type InnerAction =  // actions that are wrapped in an async and should not be called directly
   | { type: 'SYNC_LIST'; list: Port[] }
   | { type: 'SYNC_OPEN'; port: string; baudRate: number }
+  | { type: 'SYNC_INITIALIZE' }
+  | { type: 'SYNC_HOME' }
   | { type: 'SYNC_WRITE'; message: string }
   | { type: 'SYNC_CLOSE' };
 
@@ -54,6 +56,16 @@ export const reducer: Reducer<State, Action> = (state, action) => {
         ...state,
         loading: false,
       };
+    case 'SYNC_INITIALIZE':
+      return {
+        ...state,
+        loading: false,
+      };
+    case 'SYNC_HOME':
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       throw new Error('unknown action type');
   }
@@ -62,6 +74,8 @@ export const reducer: Reducer<State, Action> = (state, action) => {
 export type AsyncAction =
   | { type: 'LIST' }
   | { type: 'OPEN'; port: string; baudRate?: number }
+  | { type: 'INITIALIZE' }
+  | { type: 'HOME' }
   | { type: 'CLOSE' };
 
 export const asyncActionHandlers: AsyncActionHandlers<
@@ -80,10 +94,50 @@ export const asyncActionHandlers: AsyncActionHandlers<
   OPEN:
     ({ dispatch }) =>
     async (action) => {
-      const list = await window.electron.ipcRenderer.invoke('serialport', {
-        action: 'list',
+      const openRes = await window.electron.ipcRenderer.invoke('serialport', {
+        action: 'open',
+        payload: {
+          port: action.port,
+        },
       });
-      dispatch({ type: 'SYNC_LIST', list });
+      console.log('REACT: PORT OPENED');
+      dispatch({ type: 'SYNC_OPEN', port: action.port, baudRate: 250000 });
+    },
+  INITIALIZE:
+    ({ dispatch }) =>
+    async (action) => {
+      for (let i = 0; i <= 23; i += 1) {
+        console.log('react: sending for i = ', i);
+        await window.electron.ipcRenderer.invoke('serialport', {
+          action: 'write',
+          payload: {
+            message: 'G90',
+          },
+        });
+      }
+      await window.electron.ipcRenderer.invoke('serialport', {
+        action: 'flush',
+      });
+      dispatch({ type: 'SYNC_INITIALIZE' });
+    },
+  HOME:
+    ({ dispatch }) =>
+    async (action) => {
+      await window.electron.ipcRenderer.invoke('serialport', {
+        action: 'write',
+        payload: {
+          message: 'G28',
+        },
+      });
+      console.log('react:  HOME - G28');
+      await window.electron.ipcRenderer.invoke('serialport', {
+        action: 'write',
+        payload: {
+          message: 'G0 X100 Y100 Z100 A100 B100 C100',
+        },
+      });
+      console.log('react:  HOME - G0 xyzabc');
+      dispatch({ type: 'SYNC_HOME' });
     },
   CLOSE:
     ({ dispatch }) =>
