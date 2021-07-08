@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Alert,
   AlertIcon,
@@ -12,6 +12,7 @@ import {
 
 import PageWrapper from '../PageWrapper';
 import { ChangeEvent } from 'react';
+import { SerialportContext } from '_/renderer/context';
 
 interface Props {}
 
@@ -22,11 +23,10 @@ const Debug = (props: Props) => {
     setRawInputValue(e.target.value);
   };
 
+  const { state, dispatch } = useContext(SerialportContext);
+
   const handleRawInputSubmit = async () => {
-    await window.electron.ipcRenderer.invoke('serialport', {
-      action: 'write',
-      payload: { message: rawInputValue },
-    });
+    dispatch({ type: 'WRITE', message: rawInputValue });
   };
 
   return (

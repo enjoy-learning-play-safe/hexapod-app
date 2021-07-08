@@ -12,6 +12,7 @@ import installExtension, {
 
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
+const Ready = require('@serialport/parser-ready');
 
 // * IPC
 
@@ -20,83 +21,52 @@ const portParser = new Readline({ delimiter: '\r\n' });
 
 ipcMain.handle('serialport', async (event, data) => {
   // console.log('ipc-serialport -> event', event); // verbose!
-  console.log('ipc-serialport -> data', data);
+  console.log('ipc-serialport.handle -> data', data);
 
   // create new serialport connector
   const { action, payload } = data;
 
   switch (action) {
     case 'list':
-      return await SerialPort.list();
-    case 'isOpen':
-      return { isOpen: port.isOpen };
+      return SerialPort.list();
     case 'open':
-      const { port: devPort, baudRate = 250000 } = payload;
-      // port && port.close(); // close any existing port before opening a new one
-      port = new SerialPort(devPort, {
-        baudRate,
-      });
-      const response = port.read();
-      console.log('response'), response;
-      return { status: 'success', response };
+      const { port: openPort } = payload;
+      let openError;
+      port = new SerialPort(
+        openPort,
+        {
+          baudRate: 250000,
+        },
+        (err: any) => {
+          err && console.log('ERROR', err);
+          openError = err;
+        }
+      );
 
-    case 'update': // change baudrate of port
-      const { baudRate: br } = payload;
-      port.update({ baudRate: br });
-      return { status: 'success' };
-    case 'set': // change options of an open port
-      port.set(payload);
-      return { status: 'success' };
-    case 'get': // change options of an open port
-      let getResponse;
-      return await new Promise(function (resolve, reject) {
-        port.get((err: any, data: any) => {
-          getResponse = { err, data };
-          console.log('main.ts -> get -> ', { err, data });
-          console.log('main.ts -> get -> ', getResponse);
-        });
-      });
-      return { status: 'success', response: getResponse };
+      const parser = port.pipe(new Ready({ delimiter: 'READY' }));
+      parser.on('ready', () =>
+        console.log('the ready byte sequence has been received')
+      );
+      parser.on('data', console.log); // all data after READY is received
 
+      if (openError) {
+        return { status: 'error', error: openError };
+      } else {
+        console.log('PORT OPENED');
+        return { status: 'success', info: 'port opened' };
+      }
+    case 'isOpen':
+      return port?.isOpen ? port.isOpen() : false;
     case 'write':
       const { message } = payload;
-      if (port) {
-        const writeResponse = await new Promise(function (resolve, reject) {
-          port.write('G0\n', function () {
-            console.log('message written');
-            portParser.on('data', (data: any) => {
-              console.log(data);
-              resolve(data);
-            });
-          });
-        });
-        return { status: 'success', response: writeResponse };
-      } else {
-        return { status: 'failed', error: 'ERROR: No port connected' };
-      }
-    case 'flush':
-      port.flush((err: any) => {
-        return { status: 'error', error: err };
-      });
-      return { status: 'success' };
-    case 'drain':
-      port.flush((err: any) => {
-        return { status: 'error', error: err };
-      });
-      return { status: 'success' };
-    case 'close': // ! NOT WORKING
-      port.close((err: any) => {
-        return { status: 'failed', error: err };
-      });
-      return { status: 'success', info: 'Port closed successfully' };
-    case 'pause':
-      port.pause();
-      return { status: 'success', info: 'paused' };
-    case 'resume':
-      port.resume();
-      return { status: 'success', info: 'resumed' };
+      port.write(message);
+      const writeResponse = port.read();
+      console.log('writeResponse', writeResponse);
+      return { writeResponse };
+    case 'override':
+      return port;
     default:
-      return 'unknown action was passed to the ipc handler method';
+      console.log('NO CASE SWITCH METHOD EXISTS FOR', action);
   }
 });
 
@@ -107,7 +77,7 @@ let mainWindow: Electron.BrowserWindow | null;
 async function createWindow(): Promise<void> {
   if (process.env.NODE_ENV !== 'production') {
     await installExtension(REACT_DEVELOPER_TOOLS)
-      .then((name: string) => console.log(`Added Extension:  ${name}`))
+      .then((name: string) => console.log(`Added Extension: ${name}`))
       .catch((err: PromiseRejectionEvent) =>
         console.log('An error occurred: ', err)
       );

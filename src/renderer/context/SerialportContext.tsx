@@ -1,5 +1,5 @@
 import { createContext, Reducer } from 'react';
-
+import delay from 'delay';
 import { AsyncActionHandlers } from 'use-reducer-async';
 
 export type Port = {
@@ -31,7 +31,7 @@ export type InnerAction =  // actions that are wrapped in an async and should no
   | { type: 'SYNC_OPEN'; port: string; baudRate: number }
   | { type: 'SYNC_INITIALIZE' }
   | { type: 'SYNC_HOME' }
-  | { type: 'SYNC_WRITE'; message: string }
+  | { type: 'SYNC_WRITE' }
   | { type: 'SYNC_CLOSE' };
 
 export type OuterAction = { type: 'something' }; // actions that are not wrapped in an asycn and can be called directly
@@ -49,6 +49,7 @@ export const reducer: Reducer<State, Action> = (state, action) => {
       return {
         ...state,
         loading: false,
+        connected: true,
         port: action.port,
       };
     case 'SYNC_WRITE':
@@ -66,6 +67,11 @@ export const reducer: Reducer<State, Action> = (state, action) => {
         ...state,
         loading: false,
       };
+    case 'SYNC_WRITE':
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       throw new Error('unknown action type');
   }
@@ -76,6 +82,7 @@ export type AsyncAction =
   | { type: 'OPEN'; port: string; baudRate?: number }
   | { type: 'INITIALIZE' }
   | { type: 'HOME' }
+  | { type: 'WRITE'; message: string }
   | { type: 'CLOSE' };
 
 export const asyncActionHandlers: AsyncActionHandlers<
@@ -100,7 +107,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
           port: action.port,
         },
       });
-      console.log('REACT: PORT OPENED');
+      console.log('REACT: PORT OPENED', openRes);
       dispatch({ type: 'SYNC_OPEN', port: action.port, baudRate: 250000 });
     },
   INITIALIZE:
@@ -111,33 +118,50 @@ export const asyncActionHandlers: AsyncActionHandlers<
         await window.electron.ipcRenderer.invoke('serialport', {
           action: 'write',
           payload: {
-            message: 'G90',
+            message: `G90\r\n`,
           },
         });
+        await delay(150);
       }
-      await window.electron.ipcRenderer.invoke('serialport', {
-        action: 'flush',
-      });
+      // await window.electron.ipcRenderer.invoke('serialport', {
+      //   action: 'flush',
+      // });
       dispatch({ type: 'SYNC_INITIALIZE' });
     },
   HOME:
     ({ dispatch }) =>
     async (action) => {
-      await window.electron.ipcRenderer.invoke('serialport', {
-        action: 'write',
-        payload: {
-          message: 'G28',
-        },
-      });
-      console.log('react:  HOME - G28');
-      await window.electron.ipcRenderer.invoke('serialport', {
-        action: 'write',
-        payload: {
-          message: 'G0 X100 Y100 Z100 A100 B100 C100',
-        },
-      });
+      await window.electron.ipcRenderer
+        .invoke('serialport', {
+          action: 'write',
+          payload: {
+            message: 'G28\r\n',
+          },
+        })
+        .then(async () => {
+          await delay(150);
+          console.log('react:  HOME - G28');
+          await window.electron.ipcRenderer.invoke('serialport', {
+            action: 'write',
+            payload: {
+              message: 'G0 X100 Y100 Z100 A100 B100 C100\r\n',
+            },
+          });
+        });
       console.log('react:  HOME - G0 xyzabc');
       dispatch({ type: 'SYNC_HOME' });
+    },
+  WRITE:
+    ({ dispatch }) =>
+    async (action) => {
+      await window.electron.ipcRenderer.invoke('serialport', {
+        action: 'write',
+        payload: {
+          message: action.message + '\r\n',
+        },
+      });
+
+      dispatch({ type: 'SYNC_WRITE' });
     },
   CLOSE:
     ({ dispatch }) =>
