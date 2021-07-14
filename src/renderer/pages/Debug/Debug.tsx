@@ -12,7 +12,7 @@ import {
 
 import PageWrapper from '../PageWrapper';
 import { ChangeEvent } from 'react';
-import { SerialportContext } from '_/renderer/context';
+import { Context as SerialportContext } from '_/renderer/context/SerialportContext';
 
 interface Props {}
 

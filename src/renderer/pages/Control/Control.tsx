@@ -14,25 +14,30 @@ import {
 
 import PageWrapper from '../PageWrapper';
 import ControlInput from './ControlInput';
-import { SerialportContext } from '_/renderer/context';
-
-export const axisNames = {
-  x: 'X',
-  y: 'Y',
-  z: 'Z',
-  roll: 'Roll',
-  pitch: 'Pitch',
-  yaw: 'Yaw',
-};
+import { Context as SerialportContext } from '_/renderer/context/SerialportContext';
+import {
+  Context as SixDofContext,
+  Types as SixDofTypes,
+  Axis as SixDofAxis,
+} from '_renderer/context/SixDofContext';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Control = (props: Props): JSX.Element => {
-  const axes = ['X', 'Y', 'Z', 'Roll', 'Pitch', 'Yaw'];
+  const { state: sixDofState, dispatch: sixDofDispatch } =
+    useContext(SixDofContext);
 
-  const [liveInput, setLiveInput] = useState(false);
+  const { axes: axesState, liveInput } = sixDofState;
+
+  const setAxesState = (axis: SixDofAxis, value: number) => {
+    sixDofDispatch({ type: SixDofTypes.UPDATE_AXIS, axis, value });
+  };
+
+  const setLiveInput = (value: boolean) => {
+    sixDofDispatch({ type: SixDofTypes.SET_LIVE_INPUT, liveInput: value });
+  };
 
   const handleChangeLiveInput = () => {
     setLiveInput(!liveInput);
@@ -40,30 +45,12 @@ const Control = (props: Props): JSX.Element => {
 
   // the following code needs to be refactored (preferrably with context!)
 
-  const AxesInitialState = {
-    x: 0,
-    y: 0,
-    z: 0,
-    roll: 0,
-    pitch: 0,
-    yaw: 0,
-  };
+  // const [axesState, setAxesState] = useState(AxesInitialState);
 
-  const [axesState, setAxesState] = useState(AxesInitialState);
-
-  const updateAxis = async (axisKey: string, value: number) => {
-    //! note, this sends the code twice due to react rerender
-    const newAxesState = {
-      ...axesState,
-      [axisKey]: value,
-    };
-
+  const updateAxis = async (axis: SixDofAxis, value: number) => {
     // set state:
-    setAxesState(newAxesState);
-
-    if (liveInput) {
-      await pushToServer(newAxesState);
-    }
+    console.log({ axis, value });
+    setAxesState(axis, value);
   };
 
   const updateAxisOnEndChange = async (axisKey: string, value: number) => {
@@ -93,7 +80,7 @@ const Control = (props: Props): JSX.Element => {
   };
 
   const resetAxes = () => {
-    setAxesState(AxesInitialState);
+    sixDofDispatch({ type: SixDofTypes.RESET_AXES });
   };
 
   const [selectedConfig, setSelectedConfig] = useState('hexapod');
@@ -106,13 +93,14 @@ const Control = (props: Props): JSX.Element => {
 
   /////
 
-  const { state, dispatch } = useContext(SerialportContext);
+  const { state: serialportState, dispatch: serialportDispatch } =
+    useContext(SerialportContext);
 
   const handleInitClick = () => {
-    dispatch({ type: 'INITIALIZE' });
+    serialportDispatch({ type: 'INITIALIZE' });
   };
   const handleHomeClick = () => {
-    dispatch({ type: 'HOME' });
+    serialportDispatch({ type: 'HOME' });
   };
 
   return (
@@ -160,6 +148,7 @@ const Control = (props: Props): JSX.Element => {
       </Flex>
       <ControlInput
         axesState={axesState}
+        liveInput={liveInput}
         updateAxis={updateAxis}
         resetAxes={resetAxes}
         updateAxisOnEndChange={updateAxisOnEndChange}

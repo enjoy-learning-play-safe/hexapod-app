@@ -15,7 +15,7 @@ import {
   AlertTitle,
 } from '@chakra-ui/react';
 import { IoCheckmark, IoClose, IoRefresh } from 'react-icons/io5';
-import { SerialportContext } from '_/renderer/context/SerialportContext';
+import { Context as SerialportContext } from '_/renderer/context/SerialportContext';
 import HexapodMicroTable from './HexapodMicroTable';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

@@ -22,6 +22,8 @@ interface Props {
   sliderValue: number;
   setSliderValue: (value: number) => void;
   setSliderValueOnEndChange: (value: number) => Promise<void>;
+  min: number;
+  max: number;
 }
 
 const ControlSlider = (props: Props): JSX.Element => {

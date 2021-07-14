@@ -10,7 +10,10 @@ import {
   TableCaption,
   Button,
 } from '@chakra-ui/react';
-import { Port, SerialportContext } from '_/renderer/context';
+import {
+  Port,
+  Context as SerialportContext,
+} from '_/renderer/context/SerialportContext';
 
 type DataItem = Port;
 
