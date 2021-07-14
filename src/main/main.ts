@@ -5,15 +5,88 @@ import * as path from 'path';
 import * as url from 'url';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+} from 'electron-devtools-installer';
+
+const SerialPort = require('serialport');
+const Readline = require('@serialport/parser-readline');
+const Ready = require('@serialport/parser-ready');
+
+// * IPC
+
+let port: any; // TODO: convert to class
+const portParser = new Readline({ delimiter: '\r\n' });
+
+ipcMain.handle('serialport', async (event, data) => {
+  // console.log('ipc-serialport -> event', event); // verbose!
+  console.log('ipc-serialport.handle -> data', data);
+
+  // create new serialport connector
+  const { action, payload } = data;
+
+  switch (action) {
+    case 'list':
+      return SerialPort.list();
+    case 'open':
+      const { port: openPort } = payload;
+      let openError;
+      port = new SerialPort(
+        openPort,
+        {
+          baudRate: 250000,
+        },
+        (err: any) => {
+          err && console.log('ERROR', err);
+          openError = err;
+        }
+      );
+
+      const parser = port.pipe(new Ready({ delimiter: 'READY' }));
+      parser.on('ready', () =>
+        console.log('the ready byte sequence has been received')
+      );
+      parser.on('data', console.log); // all data after READY is received
+
+      if (openError) {
+        return { status: 'error', error: openError };
+      } else {
+        console.log('PORT OPENED');
+        return { status: 'success', info: 'port opened' };
+      }
+    case 'isOpen':
+      return port?.isOpen ? port.isOpen() : false;
+    case 'write':
+      const { message } = payload;
+      port.write(message);
+      const writeResponse = port.read();
+      console.log('writeResponse', writeResponse);
+      return { writeResponse };
+    case 'override':
+      return port;
+    default:
+      console.log('NO CASE SWITCH METHOD EXISTS FOR', action);
+  }
+});
+
+// Main Window
 
 let mainWindow: Electron.BrowserWindow | null;
 
 async function createWindow(): Promise<void> {
+  if (process.env.NODE_ENV !== 'production') {
+    await installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name: string) => console.log(`Added Extension: ${name}`))
+      .catch((err: PromiseRejectionEvent) =>
+        console.log('An error occurred: ', err)
+      );
+  }
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 700,
+    width: 1000,
     backgroundColor: '#1A202C',
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
@@ -23,8 +96,10 @@ async function createWindow(): Promise<void> {
     },
     frame: false,
     webPreferences: {
-      devTools: process.env.NODE_ENV !== 'production',
+      // devTools: process.env.NODE_ENV !== 'production',
+      devTools: true,
       preload: path.join(__dirname, './preload.bundle.js'),
+      contextIsolation: true,
     },
   });
 

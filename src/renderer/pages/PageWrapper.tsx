@@ -13,7 +13,8 @@ const PageWrapper = (props: Props): JSX.Element => {
       flexDirection="column"
       flex={1}
       p={4}
-      flexDir="column"
+      overflowY="auto"
+      overflowX="hidden"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...passedProps}
     >

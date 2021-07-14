@@ -28,6 +28,7 @@ module.exports = {
         ]
       : []),
   ],
+  devtool: 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, '../dist/renderer'),
     historyApiFallback: true,
@@ -35,5 +36,11 @@ module.exports = {
     hot: true,
     port: 4000,
     publicPath: '/',
+  },
+  performance: {
+    maxAssetSize: 17000000,
+    assetFilter: (assetFilename) => {
+      return assetFilename.endsWith('.js');
+    },
   },
 };
