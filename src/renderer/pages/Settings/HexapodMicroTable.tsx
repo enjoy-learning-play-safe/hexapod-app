@@ -29,12 +29,12 @@ const HexapodMicroTable = (props: Props) => {
 
   return (
     <Table variant="simple">
-      <TableCaption>Imperial to metric conversion factors</TableCaption>
+      {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
       <Thead>
         <Tr>
           <Th>locationId</Th>
           <Th>path</Th>
-          <Th>productId</Th>
+          {/* <Th>productId</Th> */}
           <Th>vendorId</Th>
           <Th size="sm">Connect</Th>
         </Tr>
@@ -45,7 +45,7 @@ const HexapodMicroTable = (props: Props) => {
             <Tr>
               <Td>{item.locationId}</Td>
               <Td>{item.path}</Td>
-              <Td>{item.productId}</Td>
+              {/* <Td>{item.productId}</Td> */}
               <Td>{item.vendorId}</Td>
               <Td>
                 <Button onClick={() => handleConnectButtonClick(item.path)}>

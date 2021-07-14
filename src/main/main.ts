@@ -85,8 +85,8 @@ async function createWindow(): Promise<void> {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 700,
+    width: 1000,
     backgroundColor: '#1A202C',
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',

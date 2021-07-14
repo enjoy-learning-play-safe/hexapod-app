@@ -17,9 +17,9 @@ const Settings = (props: Props) => {
       <Heading variant="h5" mb={2}>
         General
       </Heading>
-      <Text>Main settings go here</Text>
+      <Text>// todo: Main settings go here</Text>
       <HexapodMicrocontroller />
-      <HexapodServer />
+      {/* <HexapodServer /> */}
     </PageWrapper>
   );
 };

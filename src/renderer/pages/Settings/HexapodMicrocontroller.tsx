@@ -10,6 +10,9 @@ import {
   Flex,
   IconButton,
   Spacer,
+  Alert,
+  AlertIcon,
+  AlertTitle,
 } from '@chakra-ui/react';
 import { IoCheckmark, IoClose, IoRefresh } from 'react-icons/io5';
 import { SerialportContext } from '_/renderer/context/SerialportContext';
@@ -41,39 +44,32 @@ const HexapodMicrocontroller = (props: Props) => {
 
   return (
     <Box>
-      <Flex>
-        <Heading variant="h5" mt={6} mb={2}>
-          Hexapod Microcontroller
-        </Heading>
+      <Flex alignItems="center">
+        <Box>
+          <Heading variant="h5" mt={6} mb={2}>
+            Hexapod Microcontroller
+          </Heading>
+          <Text fontSize="0.9em" mb={2}>
+            Connect to Hexapod via Microcontroller over USB
+          </Text>
+        </Box>
         <Spacer />
-        <IconButton
+        <Button
+          borderRadius="lg"
           onClick={handleRefreshListClick}
           aria-label="Refresh"
-          icon={<IoRefresh />}
-        />
-      </Flex>
-      <Text fontSize="0.9em" mb={2}>
-        Connect to Hexapod via Microcontroller over USB
-      </Text>
-      <HexapodMicroTable data={list} />
-      <Flex>
-        <Text mb={2}>Status: </Text>
-        <Text
-          fontWeight="medium"
-          display="inline"
-          color={connected ? 'green.500' : 'red.500'}
+          leftIcon={<IoRefresh />}
         >
-          <Icon as={connected ? IoCheckmark : IoClose} mb={1} />{' '}
-          {connected ? 'Connected' : 'Not connected'}
-        </Text>
+          Refresh devices
+        </Button>
       </Flex>
-      <Button
-        w="16em"
-        onClick={handleClickConnectSerialport}
-        alignSelf="flex-start"
-      >
-        {connected ? 'Disconnect' : 'Connect'} serialport (USB)
-      </Button>
+      <Alert status={connected ? 'success' : 'warning'}>
+        <AlertIcon />
+        <AlertTitle mr={2}>
+          {connected ? 'Connected to device' : 'Not connected'}
+        </AlertTitle>
+      </Alert>
+      <HexapodMicroTable data={list} />
     </Box>
   );
 };

@@ -29,6 +29,12 @@ const Debug = (props: Props) => {
     dispatch({ type: 'WRITE', message: rawInputValue });
   };
 
+  const handleAnimateClick = () => {
+    for (let i = 100; i < 150; i++) {
+      dispatch({ type: 'WRITE', message: 'G0 Z' + i });
+    }
+  };
+
   return (
     <PageWrapper>
       <Alert status="error">
@@ -45,6 +51,8 @@ const Debug = (props: Props) => {
           </Button>
         </InputRightElement>
       </InputGroup>
+
+      <Button onClick={handleAnimateClick}>Animate</Button>
     </PageWrapper>
   );
 };
