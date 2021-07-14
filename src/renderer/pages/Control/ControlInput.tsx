@@ -5,33 +5,43 @@ import { Button, Flex, Spacer } from '@chakra-ui/react';
 import ControlSlider from './ControlSlider';
 import LoadConfigMenu from './LoadConfigMenu';
 import _ from 'lodash';
-import { axisNames } from './Control';
+
+import {
+  State as SixDofState,
+  Axis as SixDofAxis,
+  AxisData as SixDofAxisData,
+} from '_renderer/context/SixDofContext';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
-  axesState: Record<string, number>;
+  axesState: SixDofState['axes'];
+  liveInput: boolean;
   updateAxis: (axisKey: string, value: number) => void;
   resetAxes: () => void;
   updateAxisOnEndChange: (axisKey: string, value: number) => Promise<void>;
 }
 
-interface AxesMaxProps {
-  key: 'x' | 'y' | 'z' | 'roll' | 'pitch' | 'yaw';
-  value: number;
+interface AxesArrayItem {
+  key: SixDofAxis;
+  value: SixDofAxisData;
 }
 
 const ControlInput = (props: Props) => {
   const { axesState, updateAxis, resetAxes } = props;
 
-  const axes = Object.entries(axesState).map(([key, value]) => ({
-    key,
-    value,
-  }));
+  const axes: AxesArrayItem[] = Object.entries(axesState).map(
+    ([key, value]) => {
+      return {
+        key: key as SixDofAxis,
+        value,
+      };
+    }
+  );
 
   return (
     <>
-      {axes.map(({ key: axis, value }: AxesMaxProps) => {
-        const axisName: string = axisNames[axis];
+      {axes.map(({ key: axis, value }: AxesArrayItem) => {
+        const axisName = value.name;
 
         const setSliderValue = (value: number) => updateAxis(axis, value);
         const setSliderValueOnEndChange = async (value: number) =>
@@ -41,7 +51,9 @@ const ControlInput = (props: Props) => {
           <React.Fragment key={axis}>
             <ControlSlider
               axisName={axisName}
-              sliderValue={value}
+              sliderValue={value.current}
+              min={value.min}
+              max={value.max}
               setSliderValue={setSliderValue}
               setSliderValueOnEndChange={setSliderValueOnEndChange}
             />

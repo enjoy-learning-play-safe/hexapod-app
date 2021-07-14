@@ -178,7 +178,7 @@ export type ContextValue = {
   dispatch: React.Dispatch<OuterAction | AsyncAction>;
 };
 
-export const SerialportContext = createContext<ContextValue>({
+export const Context = createContext<ContextValue>({
   state: initialState,
   dispatch: () => {},
 });
