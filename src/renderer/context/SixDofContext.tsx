@@ -8,6 +8,7 @@
  */
 
 import { createContext, Reducer } from 'react';
+import tf, { Tensor, Rank } from '@tensorflow/tfjs';
 
 export enum Types {
   UPDATE_AXIS = 'UPDATE_AXIS',
@@ -43,6 +44,8 @@ export type State = {
   };
   liveInput: boolean;
   dof: number;
+  config: Config;
+  calculated: Calculated;
 };
 
 export const initialState: State = {
@@ -92,6 +95,60 @@ export const initialState: State = {
   },
   liveInput: false,
   dof: 6,
+  config: {
+    base: {
+      radius: 123.7,
+    },
+    platform: {
+      radius: 75,
+    },
+    actuator: {
+      min: 0,
+      max: 300,
+      home: 150,
+      precision: 3,
+    },
+    fixedRods: {
+      len: 210,
+      count: 6, // num legs
+    },
+    slice: {
+      maxChangePerSlice: 1,
+      minSlicePerMovement: 10,
+    },
+    range: {
+      xTranslate: 100,
+      yTranslate: 100,
+      zTranslate: 150,
+      roll: 0.524,
+      pitch: 0.524,
+      yaw: 0.524,
+    },
+  },
+  calculated: {
+    axes: {
+      xTranslate: 0,
+      yTranslate: 0,
+      zTranslate: 0,
+      roll: 0,
+      pitch: 0,
+      yaw: 0,
+    },
+    previousInputs: tf.zeros([6]),
+    platform: {
+      angles: tf.tensor([
+        [
+          0,
+          Math.PI / 3,
+          (2 * Math.PI) / 3,
+          Math.PI,
+          (4 * Math.PI) / 3,
+          (5 * Math.PI) / 3,
+        ],
+      ]),
+      coorXy: tf.tensor([0, 0]),
+    },
+  },
 };
 
 export type Action =
@@ -139,3 +196,54 @@ export const Context = createContext<ContextValue>({
   state: initialState,
   dispatch: () => {},
 });
+
+//
+// Calculated
+//
+
+export type Config = {
+  base: {
+    radius: number;
+  };
+  platform: {
+    radius: number;
+  };
+  actuator: {
+    min: number;
+    max: number;
+    home: number;
+    precision: number;
+  };
+  fixedRods: {
+    len: number;
+    count: number;
+  };
+  slice: {
+    maxChangePerSlice: number;
+    minSlicePerMovement: number;
+  };
+  range: {
+    xTranslate: number;
+    yTranslate: number;
+    zTranslate: number;
+    roll: number;
+    pitch: number;
+    yaw: number;
+  };
+};
+
+export type Calculated = {
+  axes: {
+    xTranslate: number;
+    yTranslate: number;
+    zTranslate: number;
+    roll: number;
+    pitch: number;
+    yaw: number;
+  };
+  previousInputs: Tensor<Rank>;
+  platform: {
+    angles: Tensor<Rank>;
+    coorXy: Tensor<Rank>;
+  };
+};
