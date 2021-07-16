@@ -4,10 +4,13 @@ on:
   push:
     tags:
       - "v*.*.*"
-
+      
 jobs:
   build-executables:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -21,7 +24,9 @@ jobs:
         run: |
           npm i -g yarn
           yarn install
-          yarn run quickbuild
+          yarn run rebuild
+          yarn run prod
+          yarn run build
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
