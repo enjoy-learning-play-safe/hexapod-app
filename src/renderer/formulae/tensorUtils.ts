@@ -37,7 +37,16 @@ export const getValuesFromTensor = (
         if (index.length === 1) {
           return tensor.gather(index).arraySync()[0];
         } else if (index.length === 2) {
-          return tensor.gather(index[0], 0).gather(index[1], 1).arraySync();
+          if (typeof index[0] === 'number' || Array.isArray(index[1])) {
+            return tensor.gather(index[0]).gather(index[1]).arraySync();
+          } else {
+            return (
+              tensor
+                .gather(index[0], 0)
+                // .gather(index[1], 1)
+                .arraySync()
+            );
+          }
         }
       }
 

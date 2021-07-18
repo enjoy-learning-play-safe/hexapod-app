@@ -87,7 +87,7 @@ describe('#tensorUtils', () => {
             ]),
             [1, [1, 2]]
           )
-        ).toIncludeAllMembers([4, 5, 6]);
+        ).toIncludeAllMembers([5, 6]);
       });
 
       test('f) should return number when (ranged index, ranged index) is input ', () => {

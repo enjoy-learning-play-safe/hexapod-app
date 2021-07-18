@@ -8,7 +8,7 @@
  */
 
 import { createContext, Reducer } from 'react';
-import tf, { Tensor, Rank } from '@tensorflow/tfjs';
+import * as tf from '@Tensorflow/tfjs';
 
 export enum Types {
   UPDATE_AXIS = 'UPDATE_AXIS',
@@ -147,8 +147,9 @@ export const initialState: State = {
           (5 * Math.PI) / 3,
         ],
       ]),
-      coorXy: tf.tensor([0, 0]),
+      coorXY: tf.tensor([0, 0]),
     },
+    slicingNumber: 0,
   },
 };
 
@@ -235,12 +236,12 @@ export type Config = {
 
 export type Initialized = {
   platform: {
-    coorXy: Tensor<Rank>;
-    coorHome: Tensor<Rank>; // home_height in py
-    coorPlatformBasis: Tensor<Rank>;
+    coorXY: tf.Tensor<tf.Rank>;
+    coorHome: tf.Tensor<tf.Rank>; // home_height in py
+    coorPlatformBasis: tf.Tensor<tf.Rank>;
   };
   base: {
-    coor: Tensor<Rank>;
+    coor: tf.Tensor<tf.Rank>;
   };
 };
 
@@ -253,10 +254,10 @@ export type Calculated = {
     pitch: number;
     yaw: number;
   };
-  previousInputs: Tensor<Rank>;
+  previousInputs: tf.Tensor<tf.Rank>;
   platform: {
-    angles: Tensor<Rank>;
-    coords: Tensor<Rank>;
+    coorXY: tf.Tensor<tf.Rank>;
+    angles: tf.Tensor<tf.Rank>;
   };
   slicingNumber: number;
 };
