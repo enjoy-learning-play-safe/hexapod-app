@@ -2,6 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "baseUrl": ".",
+    "lib": ["ES2020", "DOM"],
     "paths": {
       "_/*": ["src/*"],
       "_public/*": ["public/*"],

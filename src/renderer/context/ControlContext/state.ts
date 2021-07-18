@@ -17,7 +17,7 @@ export type AxisData = {
   max: number;
 };
 
-type Axes = {
+export type Axes = {
   [Axis.x]: AxisData;
   [Axis.y]: AxisData;
   [Axis.z]: AxisData;

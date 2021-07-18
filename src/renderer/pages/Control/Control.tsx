@@ -16,27 +16,30 @@ import PageWrapper from '../PageWrapper';
 import ControlInput from './ControlInput';
 import { Context as SerialportContext } from '_/renderer/context/SerialportContext';
 import {
-  Context as SixDofContext,
-  Types as SixDofTypes,
-  Axis as SixDofAxis,
-} from '_renderer/context/SixDofContext';
+  Context as ControlContext,
+  Types as ControlTypes,
+  Axis as ControlAxis,
+} from '_renderer/context/ControlContext';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Control = (props: Props): JSX.Element => {
-  const { state: sixDofState, dispatch: sixDofDispatch } =
-    useContext(SixDofContext);
+  const { state: controlState, dispatch: controlDispatch } =
+    useContext(ControlContext);
 
-  const { axes: axesState, liveInput } = sixDofState;
+  const { axes: axesState, liveInput } = controlState;
 
-  const setAxesState = (axis: SixDofAxis, value: number) => {
-    sixDofDispatch({ type: SixDofTypes.UPDATE_AXIS, axis, value });
+  const setAxesState = (axis: ControlAxis, value: number) => {
+    controlDispatch({
+      type: ControlTypes.SET_AXES,
+      payload: { axes: { [axis]: value } },
+    });
   };
 
   const setLiveInput = (value: boolean) => {
-    sixDofDispatch({ type: SixDofTypes.SET_LIVE_INPUT, liveInput: value });
+    controlDispatch({ type: ControlTypes.SET_LIVE_INPUT, payload: value });
   };
 
   const handleChangeLiveInput = () => {
@@ -47,7 +50,7 @@ const Control = (props: Props): JSX.Element => {
 
   // const [axesState, setAxesState] = useState(AxesInitialState);
 
-  const updateAxis = async (axis: SixDofAxis, value: number) => {
+  const updateAxis = async (axis: ControlAxis, value: number) => {
     // set state:
     console.log({ axis, value });
     setAxesState(axis, value);
@@ -80,7 +83,7 @@ const Control = (props: Props): JSX.Element => {
   };
 
   const resetAxes = () => {
-    sixDofDispatch({ type: SixDofTypes.RESET_AXES });
+    controlDispatch({ type: ControlTypes.RESET_AXES });
   };
 
   const [selectedConfig, setSelectedConfig] = useState('hexapod');

@@ -4,6 +4,7 @@ import { AsyncAction } from './actions';
 import { createContext } from 'react';
 import { OuterAction } from './actions';
 import { initialState, State } from './state';
+import Types from './types';
 
 // * Local Exports
 
@@ -17,6 +18,9 @@ export const Context = createContext<ContextValue>({
   dispatch: () => {},
 });
 
-// Exports from sister files
+// Exports from neighbouring files
 export { reducer } from './reducer';
-export { initialState } from './state';
+export { initialState, State, Axis, Axes } from './state';
+export { Action, AsyncAction, OuterAction } from './actions';
+export { asyncActionHandlers } from './asyncActions';
+export { Types };
