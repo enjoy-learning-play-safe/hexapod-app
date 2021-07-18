@@ -125,6 +125,7 @@ export const initialState: State = {
       yaw: 0.524,
     },
   },
+  // TODO: initialized
   calculated: {
     axes: {
       xTranslate: 0,
@@ -232,6 +233,17 @@ export type Config = {
   };
 };
 
+export type Initialized = {
+  platform: {
+    coorXy: Tensor<Rank>;
+    coorHome: Tensor<Rank>; // home_height in py
+    coorPlatformBasis: Tensor<Rank>;
+  };
+  base: {
+    coor: Tensor<Rank>;
+  };
+};
+
 export type Calculated = {
   axes: {
     xTranslate: number;
@@ -244,6 +256,7 @@ export type Calculated = {
   previousInputs: Tensor<Rank>;
   platform: {
     angles: Tensor<Rank>;
-    coorXy: Tensor<Rank>;
+    coords: Tensor<Rank>;
   };
+  slicingNumber: number;
 };

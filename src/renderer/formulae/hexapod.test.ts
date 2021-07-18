@@ -56,7 +56,6 @@ describe('#formulae/hexapod', () => {
 
   test('test the generateBCoor', () => {
     const bCoor = generateBCoor(pCoorXY);
-    console.log('bCoor', bCoor);
 
     expect(bCoor).toEqual([
       [
@@ -71,7 +70,11 @@ describe('#formulae/hexapod', () => {
   });
 
   test('should return solved matrix for actuator', async () => {
-    console.log('matMulTensor');
-    matMulTensor.print();
+    expect(matMulTensor.arraySync()).toEqual([
+      [6, 6],
+      [14, 14],
+    ]);
   });
+
+  // test('should ');
 });
