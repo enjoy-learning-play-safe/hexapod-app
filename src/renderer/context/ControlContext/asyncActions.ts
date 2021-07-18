@@ -8,7 +8,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
   Reducer<State, Action>,
   AsyncAction
 > = {
-  // todo: add init and home here
+  // todo: add init+home here
   [Types.SET_AXES]:
     ({ dispatch }) =>
     async (action) => {
