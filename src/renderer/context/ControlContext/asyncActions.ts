@@ -9,6 +9,22 @@ export const asyncActionHandlers: AsyncActionHandlers<
   AsyncAction
 > = {
   // todo: add init+home here
+  [Types.INIT_ARDUINO]:
+    ({ dispatch }) =>
+    async (action) => {
+      // step 1: math stuff:
+      // todo
+      dispatch({
+        type: Types.INNER_INITIALIZE_STATE,
+      });
+
+      // step 2: flush serialport
+      // todo
+
+      // step 3: write gcode to serialport
+      // todo
+    },
+
   [Types.SET_AXES]:
     ({ dispatch }) =>
     async (action) => {

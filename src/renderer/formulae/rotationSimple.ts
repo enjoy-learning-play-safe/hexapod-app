@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
 
-export const rotationSimple = (psi: number, theta: number, phi: number) => {
+export const rotationSimple = (phi: number, theta: number, psi: number) => {
   const cpsi = Math.cos(psi);
   const ctheta = Math.cos(theta);
   const cphi = Math.cos(phi);

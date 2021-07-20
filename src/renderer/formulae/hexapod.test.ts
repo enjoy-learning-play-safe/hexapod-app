@@ -1,7 +1,7 @@
 // import tf, { Tensor, Rank, Tensor2D } from '@tensorflow/tfjs';
 import * as tf from '@tensorflow/tfjs';
 
-import { platformAngles } from '../fixtures/testFixtures';
+import { platformAnglesTestData } from '../fixtures/testFixtures';
 import {
   actuatorSolving,
   generateBCoor,
@@ -21,7 +21,7 @@ describe('#formulae/hexapod', () => {
   });
 
   test('should return platformAngles as expected', () => {
-    expect(platformAngles.sin().mul(tf.scalar(5)).arraySync()).toEqual([
+    expect(platformAnglesTestData.sin().mul(tf.scalar(5)).arraySync()).toEqual([
       0, 4.330127239227295, 4.330126762390137, -4.37113897078234e-7,
       -4.330127239227295, -4.330127239227295,
     ]);

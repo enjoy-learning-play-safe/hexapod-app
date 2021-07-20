@@ -36,15 +36,6 @@ export type AxesOptional = {
   [Axis.yaw]?: AxisData;
 };
 
-export type AxesNumber = {
-  [Axis.x]: number;
-  [Axis.y]: number;
-  [Axis.z]: number;
-  [Axis.roll]: number;
-  [Axis.pitch]: number;
-  [Axis.yaw]: number;
-};
-
 type Config = {
   base: {
     radius: number;

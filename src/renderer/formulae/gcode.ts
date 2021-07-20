@@ -1,33 +1,55 @@
-import { Axis } from '../context/ControlContext/state';
+import * as tf from '@tensorflow/tfjs';
+import { Tensor2D, Tensor1D } from '@tensorflow/tfjs';
+import { interpolate } from './interpolate';
 
+import { rotationSimple } from './rotationSimple';
+import { NewAxes } from './types';
 
-type AxesNumber = {
-  [Axis.x]: number;
-  [Axis.y]: number;
-  [Axis.z]: number;
-  [Axis.roll]: number;
-  [Axis.pitch]: number;
-  [Axis.yaw]: number;
+export const gcode = (
+  platformCoords: Tensor2D,
+  newAxes: NewAxes,
+  previousInput: Tensor1D,
+  platformCoordsBasis: Tensor2D,
+  platformCoordsHome: Tensor2D,
+  fixedRodsLength: number,
+  baseCoords: Tensor2D,
+  precision?: number
+) => {
+  const startPose = platformCoords;
+
+  const { x, y, z, roll, pitch, yaw } = newAxes;
+
+  const rotation = tf.matMul(
+    rotationSimple(roll, pitch, yaw),
+    platformCoordsBasis
+  );
+
+  const newPlatformCoords = tf
+    .stack([
+      rotation.gather(0).add(x),
+      rotation.gather(1).add(y),
+      rotation.gather(2).add(z),
+    ])
+    .add(platformCoordsBasis)
+    .sub(platformCoordsHome) as Tensor1D;
+
+  const endPose = newPlatformCoords;
+
+  // const slicingNumber = slicingNumberGenerator(startPose, endPose); //todo
+  const slicingNumber = 2;
+
+  // todo: call interpolate() here
+  const interpolated = interpolate(
+    newAxes,
+    previousInput,
+    slicingNumber,
+    platformCoordsBasis,
+    platformCoordsHome,
+    fixedRodsLength,
+    baseCoords
+  );
+
+  // todo: write final position via serial (is this necessary though?)
+
+  return newPlatformCoords;
 };
-
-type AxesXyzNumber = {
-  [Axis.x]: number;
-  [Axis.y]: number;
-  [Axis.z]: number;
-}
-
-type platformCoords = {
-  1: AxesXyzNumber,
-  2: AxesXyzNumber,
-  3: AxesXyzNumber,
-  4: AxesXyzNumber,
-  5: AxesXyzNumber,
-  6: AxesXyzNumber
-}
-
-const gcode = (pCoor: platformCoords, transRot: AxesNumber, previousInputs: AxesNumber) => {
-
-  const startpose = pCoor
-  const rott = 
-
-}
