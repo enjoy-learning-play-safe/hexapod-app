@@ -1,4 +1,5 @@
-import { Rank, Tensor } from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
+import { Rank, Tensor, Tensor1D } from '@tensorflow/tfjs';
 
 export enum Axis {
   x = 'x',
@@ -33,6 +34,15 @@ export type AxesOptional = {
   [Axis.roll]?: AxisData;
   [Axis.pitch]?: AxisData;
   [Axis.yaw]?: AxisData;
+};
+
+export type AxesNumber = {
+  [Axis.x]: number;
+  [Axis.y]: number;
+  [Axis.z]: number;
+  [Axis.roll]: number;
+  [Axis.pitch]: number;
+  [Axis.yaw]: number;
 };
 
 type Config = {
@@ -87,8 +97,8 @@ export type State = {
   axes: Axes;
   liveInput: boolean;
   dof: number;
-  config: {}; // todo change type
-  calculated: {}; // todo change type
+  config: Config;
+  calculated: Calculated; // todo change type
 };
 
 const initialAxes: Axes = {
@@ -136,12 +146,61 @@ const initialAxes: Axes = {
   },
 };
 
-const initialConfig = {
-  // todo
+const initialConfig: Config = {
+  base: {
+    radius: 123.7,
+  },
+  platform: {
+    radius: 75,
+  },
+  actuator: {
+    min: 0,
+    max: 300,
+    home: 150,
+    precision: 3,
+  },
+  fixedRods: {
+    len: 210,
+    count: 6,
+  },
+  slice: {
+    maxChangePerSlice: 1,
+    minSlicePerMovement: 10,
+  },
+  range: {
+    xTranslate: 100,
+    yTranslate: 100,
+    zTranslate: 150,
+    roll: 0.524,
+    pitch: 0.524,
+    yaw: 0.524,
+  },
 };
 
-const initialCalculated = {
-  // todo
+const initialCalculated: Calculated = {
+  axes: {
+    xTranslate: 0,
+    yTranslate: 0,
+    zTranslate: 0,
+    roll: 0,
+    pitch: 0,
+    yaw: 0,
+  },
+  previousInputs: tf.zeros([6]),
+  platform: {
+    angles: tf.tensor([
+      [
+        0,
+        Math.PI / 3,
+        (2 * Math.PI) / 3,
+        Math.PI,
+        (4 * Math.PI) / 3,
+        (5 * Math.PI) / 3,
+      ],
+    ]),
+    coorXY: tf.tensor([0, 0]),
+  },
+  slicingNumber: 0,
 };
 
 export const initialState: State = {

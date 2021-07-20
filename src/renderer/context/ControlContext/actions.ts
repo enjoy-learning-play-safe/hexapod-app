@@ -30,6 +30,9 @@ export type InnerAction =
 
 export type AsyncAction =
   | {
+      type: Types.INIT_ARDUINO;
+    }
+  | {
       type: Types.SET_AXES;
       payload: { axes: AxesOptional };
     }

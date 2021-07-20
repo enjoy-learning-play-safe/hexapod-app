@@ -1,5 +1,6 @@
 {
-  "name": "electron-react-typescript-webpack-boilerplate",
+  "name": "hexapod-app",
+  "productName": "AluMata Controller",
   "version": "0.1.2",
   "description": "Electron app for hexapod",
   "author": "Enjoy Learning Play Safe",
