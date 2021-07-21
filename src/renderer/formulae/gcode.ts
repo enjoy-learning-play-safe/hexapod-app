@@ -53,7 +53,9 @@ export const gcode = (
     baseCoords
   );
 
+  const { finalValue: gcodeString } = interpolated;
+
   // todo: write final position via serial (is this necessary though?)
 
-  return newPlatformCoords;
+  return { newPlatformCoords, gcodeString };
 };
