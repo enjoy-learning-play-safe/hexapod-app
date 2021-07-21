@@ -49,7 +49,7 @@ export const interpolate = (
 
     const rotatedArray = rotated.arraySync();
 
-    console.log('rotated', rotated.arraySync());
+    // console.log('rotated', rotated.arraySync());
 
     const intermediatePlatformCoords = tf
       .stack([
@@ -62,10 +62,10 @@ export const interpolate = (
 
     const intermediatePlatformCoordsArray = rotated.arraySync();
 
-    console.log(
-      'intermediatePlatformCoords',
-      intermediatePlatformCoords.arraySync()
-    );
+    // console.log(
+    //   'intermediatePlatformCoords',
+    //   intermediatePlatformCoords.arraySync()
+    // );
 
     const legs = solveActuator(
       intermediatePlatformCoords,
@@ -78,9 +78,10 @@ export const interpolate = (
 
     const legsArray = rotated.arraySync();
 
-    console.log('legs', legs);
+    // console.log('legs', legs);
 
     const gcodeString = `G0 X${legs[0]} Y${legs[1]} Z${legs[2]} A${legs[3]} B${legs[4]} C${legs[5]}`;
+
     console.log('gcodeString', gcodeString);
 
     // todo: write to serial

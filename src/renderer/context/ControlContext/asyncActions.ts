@@ -3,6 +3,17 @@ import { State, initialState } from './state';
 import { Reducer } from 'react';
 import { AsyncActionHandlers } from 'use-reducer-async';
 import Types from './types';
+import { gcode } from '_/renderer/formulae/gcode';
+import {
+  baseCoordsTestData,
+  constants,
+  newAxesTestData,
+  newAxesTestData30,
+  platformCoordsBasisTestData,
+  platformCoordsHomeTestData,
+  platformCoordsTestData,
+  previousInputTestData,
+} from '_/renderer/fixtures/testFixtures';
 
 export const asyncActionHandlers: AsyncActionHandlers<
   Reducer<State, Action>,
@@ -26,7 +37,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
     },
 
   [Types.SET_AXES]:
-    ({ dispatch }) =>
+    ({ dispatch, getState }) =>
     async (action) => {
       // step 0: update axes in state
       dispatch({
@@ -34,6 +45,29 @@ export const asyncActionHandlers: AsyncActionHandlers<
         payload: { axes: action.payload.axes },
       });
       // step 1: take the 6dof array and calculate gcode from that
+      const state: State = getState();
+
+      const t0 = performance.now();
+
+      const gcodeRes = gcode(
+        // ! DEBUG
+        platformCoordsTestData,
+        newAxesTestData30,
+        previousInputTestData,
+        platformCoordsBasisTestData,
+        platformCoordsHomeTestData,
+        constants.fixedRodsLength,
+        baseCoordsTestData,
+        constants.maxChangePerSlice,
+        constants.minimumSlicePerMovement
+      );
+
+      console.log('gcodeRes', gcodeRes);
+
+      const t1 = performance.now();
+
+      console.log(`Call to calculate gcode took ${t1 - t0} milliseconds.`);
+
       //
       // step 2: send the gcode via serialport
       // todo: move serial port code to some function within the control context (thus replacing the serialportContext context)

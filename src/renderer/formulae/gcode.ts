@@ -3,6 +3,7 @@ import { Tensor2D, Tensor1D } from '@tensorflow/tfjs';
 import { interpolate } from './interpolate';
 
 import { rotationSimple } from './rotationSimple';
+import { slicingNumberGenerator } from './slicingNumberGenerator';
 import { NewAxes } from './types';
 
 export const gcode = (
@@ -13,6 +14,8 @@ export const gcode = (
   platformCoordsHome: Tensor2D,
   fixedRodsLength: number,
   baseCoords: Tensor2D,
+  maxChangePerSlice: number,
+  minSlicePerMovement: number,
   precision?: number
 ) => {
   const startPose = platformCoords;
@@ -33,14 +36,20 @@ export const gcode = (
       rotation.gather(2).add(z),
     ])
     .sub(platformCoordsBasis)
-    .add(platformCoordsHome) as Tensor1D;
+    .add(platformCoordsHome) as Tensor2D;
 
   const newPlatformCoordsArray = newPlatformCoords.arraySync();
 
   const endPose = newPlatformCoords;
 
-  // const slicingNumber = slicingNumberGenerator(startPose, endPose); //todo
-  const slicingNumber = 2;
+  const slicingNumber = slicingNumberGenerator(
+    startPose,
+    endPose,
+    fixedRodsLength,
+    baseCoords,
+    maxChangePerSlice,
+    minSlicePerMovement
+  );
 
   // todo: call interpolate() here
   const interpolated = interpolate(

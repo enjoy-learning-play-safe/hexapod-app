@@ -21,6 +21,8 @@ export const reducer: Reducer<State, Action> = (state, action) => {
       return state;
     case Types.INNER_SET_NEW_STORE:
       return state;
+    case Types.INNER_INITIALIZE_STATE:
+      return state;
 
     // * outer sync actions
     case Types.SET_LIVE_INPUT:

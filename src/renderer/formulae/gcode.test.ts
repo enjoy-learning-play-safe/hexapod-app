@@ -19,7 +19,9 @@ describe('#gcode', () => {
       platformCoordsBasisTestData,
       platformCoordsHomeTestData,
       constants.fixedRodsLength,
-      baseCoordsTestData
+      baseCoordsTestData,
+      constants.maxChangePerSlice,
+      constants.minimumSlicePerMovement
     );
 
     expect({
@@ -52,7 +54,9 @@ describe('#gcode', () => {
       platformCoordsBasisTestData,
       platformCoordsHomeTestData,
       constants.fixedRodsLength,
-      baseCoordsTestData
+      baseCoordsTestData,
+      constants.maxChangePerSlice,
+      constants.minimumSlicePerMovement
     );
 
     expect({

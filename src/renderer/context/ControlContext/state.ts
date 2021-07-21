@@ -36,6 +36,15 @@ export type AxesOptional = {
   [Axis.yaw]?: AxisData;
 };
 
+export type AxesNumber = {
+  [Axis.x]?: number;
+  [Axis.y]?: number;
+  [Axis.z]?: number;
+  [Axis.roll]?: number;
+  [Axis.pitch]?: number;
+  [Axis.yaw]?: number;
+};
+
 type Config = {
   base: {
     radius: number;
@@ -189,7 +198,12 @@ const initialCalculated: Calculated = {
         (5 * Math.PI) / 3,
       ],
     ]),
-    coorXY: tf.tensor([0, 0]),
+    coorXY: tf.tensor([0, 0]), // ? can we remove this?
+    // coors: tf.tensor2d([
+    //   [0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0],
+    //   [1, 1, 1, 1, 1, 1],
+    // ]),
   },
   slicingNumber: 0,
 };

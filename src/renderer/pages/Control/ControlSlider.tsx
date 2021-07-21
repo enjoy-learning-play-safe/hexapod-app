@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import {
   Flex,
@@ -16,6 +16,8 @@ import {
 
 // eslint-disable-next-line max-len
 import SliderCenteredFilledTrack from '../../components/SliderCenteredFilledTrack';
+import { Context as ControlContext } from '_renderer/context/ControlContext';
+import ActionTypes from '_/renderer/context/ControlContext/types';
 
 interface Props {
   axisName: string;
@@ -32,10 +34,17 @@ const ControlSlider = (props: Props): JSX.Element => {
 
   const [loading, setLoading] = useState(false);
 
+  const { state: controlState, dispatch: controlDispatch } =
+    useContext(ControlContext);
+
   const sliderThumbText = `${sliderValue > 0 ? '+' : ''}${sliderValue}`;
 
   const handleSliderChange = (val: number) => {
-    setSliderValue(val);
+    // setSliderValue(val);
+    controlDispatch({
+      type: ActionTypes.SET_AXES,
+      payload: { axes: { x: 0, y: 0, z: 10, roll: 0, pitch: 0, yaw: 0 } },
+    });
     setLoading(true);
   };
 
