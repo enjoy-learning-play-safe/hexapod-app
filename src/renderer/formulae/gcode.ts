@@ -24,14 +24,18 @@ export const gcode = (
     platformCoordsBasis
   );
 
+  const rotationArray = rotation.arraySync();
+
   const newPlatformCoords = tf
     .stack([
       rotation.gather(0).add(x),
       rotation.gather(1).add(y),
       rotation.gather(2).add(z),
     ])
-    .add(platformCoordsBasis)
-    .sub(platformCoordsHome) as Tensor1D;
+    .sub(platformCoordsBasis)
+    .add(platformCoordsHome) as Tensor1D;
+
+  const newPlatformCoordsArray = newPlatformCoords.arraySync();
 
   const endPose = newPlatformCoords;
 

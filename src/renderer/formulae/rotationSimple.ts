@@ -8,7 +8,7 @@ export const rotationSimple = (roll: number, pitch: number, yaw: number) => {
   const stheta = Math.sin(pitch);
   const sphi = Math.sin(roll);
 
-  const rota = tf.tensor2d([
+  const rotation = tf.tensor2d([
     [
       cpsi * ctheta,
       cpsi * stheta * sphi - spsi * cphi,
@@ -22,5 +22,5 @@ export const rotationSimple = (roll: number, pitch: number, yaw: number) => {
     [-stheta, ctheta * sphi, ctheta * cphi],
   ]);
 
-  return rota;
+  return rotation;
 };

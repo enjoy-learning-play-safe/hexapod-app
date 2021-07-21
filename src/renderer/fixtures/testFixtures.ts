@@ -1,6 +1,8 @@
 import * as tf from '@tensorflow/tfjs';
 import { Tensor2D } from '@tensorflow/tfjs';
 
+import { toRadians } from './../formulae/toRadians';
+
 export const constants = {
   baseRadius: 125,
   platformRadius: 75,
@@ -8,6 +10,8 @@ export const constants = {
   actuatorMin: 0,
   actuatorMax: 300,
   actuatorHome: 150, // (max - min) / 2
+  maxChangePerSlice: 1,
+  minimumSlicePerMovement: 10,
 };
 
 export const platformAnglesTestData = tf.tensor1d([
@@ -22,14 +26,28 @@ export const platformAnglesTestData = tf.tensor1d([
 export const newAxesTestData = {
   x: 0,
   y: 0,
-  z: 100,
-  roll: 0,
-  pitch: 0,
-  yaw: 0,
+  z: 10,
+  roll: toRadians(0),
+  pitch: toRadians(0),
+  yaw: toRadians(0),
+};
+
+export const newAxesTestData30 = {
+  x: 30,
+  y: 30,
+  z: 30,
+  roll: toRadians(30),
+  pitch: toRadians(30),
+  yaw: toRadians(30),
 };
 
 export const previousInputTestData = tf.tensor1d([
-  150, 150, 150, 150, 150, 150,
+  0,
+  0,
+  0,
+  toRadians(0),
+  toRadians(0),
+  toRadians(0),
 ]);
 
 export const platformCoordsXYTestData = tf.stack([

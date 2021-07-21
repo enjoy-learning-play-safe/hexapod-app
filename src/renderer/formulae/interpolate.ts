@@ -1,3 +1,4 @@
+import roundTo from 'round-to';
 import { solveActuator } from './solveActuator';
 import * as tf from '@tensorflow/tfjs';
 import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
@@ -14,7 +15,7 @@ export const interpolate = (
   platformCoordsHome: Tensor2D,
   fixedRodsLength: number,
   baseCoords: Tensor2D,
-  precision?: number
+  precision = 3
 ) => {
   console.log('interpolate overArgs', {
     newAxes,
@@ -36,7 +37,7 @@ export const interpolate = (
     const intermediate = Object.fromEntries(
       axesArray.map(([axis, value], index) => [
         axis,
-        (value - prevInputArray[index] / slicingNumber) * i +
+        ((value - prevInputArray[index]) / slicingNumber) * i +
           prevInputArray[index],
       ])
     );
@@ -46,16 +47,20 @@ export const interpolate = (
       platformCoordsBasis
     );
 
+    const rotatedArray = rotated.arraySync();
+
     console.log('rotated', rotated.arraySync());
 
     const intermediatePlatformCoords = tf
       .stack([
-        rotated.gather(0).add(intermediate.y),
-        rotated.gather(1).add(intermediate.x),
+        rotated.gather(0).add(intermediate.x),
+        rotated.gather(1).add(intermediate.y),
         rotated.gather(2).add(intermediate.z),
       ])
       .sub(platformCoordsBasis)
       .add(platformCoordsHome) as Tensor2D;
+
+    const intermediatePlatformCoordsArray = rotated.arraySync();
 
     console.log(
       'intermediatePlatformCoords',
@@ -67,7 +72,11 @@ export const interpolate = (
       fixedRodsLength,
       baseCoords,
       precision
-    ).arraySync();
+    )
+      .arraySync()
+      .map((num) => (precision ? roundTo(num, precision) : num));
+
+    const legsArray = rotated.arraySync();
 
     console.log('legs', legs);
 

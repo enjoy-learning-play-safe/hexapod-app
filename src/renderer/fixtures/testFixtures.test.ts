@@ -45,7 +45,7 @@ describe('#testFixtures', () => {
       expect(newAxesTestData).toEqual({
         x: 0,
         y: 0,
-        z: 100,
+        z: 10,
         roll: 0,
         pitch: 0,
         yaw: 0,
@@ -56,7 +56,7 @@ describe('#testFixtures', () => {
   describe('previousInput', () => {
     test('should return expected tensor', () => {
       expect(previousInputTestData.arraySync()).toIncludeSameMembers([
-        150, 150, 150, 150, 150, 150,
+        0, 0, 0, 0, 0, 0,
       ]);
     });
   });
