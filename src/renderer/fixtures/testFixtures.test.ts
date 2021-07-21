@@ -43,8 +43,8 @@ describe('#testFixtures', () => {
   describe('newAxes', () => {
     test('should return expected tensor', () => {
       expect(newAxesTestData).toEqual({
-        x: 100,
-        y: 100,
+        x: 0,
+        y: 0,
         z: 100,
         roll: 0,
         pitch: 0,

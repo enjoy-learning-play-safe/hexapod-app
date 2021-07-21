@@ -23,8 +23,7 @@ describe('#interpolate', () => {
 
       expect(interpolated).toEqual({
         finalValue: {
-          gcodeString:
-            'G0 X-454.1590576171875 Y-429.5276184082031 Z-429.5276184082031 A-520.3771362304688 B-520.3770751953125 C-454.1590270996094',
+          gcodeString: 'G0 X350 Y350 Z350 A350 B350 C350',
         },
       });
     });

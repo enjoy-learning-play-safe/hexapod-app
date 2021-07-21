@@ -1,12 +1,12 @@
 import * as tf from '@tensorflow/tfjs';
 
-export const rotationSimple = (phi: number, theta: number, psi: number) => {
-  const cpsi = Math.cos(psi);
-  const ctheta = Math.cos(theta);
-  const cphi = Math.cos(phi);
-  const spsi = Math.sin(psi);
-  const stheta = Math.sin(theta);
-  const sphi = Math.sin(phi);
+export const rotationSimple = (roll: number, pitch: number, yaw: number) => {
+  const cpsi = Math.cos(yaw);
+  const ctheta = Math.cos(pitch);
+  const cphi = Math.cos(roll);
+  const spsi = Math.sin(yaw);
+  const stheta = Math.sin(pitch);
+  const sphi = Math.sin(roll);
 
   const rota = tf.tensor2d([
     [
