@@ -135,7 +135,7 @@ describe('#testFixtures', () => {
 
   describe('homeHeight', () => {
     test('should return expected tensor', () => {
-      expect(homeHeightTestData).toEqual(352.86089238044957); // ! isn't this supposed to be under 300?
+      expect(homeHeightTestData).toEqual(352.86089238044957);
     });
   });
 

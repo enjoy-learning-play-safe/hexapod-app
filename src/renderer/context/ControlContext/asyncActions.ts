@@ -51,7 +51,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
 
       const gcodeRes = gcode(
         // ! DEBUG
-        platformCoordsTestData,
+        platformCoordsHomeTestData,
         newAxesTestData30,
         previousInputTestData,
         platformCoordsBasisTestData,
