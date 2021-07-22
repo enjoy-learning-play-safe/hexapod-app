@@ -3,21 +3,21 @@ import { Tensor2D } from '@tensorflow/tfjs';
 
 import roundTo from 'round-to';
 
-export const solveActuator = (
+export const solveActuator = async (
   platformCoords: Tensor2D,
   fixedRodsLength: number,
   baseCoords: Tensor2D,
   precision?: number
 ) => {
-  const numLegs = platformCoords.gather(0).arraySync().length;
+  const numLegs = (await platformCoords.gather(0).array()).length;
 
-  const platformX = platformCoords.gather(0).arraySync() as any;
-  const platformY = platformCoords.gather(1).arraySync() as any;
-  const platformZ = platformCoords.gather(2).arraySync() as any;
+  const platformX = (await platformCoords.gather(0).array()) as any;
+  const platformY = (await platformCoords.gather(1).array()) as any;
+  const platformZ = (await platformCoords.gather(2).array()) as any;
 
-  const baseX = baseCoords.gather(0).arraySync() as any;
-  const baseY = baseCoords.gather(1).arraySync() as any;
-  // const baseZ = baseCoords.gather(2).arraySync();
+  const baseX = (await baseCoords.gather(0).array()) as any;
+  const baseY = (await baseCoords.gather(1).array()) as any;
+  // const baseZ = await baseCoords.gather(2).array();
 
   const legsArray = new Array(numLegs)
     .fill(undefined)

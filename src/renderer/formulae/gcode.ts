@@ -6,7 +6,7 @@ import { rotationSimple } from './rotationSimple';
 import { slicingNumberGenerator } from './slicingNumberGenerator';
 import { NewAxes } from './types';
 
-export const gcode = (
+export const gcode = async (
   platformCoords: Tensor2D,
   newAxes: NewAxes,
   previousInput: Tensor1D,
@@ -27,8 +27,6 @@ export const gcode = (
     platformCoordsBasis
   );
 
-  const rotationArray = rotation.arraySync();
-
   const newPlatformCoords = tf
     .stack([
       rotation.gather(0).add(x),
@@ -38,11 +36,9 @@ export const gcode = (
     .sub(platformCoordsBasis)
     .add(platformCoordsHome) as Tensor2D;
 
-  const newPlatformCoordsArray = newPlatformCoords.arraySync();
-
   const endPose = newPlatformCoords;
 
-  const slicingNumber = slicingNumberGenerator(
+  const slicingNumber = await slicingNumberGenerator(
     startPose,
     endPose,
     fixedRodsLength,
@@ -52,7 +48,7 @@ export const gcode = (
   );
 
   // todo: call interpolate() here
-  const interpolated = interpolate(
+  const interpolated = await interpolate(
     newAxes,
     previousInput,
     slicingNumber,
@@ -66,5 +62,18 @@ export const gcode = (
 
   // todo: write final position via serial (is this necessary though?)
 
-  return { newPlatformCoords, gcodeString: finalValue?.gcodeString };
+  //
+
+  const newPreviousInput = tf.tensor1d(Object.values(newAxes));
+
+  console.log('newPreviousInput', newPreviousInput);
+
+  const newPlatformCoordsBasis = platformCoordsBasis; // ! change this
+
+  return {
+    platformCoords: newPlatformCoords,
+    previousInput: newPreviousInput,
+    platformCoordsBasis: newPlatformCoordsBasis,
+    gcodeString: finalValue?.gcodeString,
+  };
 };

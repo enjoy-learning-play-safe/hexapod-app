@@ -4,6 +4,7 @@ import update from 'immutability-helper';
 import {
   Action,
   InnerResetStateAxes,
+  InnerSetCalculated,
   InnerSetStateAxes,
   SetLiveInput,
 } from './actions';
@@ -23,6 +24,8 @@ export const reducer: Reducer<State, Action> = (state, action) => {
       return state;
     case Types.INNER_INITIALIZE_STATE:
       return state;
+    case Types.INNER_SET_CALCULATED:
+      return innerSetCalculated(state, action);
 
     // * outer sync actions
     case Types.SET_LIVE_INPUT:
@@ -50,6 +53,12 @@ const innerSetStateAxes = (state: State, action: InnerSetStateAxes) => {
 
 const innerResetStateAxes = (state: State, action: InnerResetStateAxes) => {
   return update(state, { $merge: { axes: initialState.axes } });
+};
+
+const innerSetCalculated = (state: State, action: InnerSetCalculated) => {
+  return update(state, {
+    $merge: action.payload,
+  });
 };
 
 const setLiveInput = (state: State, action: SetLiveInput) => {

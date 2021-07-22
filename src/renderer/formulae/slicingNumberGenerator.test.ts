@@ -12,9 +12,9 @@ import { slicingNumberGenerator } from './slicingNumberGenerator';
 import { rotationSimple } from './rotationSimple';
 
 describe('#slicingNumberGeneratir', () => {
-  test('z 20 should return 20 as the slicing number', () => {
+  test('z 20 should return 20 as the slicing number', async () => {
     expect(
-      slicingNumberGenerator(
+      await slicingNumberGenerator(
         platformCoordsHomeTestData,
         platformCoordsHomeTestData.add([
           [0, 0, 0, 0, 0, 0],
@@ -28,9 +28,9 @@ describe('#slicingNumberGeneratir', () => {
       )
     ).toEqual(20);
   });
-  test('z 5 should return 10 as the slicing number', () => {
+  test('z 5 should return 10 as the slicing number', async () => {
     expect(
-      slicingNumberGenerator(
+      await slicingNumberGenerator(
         platformCoordsHomeTestData,
         platformCoordsHomeTestData.add([
           [0, 0, 0, 0, 0, 0],
@@ -45,13 +45,13 @@ describe('#slicingNumberGeneratir', () => {
     ).toEqual(10);
   });
 
-  test('everything 30 should return 86', () => {
+  test('everything 30 should return 86', async () => {
     const rotation = tf.matMul(
       rotationSimple(toRadians(30), toRadians(30), toRadians(30)),
       platformCoordsBasisTestData
     );
     expect(
-      slicingNumberGenerator(
+      await slicingNumberGenerator(
         platformCoordsHomeTestData,
         tf
           .stack([
@@ -69,13 +69,13 @@ describe('#slicingNumberGeneratir', () => {
     ).toEqual(86);
   });
 
-  test('everything 20 should return ?', () => {
+  test('everything 20 should return ?', async () => {
     const rotation = tf.matMul(
       rotationSimple(toRadians(20), toRadians(20), toRadians(20)),
       platformCoordsBasisTestData
     );
     expect(
-      slicingNumberGenerator(
+      await slicingNumberGenerator(
         platformCoordsHomeTestData,
         tf
           .stack([

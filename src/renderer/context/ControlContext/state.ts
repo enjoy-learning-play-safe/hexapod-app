@@ -1,5 +1,12 @@
+import {
+  baseCoords,
+  platformAngles,
+  platformCoordsBasis,
+  platformCoordsHome,
+  previousInput,
+} from './constants';
 import * as tf from '@tensorflow/tfjs';
-import { Rank, Tensor, Tensor1D } from '@tensorflow/tfjs';
+import { Rank, Tensor, Tensor1D, Tensor2D } from '@tensorflow/tfjs';
 
 export enum Axis {
   x = 'x',
@@ -38,6 +45,15 @@ export type AxesOptional = {
 };
 
 export type AxesNumber = {
+  [Axis.x]: number;
+  [Axis.y]: number;
+  [Axis.z]: number;
+  [Axis.roll]: number;
+  [Axis.pitch]: number;
+  [Axis.yaw]: number;
+};
+
+export type AxesNumberOptional = {
   [Axis.x]?: number;
   [Axis.y]?: number;
   [Axis.z]?: number;
@@ -49,9 +65,11 @@ export type AxesNumber = {
 type Config = {
   base: {
     radius: number;
+    coords: Tensor2D;
   };
   platform: {
     radius: number;
+    homeCoords: Tensor2D;
   };
   actuator: {
     min: number;
@@ -86,10 +104,11 @@ type Calculated = {
     pitch: number;
     yaw: number;
   };
-  previousInputs: Tensor<Rank>;
+  previousInput: Tensor1D;
   platform: {
-    coorXY: Tensor<Rank>;
-    angles: Tensor<Rank>;
+    angles: Tensor1D;
+    coords: Tensor2D;
+    coordsBasis: Tensor2D;
   };
   slicingNumber: number;
 };
@@ -156,9 +175,11 @@ const initialAxes: Axes = {
 const initialConfig: Config = {
   base: {
     radius: 123.7,
+    coords: baseCoords,
   },
   platform: {
     radius: 75,
+    homeCoords: platformCoordsHome,
   },
   actuator: {
     min: 0,
@@ -193,24 +214,11 @@ const initialCalculated: Calculated = {
     pitch: 0,
     yaw: 0,
   },
-  previousInputs: tf.zeros([6]),
+  previousInput: previousInput,
   platform: {
-    angles: tf.tensor([
-      [
-        0,
-        Math.PI / 3,
-        (2 * Math.PI) / 3,
-        Math.PI,
-        (4 * Math.PI) / 3,
-        (5 * Math.PI) / 3,
-      ],
-    ]),
-    coorXY: tf.tensor([0, 0]), // ? can we remove this?
-    // coors: tf.tensor2d([
-    //   [0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 0, 0, 0],
-    //   [1, 1, 1, 1, 1, 1],
-    // ]),
+    angles: platformAngles,
+    coords: platformCoordsHome,
+    coordsBasis: platformCoordsBasis,
   },
   slicingNumber: 0,
 };

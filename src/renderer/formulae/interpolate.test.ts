@@ -11,8 +11,8 @@ import { interpolate } from './interpolate';
 
 describe('#interpolate', () => {
   describe('interpolate()', () => {
-    test('from home to z = +10', () => {
-      const interpolated = interpolate(
+    test('from home to z = +10', async () => {
+      const interpolated = await interpolate(
         newAxesTestData,
         previousInputTestData,
         2,
@@ -30,8 +30,8 @@ describe('#interpolate', () => {
       });
     });
 
-    test('from home to all axes +30', () => {
-      const interpolated = interpolate(
+    test('from home to all axes +30', async () => {
+      const interpolated = await interpolate(
         newAxesTestData30,
         previousInputTestData,
         2,

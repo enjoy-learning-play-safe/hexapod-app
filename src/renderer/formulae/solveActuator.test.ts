@@ -6,14 +6,15 @@ import {
 import { solveActuator } from './solveActuator';
 
 describe('#solveActuator', () => {
-  test('should return expected 1d tensor', () => {
-    // expect(true).toBeTruthy();
+  test('should return expected 1d tensor', async () => {
     expect(
-      solveActuator(
-        platformCoordsTestData,
-        constants.fixedRodsLength,
-        baseCoordsTestData,
-        3
+      (
+        await solveActuator(
+          platformCoordsTestData,
+          constants.fixedRodsLength,
+          baseCoordsTestData,
+          3
+        )
       ).arraySync()
     ).toIncludeSameMembers([160, 160, 160, 160, 160, 160]);
   });
