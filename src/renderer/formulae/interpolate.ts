@@ -1,11 +1,10 @@
 import roundTo from 'round-to';
-import { solveActuator } from './solveActuator';
 import * as tf from '@tensorflow/tfjs';
 import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
 
-import { rotationSimple } from './rotationSimple';
 import { NewAxes } from './types';
-import { overArgs } from 'lodash';
+import { solveActuator } from './solveActuator';
+import { rotationSimple } from './rotationSimple';
 
 export const interpolate = async (
   newAxes: NewAxes,

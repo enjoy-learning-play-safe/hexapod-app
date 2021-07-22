@@ -1,3 +1,4 @@
+import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
 import { AxesNumberOptional, AxesOptional } from './state';
 import Types from './types';
 
@@ -19,6 +20,11 @@ export type SetLiveInput = {
 
 export type InnerSetCalculated = {
   type: Types.INNER_SET_CALCULATED;
+  // payload: {
+  //   previousInput: Tensor1D;
+  //   platform: Tensor2D;
+  //   slicingNumber: Tensor2D;
+  // };
   payload: Record<string, unknown>;
 };
 

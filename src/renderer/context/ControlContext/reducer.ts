@@ -57,7 +57,9 @@ const innerResetStateAxes = (state: State, action: InnerResetStateAxes) => {
 
 const innerSetCalculated = (state: State, action: InnerSetCalculated) => {
   return update(state, {
-    $merge: action.payload,
+    calculated: {
+      $merge: action.payload,
+    },
   });
 };
 
