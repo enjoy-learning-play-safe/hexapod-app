@@ -16,6 +16,7 @@ export type AxisData = {
   default: number;
   min: number;
   max: number;
+  loading: boolean;
 };
 
 export type Axes = {
@@ -108,6 +109,7 @@ const initialAxes: Axes = {
     default: 0,
     min: -100,
     max: 100,
+    loading: false,
   },
   y: {
     name: 'Y',
@@ -115,6 +117,7 @@ const initialAxes: Axes = {
     default: 0,
     min: -100,
     max: 100,
+    loading: false,
   },
   z: {
     name: 'Z',
@@ -122,6 +125,7 @@ const initialAxes: Axes = {
     default: 0,
     min: -100,
     max: 100,
+    loading: false,
   },
   roll: {
     name: 'Roll',
@@ -129,6 +133,7 @@ const initialAxes: Axes = {
     default: 0,
     min: -100,
     max: 100,
+    loading: false,
   },
   pitch: {
     name: 'Pitch',
@@ -136,6 +141,7 @@ const initialAxes: Axes = {
     default: 0,
     min: -100,
     max: 100,
+    loading: false,
   },
   yaw: {
     name: 'Yaw',
@@ -143,6 +149,7 @@ const initialAxes: Axes = {
     default: 0,
     min: -100,
     max: 100,
+    loading: false,
   },
 };
 

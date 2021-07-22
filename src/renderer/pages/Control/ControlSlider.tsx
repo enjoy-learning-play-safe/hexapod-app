@@ -26,33 +26,26 @@ interface Props {
   setSliderValueOnEndChange: (value: number) => Promise<void>;
   min: number;
   max: number;
+  loading: boolean;
 }
 
 const ControlSlider = (props: Props): JSX.Element => {
-  const { axisName, sliderValue, setSliderValue, setSliderValueOnEndChange } =
-    props;
-
-  const [loading, setLoading] = useState(false);
-
-  const { state: controlState, dispatch: controlDispatch } =
-    useContext(ControlContext);
+  const {
+    axisName,
+    sliderValue,
+    setSliderValue,
+    setSliderValueOnEndChange,
+    loading,
+  } = props;
 
   const sliderThumbText = `${sliderValue > 0 ? '+' : ''}${sliderValue}`;
 
   const handleSliderChange = (val: number) => {
-    // setSliderValue(val);
-    controlDispatch({
-      type: ActionTypes.SET_AXES,
-      payload: { axes: { x: 0, y: 0, z: 10, roll: 0, pitch: 0, yaw: 0 } },
-    });
-    setLoading(true);
+    setSliderValue(val);
   };
 
   const handleSliderChangeEnd = async (val: number) => {
-    await setSliderValueOnEndChange(val);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
+    setSliderValueOnEndChange(val);
   };
 
   const limit = axisName.length === 1 ? 100 : 45;
@@ -88,7 +81,6 @@ const ControlSlider = (props: Props): JSX.Element => {
               </Box>
             </SliderThumb>
             <SliderTrack>
-              {/* <SliderFilledTrack /> */}
               <SliderCenteredFilledTrack value={sliderValue} limit={limit} />
             </SliderTrack>
           </Slider>

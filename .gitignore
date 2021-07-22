@@ -3,6 +3,7 @@ dist/
 node_modules/
 out/
 build/
+coverage/
 
 # Logs
 logs
@@ -29,4 +30,3 @@ Thumbs.db
 # OS X files
 .DS_Store
 ._*
-coverage

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Button, Flex, Spacer } from '@chakra-ui/react';
 
@@ -12,24 +12,35 @@ import {
   AxisData as SixDofAxisData,
 } from '_renderer/context/SixDofContext';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Props {
-  axesState: SixDofState['axes'];
-  liveInput: boolean;
-  updateAxis: (axisKey: string, value: number) => void;
-  resetAxes: () => void;
-  updateAxisOnEndChange: (axisKey: string, value: number) => Promise<void>;
-}
+import {
+  Context as ControlContext,
+  Types as ControlTypes,
+  Axis as ControlAxis,
+  Axis,
+} from '_renderer/context/ControlContext';
+import { AxisData } from '_/renderer/context/ControlContext/state';
 
-interface AxesArrayItem {
-  key: SixDofAxis;
-  value: SixDofAxisData;
-}
+type AxesArrayItem = {
+  key: Axis;
+  value: AxisData;
+};
 
-const ControlInput = (props: Props) => {
-  const { axesState, updateAxis, resetAxes } = props;
+const ControlInput = () => {
+  const { state: controlState, dispatch: controlDispatch } =
+    useContext(ControlContext);
 
-  const axes: AxesArrayItem[] = Object.entries(axesState).map(
+  const updateAxis = async (axis: ControlAxis, value: number) => {
+    controlDispatch({
+      type: ControlTypes.SET_AXES,
+      payload: { axes: { [axis]: value } },
+    });
+  };
+
+  const resetAxes = () => {
+    controlDispatch({ type: ControlTypes.RESET_AXES });
+  };
+
+  const axes: AxesArrayItem[] = Object.entries(controlState.axes).map(
     ([key, value]) => {
       return {
         key: key as SixDofAxis,
@@ -40,22 +51,21 @@ const ControlInput = (props: Props) => {
 
   return (
     <>
-      {axes.map(({ key: axis, value }: AxesArrayItem) => {
-        const axisName = value.name;
-
+      {axes.map(({ key: axis, value }) => {
         const setSliderValue = (value: number) => updateAxis(axis, value);
-        const setSliderValueOnEndChange = async (value: number) =>
+        const setSliderValueOnEndChange = (value: number) =>
           updateAxis(axis, value);
 
         return (
           <React.Fragment key={axis}>
             <ControlSlider
-              axisName={axisName}
+              axisName={value.name}
               sliderValue={value.current}
               min={value.min}
               max={value.max}
               setSliderValue={setSliderValue}
               setSliderValueOnEndChange={setSliderValueOnEndChange}
+              loading={value.loading}
             />
           </React.Fragment>
         );
