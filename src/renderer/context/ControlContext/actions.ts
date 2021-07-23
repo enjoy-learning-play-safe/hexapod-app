@@ -1,16 +1,23 @@
-import { AxesNumber, AxesOptional } from './state';
+import { AxesNumberOptional } from './state';
 import Types from './types';
 
 export type InnerSetStateAxes = {
   type: Types.INNER_SET_STATE_AXES;
   payload: {
-    axes: AxesNumber;
+    axes: AxesNumberOptional;
   };
 };
 
 export type InnerResetStateAxes = {
   type: Types.INNER_RESET_STATE_AXES;
 };
+
+export type InnerSetCalculated = {
+  type: Types.INNER_SET_CALCULATED;
+  payload: Record<string, unknown>;
+};
+
+//
 
 export type SetLiveInput = {
   type: Types.SET_LIVE_INPUT;
@@ -26,6 +33,7 @@ export type InnerAction =
   | InnerSetStateAxes
   | InnerResetStateAxes
   | { type: Types.INNER_INITIALIZE_STATE }
+  | { type: Types.INNER_SET_CALCULATED; payload: {} }
   | { type: Types.INNER_SET_NEW_CALC; payload: {} }
   | { type: Types.INNER_SET_NEW_STORE; payload: {} };
 
@@ -35,8 +43,9 @@ export type AsyncAction =
     }
   | {
       type: Types.SET_AXES;
-      payload: { axes: AxesNumber };
+      payload: { axes: AxesNumberOptional };
     }
+  | { type: Types.PUSH_TO_ARDUINO }
   | { type: Types.RESET_AXES };
 
 export type OuterAction = SetLiveInput;

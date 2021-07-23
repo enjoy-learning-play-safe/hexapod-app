@@ -14,12 +14,6 @@ import {
 } from './context/SerialportContext';
 
 import {
-  Context as SixDofContext,
-  reducer as sixDofReducer,
-  initialState as sixDofInitialState,
-} from './context/SixDofContext';
-
-import {
   Context as ControlContext,
   State as ControlState,
   Action as ControlAction,
@@ -46,21 +40,9 @@ const Providers = (props: Props) => {
     SerialportAsyncAction | SerialportOuterAction
   >(SerialportReducer, serialportInitialState, serialportAsyncActionHandlers);
 
-  const serialInitialContextValue = {
+  const serialInitialContextValue: SerialportContextValue = {
     state: serialportState,
     dispatch: serialportDispatch,
-  };
-
-  // * 6dof
-
-  const [sixDofState, sixDofDispatch] = useReducer(
-    sixDofReducer,
-    sixDofInitialState
-  );
-
-  const sixDofContextValue = {
-    state: sixDofState,
-    dispatch: sixDofDispatch,
   };
 
   // * Control
@@ -71,7 +53,7 @@ const Providers = (props: Props) => {
     ControlAsyncAction | ControlOuterAction
   >(controlReducer, controlInitialState, controlAsyncActionHandlers);
 
-  const controlContextValue = {
+  const controlContextValue: ControlContextValue = {
     state: controlState,
     dispatch: controlDispatch,
   };

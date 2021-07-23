@@ -1,16 +1,10 @@
 import React, { useContext } from 'react';
 
-import { Button, Flex, Spacer } from '@chakra-ui/react';
+import { Button, Flex, Icon, Spacer } from '@chakra-ui/react';
 
 import ControlSlider from './ControlSlider';
 import LoadConfigMenu from './LoadConfigMenu';
 import _ from 'lodash';
-
-import {
-  State as SixDofState,
-  Axis as SixDofAxis,
-  AxisData as SixDofAxisData,
-} from '_renderer/context/SixDofContext';
 
 import {
   Context as ControlContext,
@@ -18,7 +12,8 @@ import {
   Axis as ControlAxis,
   Axis,
 } from '_renderer/context/ControlContext';
-import { AxisData } from '_/renderer/context/ControlContext/state';
+import { AxesNumber, AxisData } from '_/renderer/context/ControlContext/state';
+import { IoRefreshOutline, IoSaveOutline } from 'react-icons/io5';
 
 type AxesArrayItem = {
   key: Axis;
@@ -30,9 +25,10 @@ const ControlInput = () => {
     useContext(ControlContext);
 
   const updateAxis = async (axis: ControlAxis, value: number) => {
+    const newAxes = { [axis]: value } as AxesNumber;
     controlDispatch({
       type: ControlTypes.SET_AXES,
-      payload: { axes: { [axis]: value } },
+      payload: { axes: newAxes },
     });
   };
 
@@ -43,7 +39,7 @@ const ControlInput = () => {
   const axes: AxesArrayItem[] = Object.entries(controlState.axes).map(
     ([key, value]) => {
       return {
-        key: key as SixDofAxis,
+        key: key as ControlAxis,
         value,
       };
     }
@@ -72,9 +68,13 @@ const ControlInput = () => {
       })}
       <Spacer />
       <Flex alignSelf="stretch" mt={4}>
-        <Button onClick={resetAxes}>Reset All Axes</Button>
+        <Button onClick={resetAxes} leftIcon={<Icon as={IoRefreshOutline} />}>
+          Reset All Axes
+        </Button>
         <Spacer />
-        <Button mr="4">Save Config</Button>
+        <Button mr="4" leftIcon={<Icon as={IoSaveOutline} />}>
+          Save Config
+        </Button>
         <LoadConfigMenu />
       </Flex>
     </>

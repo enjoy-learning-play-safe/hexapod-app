@@ -1,5 +1,5 @@
 import { Action, AsyncAction } from './actions';
-import { State, initialState } from './state';
+import { State, initialState, AxesNumber, Axis } from './state';
 import { Reducer } from 'react';
 import { AsyncActionHandlers } from 'use-reducer-async';
 import Types from './types';
@@ -14,6 +14,7 @@ import {
   platformCoordsTestData,
   previousInputTestData,
 } from '_/renderer/fixtures/testFixtures';
+import delay from 'delay';
 
 export const asyncActionHandlers: AsyncActionHandlers<
   Reducer<State, Action>,
@@ -39,38 +40,21 @@ export const asyncActionHandlers: AsyncActionHandlers<
   [Types.SET_AXES]:
     ({ dispatch, getState }) =>
     async (action) => {
-      // step 0: update axes in state
+      const oldState: State = getState();
+
       dispatch({
         type: Types.INNER_SET_STATE_AXES,
         payload: { axes: action.payload.axes },
       });
-      // step 1: take the 6dof array and calculate gcode from that
-      const state: State = getState();
 
-      const t0 = performance.now();
-
-      const gcodeRes = gcode(
-        // ! DEBUG
-        platformCoordsHomeTestData,
-        newAxesTestData30,
-        previousInputTestData,
-        platformCoordsBasisTestData,
-        platformCoordsHomeTestData,
-        constants.fixedRodsLength,
-        baseCoordsTestData,
-        constants.maxChangePerSlice,
-        constants.minimumSlicePerMovement
-      );
-
-      console.log('gcodeRes', gcodeRes);
-
-      const t1 = performance.now();
-
-      console.log(`Call to calculate gcode took ${t1 - t0} milliseconds.`);
-
-      //
-      // step 2: send the gcode via serialport
-      // todo: move serial port code to some function within the control context (thus replacing the serialportContext context)
+      if (oldState.liveInput) {
+        await pushToArduino(getState, dispatch);
+      }
+    },
+  [Types.PUSH_TO_ARDUINO]:
+    ({ dispatch, getState }) =>
+    async (action) => {
+      await pushToArduino(getState, dispatch);
     },
   [Types.RESET_AXES]:
     ({ dispatch }) =>
@@ -84,4 +68,57 @@ export const asyncActionHandlers: AsyncActionHandlers<
       // step 2: send the gcode via serialport
       // todo: move serial port code to some function within the control context (thus replacing the serialportContext context)
     },
+};
+
+const pushToArduino = async (
+  getState: () => State,
+  dispatch: React.Dispatch<Action>
+) => {
+  // step 1: take the 6dof array and calculate gcode from that
+  const state: State = getState(); // gets current state (no side effects!)
+
+  const t0 = performance.now();
+
+  const newAxes = Object.fromEntries(
+    Object.entries(state.axes).map(([key, value]) => [key, value.current])
+  ) as AxesNumber;
+
+  console.log('newAxes', newAxes);
+
+  const { calculated, config } = state;
+
+  const { gcodeString, platformCoords, previousInput, platformCoordsBasis } =
+    await gcode(
+      calculated.platform.coords,
+      newAxes,
+      calculated.previousInput,
+      calculated.platform.coordsBasis,
+      config.platform.homeCoords,
+      config.fixedRods.len,
+      config.base.coords,
+      config.slice.maxChangePerSlice,
+      config.slice.minSlicePerMovement,
+      config.delayDuration
+    );
+
+  console.log('gcodeRes', { gcodeString });
+
+  const t1 = performance.now();
+
+  console.log(`⏱ Call to calculate gcode took ${t1 - t0} milliseconds.`);
+
+  dispatch({
+    type: Types.INNER_SET_CALCULATED,
+    payload: {
+      platform: {
+        coords: platformCoords,
+        coordsBasis: platformCoordsBasis,
+      },
+      previousInput: previousInput,
+    },
+  });
+
+  //
+  // step 2: send the gcode via serialport
+  // todo: move serial port code to some function within the control context (thus replacing the serialportContext context)
 };

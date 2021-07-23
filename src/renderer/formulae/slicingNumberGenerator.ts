@@ -2,7 +2,7 @@ import { Tensor2D } from '@tensorflow/tfjs';
 
 import { solveActuator } from './solveActuator';
 
-export const slicingNumberGenerator = (
+export const slicingNumberGenerator = async (
   startPose: Tensor2D,
   endPose: Tensor2D,
   fixedRodsLength: number,
@@ -10,15 +10,15 @@ export const slicingNumberGenerator = (
   maxChangePerSlice: number,
   minimumSlicePerMovement: number
 ) => {
-  const baseCoordsDebug = baseCoords.arraySync();
-  const startPoseDebug = startPose.arraySync();
-  const endPoseDebug = endPose.arraySync();
+  const previousLegs = await solveActuator(
+    startPose,
+    fixedRodsLength,
+    baseCoords
+  );
+  const previousLegsArray = await previousLegs.array();
 
-  const previousLegs = solveActuator(startPose, fixedRodsLength, baseCoords);
-  const previousLegsArray = previousLegs.arraySync();
-
-  const finalLegs = solveActuator(endPose, fixedRodsLength, baseCoords);
-  const finalLegsArray = finalLegs.arraySync();
+  const finalLegs = await solveActuator(endPose, fixedRodsLength, baseCoords);
+  const finalLegsArray = await finalLegs.array();
 
   const actuatorChange = finalLegsArray.map((joint, index) =>
     Math.abs(finalLegsArray[index] - previousLegsArray[index])

@@ -1,13 +1,14 @@
 import roundTo from 'round-to';
-import { solveActuator } from './solveActuator';
 import * as tf from '@tensorflow/tfjs';
 import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
 
-import { rotationSimple } from './rotationSimple';
 import { NewAxes } from './types';
-import { overArgs } from 'lodash';
+import { solveActuator } from './solveActuator';
+import { rotationSimple } from './rotationSimple';
+import serial from '../utils/serialport';
+import delay from 'delay';
 
-export const interpolate = (
+export const interpolate = async (
   newAxes: NewAxes,
   previousInput: Tensor1D,
   slicingNumber: number,
@@ -15,21 +16,22 @@ export const interpolate = (
   platformCoordsHome: Tensor2D,
   fixedRodsLength: number,
   baseCoords: Tensor2D,
+  delayDuration: number,
   precision = 3
 ) => {
   console.log('interpolate overArgs', {
     newAxes,
-    previousInput: previousInput.arraySync(),
+    previousInput: await previousInput.array(),
     slicingNumber,
-    platformCoordsBasis: platformCoordsBasis.arraySync(),
-    platformCoordsHome: platformCoordsHome.arraySync(),
+    platformCoordsBasis: await platformCoordsBasis.array(),
+    platformCoordsHome: await platformCoordsHome.array(),
     fixedRodsLength,
     baseCoords,
   });
 
   const axesArray = Object.entries(newAxes);
 
-  const prevInputArray = previousInput.arraySync();
+  const prevInputArray = await previousInput.array();
 
   let finalValue = null;
 
@@ -47,10 +49,6 @@ export const interpolate = (
       platformCoordsBasis
     );
 
-    const rotatedArray = rotated.arraySync();
-
-    // console.log('rotated', rotated.arraySync());
-
     const intermediatePlatformCoords = tf
       .stack([
         rotated.gather(0).add(intermediate.x),
@@ -60,31 +58,24 @@ export const interpolate = (
       .sub(platformCoordsBasis)
       .add(platformCoordsHome) as Tensor2D;
 
-    const intermediatePlatformCoordsArray = rotated.arraySync();
-
-    // console.log(
-    //   'intermediatePlatformCoords',
-    //   intermediatePlatformCoords.arraySync()
-    // );
-
-    const legs = solveActuator(
-      intermediatePlatformCoords,
-      fixedRodsLength,
-      baseCoords,
-      precision
-    )
-      .arraySync()
-      .map((num) => (precision ? roundTo(num, precision) : num));
-
-    const legsArray = rotated.arraySync();
-
-    // console.log('legs', legs);
+    const legs = (
+      await (
+        await solveActuator(
+          intermediatePlatformCoords,
+          fixedRodsLength,
+          baseCoords,
+          precision
+        )
+      ).array()
+    ).map((num) => (precision ? roundTo(num, precision) : num));
 
     const gcodeString = `G0 X${legs[0]} Y${legs[1]} Z${legs[2]} A${legs[3]} B${legs[4]} C${legs[5]}`;
 
     console.log('gcodeString', gcodeString);
 
     // todo: write to serial
+    delayDuration && (await delay(delayDuration));
+    await serial.write(gcodeString ?? '');
 
     finalValue = { gcodeString };
   }

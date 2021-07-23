@@ -12,6 +12,7 @@ export const constants = {
   actuatorHome: 150, // (max - min) / 2
   maxChangePerSlice: 1,
   minimumSlicePerMovement: 10,
+  delayDuration: 120,
 };
 
 export const platformAnglesTestData = tf.tensor1d([
