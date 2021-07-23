@@ -55,6 +55,9 @@ ipcMain.handle('serialport', async (event, data) => {
         console.log('PORT OPENED');
         return { status: 'success', info: 'port opened' };
       }
+    case 'close':
+      console.log('CLOSING PORT');
+      return port.close();
     case 'isOpen':
       return port?.isOpen ? port.isOpen() : false;
     case 'write':
@@ -65,6 +68,18 @@ ipcMain.handle('serialport', async (event, data) => {
       return { writeResponse };
     case 'override':
       return port;
+    case 'flush':
+      console.log('FLUSHING PORT');
+      return port.flush();
+    case 'drain':
+      console.log('DRAINING PORT');
+      return port.drain();
+    case 'pause':
+      console.log('PAUSING PORT');
+      return port.pause();
+    case 'resume':
+      console.log('RESUMING PORT');
+      return port.resume();
     default:
       console.log('NO CASE SWITCH METHOD EXISTS FOR', action);
   }

@@ -144,7 +144,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
           await window.electron.ipcRenderer.invoke('serialport', {
             action: 'write',
             payload: {
-              message: 'G0 X100 Y100 Z100 A100 B100 C100\r\n',
+              message: 'G0 X150 Y150 Z150 A150 B150 C150\r\n',
             },
           });
         });
