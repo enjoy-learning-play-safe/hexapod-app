@@ -1,0 +1,23 @@
+diff --git a/node_modules/@tensorflow/tfjs-backend-cpu/dist/tf-backend-cpu.node.js b/node_modules/@tensorflow/tfjs-backend-cpu/dist/tf-backend-cpu.node.js
+index 9635b32..42d129b 100644
+--- a/node_modules/@tensorflow/tfjs-backend-cpu/dist/tf-backend-cpu.node.js
++++ b/node_modules/@tensorflow/tfjs-backend-cpu/dist/tf-backend-cpu.node.js
+@@ -147,18 +147,6 @@ var MathBackendCPU = /** @class */ (function (_super) {
+     MathBackendCPU.prototype.write = function (values, shape, dtype) {
+         if (this.firstUse) {
+             this.firstUse = false;
+-            if (tfjsCore.env().get('IS_NODE')) {
+-                tfjsCore.backend_util.warn('\n============================\n' +
+-                    'Hi there 👋. Looks like you are running TensorFlow.js in ' +
+-                    'Node.js. To speed things up dramatically, install our node ' +
+-                    'backend, which binds to TensorFlow C++, by running ' +
+-                    'npm i @tensorflow/tfjs-node, ' +
+-                    'or npm i @tensorflow/tfjs-node-gpu if you have CUDA. ' +
+-                    'Then call require(\'@tensorflow/tfjs-node\'); (-gpu ' +
+-                    'suffix for CUDA) at the start of your program. ' +
+-                    'Visit https://github.com/tensorflow/tfjs-node for more details.' +
+-                    '\n============================');
+-            }
+         }
+         var dataId = { id: this.nextDataId() };
+         this.data.set(dataId, { values: values, dtype: dtype, refCount: 1 });

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "baseUrl": ".",
+    "lib": ["ES2020", "DOM"],
     "paths": {
       "_/*": ["src/*"],
       "_public/*": ["public/*"],
@@ -10,6 +11,7 @@
       "_renderer/*": ["src/renderer/*"],
       "_utils/*": ["src/utils/*"]
     },
+    "importHelpers": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -17,6 +19,7 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "target": "es5",
+    "types": ["node", "jest"],
     "esModuleInterop": true
   },
   "exclude": ["node_modules"]

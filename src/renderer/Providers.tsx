@@ -14,10 +14,16 @@ import {
 } from './context/SerialportContext';
 
 import {
-  Context as SixDofContext,
-  reducer as sixDofReducer,
-  initialState as sixDofInitialState,
-} from './context/SixDofContext';
+  Context as ControlContext,
+  State as ControlState,
+  Action as ControlAction,
+  AsyncAction as ControlAsyncAction,
+  OuterAction as ControlOuterAction,
+  ContextValue as ControlContextValue,
+  reducer as controlReducer,
+  initialState as controlInitialState,
+  asyncActionHandlers as controlAsyncActionHandlers,
+} from './context/ControlContext';
 
 interface Props {
   children: React.ReactNode;
@@ -34,29 +40,30 @@ const Providers = (props: Props) => {
     SerialportAsyncAction | SerialportOuterAction
   >(SerialportReducer, serialportInitialState, serialportAsyncActionHandlers);
 
-  const serialInitialContextValue = {
+  const serialInitialContextValue: SerialportContextValue = {
     state: serialportState,
     dispatch: serialportDispatch,
   };
 
-  // * 6dof
+  // * Control
 
-  const [sixDofState, sixDofDispatch] = useReducer(
-    sixDofReducer,
-    sixDofInitialState
-  );
+  const [controlState, controlDispatch] = useReducerAsync<
+    Reducer<ControlState, ControlAction>,
+    ControlAsyncAction,
+    ControlAsyncAction | ControlOuterAction
+  >(controlReducer, controlInitialState, controlAsyncActionHandlers);
 
-  const sixDofContextValue = {
-    state: sixDofState,
-    dispatch: sixDofDispatch,
+  const controlContextValue: ControlContextValue = {
+    state: controlState,
+    dispatch: controlDispatch,
   };
 
   return (
     <>
       <SerialportContext.Provider value={serialInitialContextValue}>
-        <SixDofContext.Provider value={sixDofContextValue}>
+        <ControlContext.Provider value={controlContextValue}>
           {children}
-        </SixDofContext.Provider>
+        </ControlContext.Provider>
       </SerialportContext.Provider>
     </>
   );
