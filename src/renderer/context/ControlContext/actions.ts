@@ -1,5 +1,4 @@
-import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
-import { AxesNumberOptional, AxesOptional } from './state';
+import { AxesNumberOptional } from './state';
 import Types from './types';
 
 export type InnerSetStateAxes = {
@@ -13,19 +12,16 @@ export type InnerResetStateAxes = {
   type: Types.INNER_RESET_STATE_AXES;
 };
 
+export type InnerSetCalculated = {
+  type: Types.INNER_SET_CALCULATED;
+  payload: Record<string, unknown>;
+};
+
+//
+
 export type SetLiveInput = {
   type: Types.SET_LIVE_INPUT;
   payload: boolean;
-};
-
-export type InnerSetCalculated = {
-  type: Types.INNER_SET_CALCULATED;
-  // payload: {
-  //   previousInput: Tensor1D;
-  //   platform: Tensor2D;
-  //   slicingNumber: Tensor2D;
-  // };
-  payload: Record<string, unknown>;
 };
 
 //
