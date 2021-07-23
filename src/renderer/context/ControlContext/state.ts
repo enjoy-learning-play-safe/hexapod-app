@@ -93,6 +93,7 @@ type Config = {
     pitch: number;
     yaw: number;
   };
+  delayDuration: number;
 };
 
 type Calculated = {
@@ -203,6 +204,7 @@ const initialConfig: Config = {
     pitch: 0.524,
     yaw: 0.524,
   },
+  delayDuration: 120,
 };
 
 const initialCalculated: Calculated = {

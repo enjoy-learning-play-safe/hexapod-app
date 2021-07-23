@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {
   constants,
   newAxesTestData,
@@ -12,6 +16,12 @@ import { interpolate } from './interpolate';
 describe('#interpolate', () => {
   describe('interpolate()', () => {
     test('from home to z = +10', async () => {
+      window.electron = {
+        ipcRenderer: {
+          invoke: jest.fn().mockImplementation(() => true),
+        },
+      };
+
       const interpolated = await interpolate(
         newAxesTestData,
         previousInputTestData,

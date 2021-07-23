@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {
   newAxesTestData,
   platformCoordsTestData,
@@ -12,6 +16,12 @@ import { gcode } from './gcode';
 
 describe('#gcode', () => {
   test('should generate gcode for z +10', async () => {
+    window.electron = {
+      ipcRenderer: {
+        invoke: jest.fn().mockImplementation(() => true),
+      },
+    };
+
     const gcodeRes = await gcode(
       platformCoordsTestData,
       newAxesTestData,
@@ -21,7 +31,8 @@ describe('#gcode', () => {
       constants.fixedRodsLength,
       baseCoordsTestData,
       constants.maxChangePerSlice,
-      constants.minimumSlicePerMovement
+      constants.minimumSlicePerMovement,
+      constants.delayDuration
     );
 
     expect({
@@ -61,6 +72,12 @@ describe('#gcode', () => {
   });
 
   test('should generate gcode for changing all axes +30', async () => {
+    window.electron = {
+      ipcRenderer: {
+        invoke: jest.fn().mockImplementation(() => true),
+      },
+    };
+
     const gcodeRes = await gcode(
       platformCoordsTestData,
       newAxesTestData30,
@@ -70,7 +87,8 @@ describe('#gcode', () => {
       constants.fixedRodsLength,
       baseCoordsTestData,
       constants.maxChangePerSlice,
-      constants.minimumSlicePerMovement
+      constants.minimumSlicePerMovement,
+      constants.delayDuration
     );
 
     expect({
@@ -80,20 +98,6 @@ describe('#gcode', () => {
       previousInput: gcodeRes.previousInput.arraySync(),
     }).toEqual({
       gcodeString: 'G0 X158.843 Y182.962 Z227.023 A235.104 B195.707 C142.84',
-      platformCoords: [
-        [
-          86.25, 44.062496185302734, -12.187503814697266, -26.25,
-          15.937507629394531, 72.1875,
-        ],
-        [
-          62.4759521484375, 103.0708999633789, 70.59494018554688,
-          -2.4759559631347656, -43.070892333984375, -10.594951629638672,
-        ],
-        [
-          345.36090087890625, 392.23590087890625, 429.73590087890625,
-          420.36090087890625, 373.48590087890625, 335.98590087890625,
-        ],
-      ],
 
       platformCoordsBasis: [
         [

@@ -6,6 +6,7 @@ import { rotationSimple } from './rotationSimple';
 import { slicingNumberGenerator } from './slicingNumberGenerator';
 import { toRadians } from './toRadians';
 import { NewAxes } from './types';
+import serial from '../utils/serialport';
 
 export const gcode = async (
   platformCoords: Tensor2D,
@@ -17,6 +18,7 @@ export const gcode = async (
   baseCoords: Tensor2D,
   maxChangePerSlice: number,
   minSlicePerMovement: number,
+  delayDuration: number,
   precision?: number
 ) => {
   console.log('gcodeArgs', {
@@ -64,14 +66,12 @@ export const gcode = async (
     platformCoordsBasis,
     platformCoordsHome,
     fixedRodsLength,
-    baseCoords
+    baseCoords,
+    delayDuration
   );
 
   const { finalValue } = interpolated;
-
-  // todo: write final position via serial (is this necessary though?)
-
-  //
+  const { gcodeString } = finalValue ?? {};
 
   const newPreviousInput = tf.tensor1d(Object.values(newAxes));
 
@@ -79,10 +79,14 @@ export const gcode = async (
 
   const newPlatformCoordsBasis = platformCoordsBasis; // ! change this
 
+  // todo: write final position via serial (is this necessary though?)
+
+  await serial.write(gcodeString ?? '');
+
   return {
     platformCoords: newPlatformCoords,
     previousInput: newPreviousInput,
     platformCoordsBasis: newPlatformCoordsBasis,
-    gcodeString: finalValue?.gcodeString,
+    gcodeString: gcodeString,
   };
 };

@@ -5,6 +5,8 @@ import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
 import { NewAxes } from './types';
 import { solveActuator } from './solveActuator';
 import { rotationSimple } from './rotationSimple';
+import serial from '../utils/serialport';
+import delay from 'delay';
 
 export const interpolate = async (
   newAxes: NewAxes,
@@ -14,6 +16,7 @@ export const interpolate = async (
   platformCoordsHome: Tensor2D,
   fixedRodsLength: number,
   baseCoords: Tensor2D,
+  delayDuration: number,
   precision = 3
 ) => {
   console.log('interpolate overArgs', {
@@ -71,6 +74,8 @@ export const interpolate = async (
     console.log('gcodeString', gcodeString);
 
     // todo: write to serial
+    delayDuration && (await delay(delayDuration));
+    await serial.write(gcodeString ?? '');
 
     finalValue = { gcodeString };
   }

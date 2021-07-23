@@ -97,7 +97,8 @@ const pushToArduino = async (
       config.fixedRods.len,
       config.base.coords,
       config.slice.maxChangePerSlice,
-      config.slice.minSlicePerMovement
+      config.slice.minSlicePerMovement,
+      config.delayDuration
     );
 
   console.log('gcodeRes', { gcodeString });
