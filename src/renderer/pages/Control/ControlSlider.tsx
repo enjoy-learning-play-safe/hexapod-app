@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import {
   Flex,
@@ -16,6 +16,8 @@ import {
 
 // eslint-disable-next-line max-len
 import SliderCenteredFilledTrack from '../../components/SliderCenteredFilledTrack';
+import { Context as ControlContext } from '_renderer/context/ControlContext';
+import ActionTypes from '_/renderer/context/ControlContext/types';
 
 interface Props {
   axisName: string;
@@ -24,26 +26,26 @@ interface Props {
   setSliderValueOnEndChange: (value: number) => Promise<void>;
   min: number;
   max: number;
+  loading: boolean;
 }
 
 const ControlSlider = (props: Props): JSX.Element => {
-  const { axisName, sliderValue, setSliderValue, setSliderValueOnEndChange } =
-    props;
-
-  const [loading, setLoading] = useState(false);
+  const {
+    axisName,
+    sliderValue,
+    setSliderValue,
+    setSliderValueOnEndChange,
+    loading,
+  } = props;
 
   const sliderThumbText = `${sliderValue > 0 ? '+' : ''}${sliderValue}`;
 
   const handleSliderChange = (val: number) => {
     setSliderValue(val);
-    setLoading(true);
   };
 
   const handleSliderChangeEnd = async (val: number) => {
-    await setSliderValueOnEndChange(val);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
+    setSliderValueOnEndChange(val);
   };
 
   const limit = axisName.length === 1 ? 100 : 45;
@@ -63,7 +65,7 @@ const ControlSlider = (props: Props): JSX.Element => {
             defaultValue={sliderValue}
             value={sliderValue}
             onChange={handleSliderChange}
-            onChangeEnd={handleSliderChangeEnd}
+            // onChangeEnd={handleSliderChangeEnd}
           >
             <SliderThumb>
               <Box boxSize={16}>
@@ -79,7 +81,6 @@ const ControlSlider = (props: Props): JSX.Element => {
               </Box>
             </SliderThumb>
             <SliderTrack>
-              {/* <SliderFilledTrack /> */}
               <SliderCenteredFilledTrack value={sliderValue} limit={limit} />
             </SliderTrack>
           </Slider>
