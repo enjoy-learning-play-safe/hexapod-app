@@ -1,7 +1,7 @@
 {
   "name": "hexapod-app",
   "productName": "AluMata Controller",
-  "version": "0.2.0",
+  "version": "0.1.9",
   "description": "Electron app for hexapod",
   "author": "Enjoy Learning Play Safe",
   "license": "MIT",
