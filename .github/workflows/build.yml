@@ -35,6 +35,6 @@ jobs:
           files: |
             out/*.exe
             out/*.dmg
-            out/mac/*.app
+            out/*.AppImage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
