@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://json.schemastore.org/electron-builder.json
+
 appId: com.hexapod.app
 productName: Hexapod
 publish: null
@@ -12,6 +14,10 @@ win:
   target: portable
   asar: true
   icon: build/icon.ico
+linux:
+  target: AppImage
+  icon: icons/appIcon.png
+  category: Utility
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true

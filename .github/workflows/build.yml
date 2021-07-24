@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
 name: Build Executables
 
 on:
@@ -7,7 +9,10 @@ on:
 
 jobs:
   build-executables:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -21,9 +26,8 @@ jobs:
         run: |
           npm i -g yarn
           yarn install
-          yarn run quickbuild
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          yarn run prod
+          yarn run build
 
       - name: Create Release with Artifacts
         uses: softprops/action-gh-release@v1
@@ -31,6 +35,6 @@ jobs:
           files: |
             out/*.exe
             out/*.dmg
-            out/mac/*.app
+            out/*.AppImage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
