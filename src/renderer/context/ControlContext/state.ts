@@ -5,8 +5,7 @@ import {
   platformCoordsHome,
   previousInput,
 } from './constants';
-import * as tf from '@tensorflow/tfjs';
-import { Rank, Tensor, Tensor1D, Tensor2D } from '@tensorflow/tfjs';
+import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
 
 export enum Axis {
   x = 'x',
@@ -70,6 +69,7 @@ type Config = {
   platform: {
     radius: number;
     homeCoords: Tensor2D;
+    coordsBasis: Tensor2D;
   };
   actuator: {
     min: number;
@@ -85,10 +85,11 @@ type Config = {
     maxChangePerSlice: number;
     minSlicePerMovement: number;
   };
+  default: AxesNumber;
   range: {
-    xTranslate: number;
-    yTranslate: number;
-    zTranslate: number;
+    x: number;
+    y: number;
+    z: number;
     roll: number;
     pitch: number;
     yaw: number;
@@ -97,21 +98,11 @@ type Config = {
 };
 
 type Calculated = {
-  axes: {
-    xTranslate: number;
-    yTranslate: number;
-    zTranslate: number;
-    roll: number;
-    pitch: number;
-    yaw: number;
-  };
   previousInput: Tensor1D;
   platform: {
     angles: Tensor1D;
     coords: Tensor2D;
-    coordsBasis: Tensor2D;
   };
-  slicingNumber: number;
 };
 
 export type State = {
@@ -122,65 +113,15 @@ export type State = {
   calculated: Calculated; // todo change type
 };
 
-const initialAxes: Axes = {
-  x: {
-    name: 'X',
-    current: 0,
-    default: 0,
-    min: -100,
-    max: 100,
-    loading: false,
-  },
-  y: {
-    name: 'Y',
-    current: 0,
-    default: 0,
-    min: -100,
-    max: 100,
-    loading: false,
-  },
-  z: {
-    name: 'Z',
-    current: 0,
-    default: 0,
-    min: -100,
-    max: 100,
-    loading: false,
-  },
-  roll: {
-    name: 'Roll',
-    current: 0,
-    default: 0,
-    min: -100,
-    max: 100,
-    loading: false,
-  },
-  pitch: {
-    name: 'Pitch',
-    current: 0,
-    default: 0,
-    min: -100,
-    max: 100,
-    loading: false,
-  },
-  yaw: {
-    name: 'Yaw',
-    current: 0,
-    default: 0,
-    min: -100,
-    max: 100,
-    loading: false,
-  },
-};
-
 const initialConfig: Config = {
   base: {
     radius: 123.7,
-    coords: baseCoords,
+    coords: baseCoords, // ! DO NOT EDIT DIRECTLY - calculated from base.radius
   },
   platform: {
     radius: 75,
     homeCoords: platformCoordsHome,
+    coordsBasis: platformCoordsBasis,
   },
   actuator: {
     min: 0,
@@ -196,33 +137,82 @@ const initialConfig: Config = {
     maxChangePerSlice: 1,
     minSlicePerMovement: 10,
   },
-  range: {
-    xTranslate: 100,
-    yTranslate: 100,
-    zTranslate: 150,
-    roll: 0.524,
-    pitch: 0.524,
-    yaw: 0.524,
-  },
-  delayDuration: 120,
-};
-
-const initialCalculated: Calculated = {
-  axes: {
-    xTranslate: 0,
-    yTranslate: 0,
-    zTranslate: 0,
+  default: {
+    x: 0,
+    y: 0,
+    z: 0,
     roll: 0,
     pitch: 0,
     yaw: 0,
   },
+  range: {
+    x: 100,
+    y: 100,
+    z: 150,
+    roll: 30, // 0.524 radians
+    pitch: 30,
+    yaw: 30,
+  },
+  delayDuration: 120,
+};
+
+const initialAxes: Axes = {
+  x: {
+    name: 'X',
+    current: initialConfig.default.x,
+    default: initialConfig.default.x,
+    min: -initialConfig.range.x,
+    max: initialConfig.range.x,
+    loading: false,
+  },
+  y: {
+    name: 'Y',
+    current: initialConfig.default.y,
+    default: initialConfig.default.y,
+    min: -initialConfig.range.y,
+    max: initialConfig.range.y,
+    loading: false,
+  },
+  z: {
+    name: 'Z',
+    current: initialConfig.default.z,
+    default: initialConfig.default.z,
+    min: -initialConfig.range.z,
+    max: initialConfig.range.z,
+    loading: false,
+  },
+  roll: {
+    name: 'Roll',
+    current: initialConfig.default.roll,
+    default: initialConfig.default.roll,
+    min: -initialConfig.range.roll,
+    max: initialConfig.range.roll,
+    loading: false,
+  },
+  pitch: {
+    name: 'Pitch',
+    current: initialConfig.default.pitch,
+    default: initialConfig.default.pitch,
+    min: -initialConfig.range.pitch,
+    max: initialConfig.range.pitch,
+    loading: false,
+  },
+  yaw: {
+    name: 'Yaw',
+    current: initialConfig.default.yaw,
+    default: initialConfig.default.yaw,
+    min: -initialConfig.range.yaw,
+    max: initialConfig.range.yaw,
+    loading: false,
+  },
+};
+
+const initialCalculated: Calculated = {
   previousInput: previousInput,
   platform: {
     angles: platformAngles,
     coords: platformCoordsHome,
-    coordsBasis: platformCoordsBasis,
   },
-  slicingNumber: 0,
 };
 
 export const initialState: State = {

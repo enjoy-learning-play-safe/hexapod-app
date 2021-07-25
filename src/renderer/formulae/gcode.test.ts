@@ -97,7 +97,7 @@ describe('#gcode', () => {
       platformCoordsBasis: gcodeRes.platformCoordsBasis.arraySync(),
       previousInput: gcodeRes.previousInput.arraySync(),
     }).toEqual({
-      gcodeString: 'G0 X158.843 Y182.962 Z227.023 A235.104 B195.707 C142.84',
+      gcodeString: 'G0 X181.014 Y176.565 Z177.332 A196.518 B195.929 C180.618',
 
       platformCoords: [
         [
@@ -126,7 +126,8 @@ describe('#gcode', () => {
         [0, 0, 0, 0, 0, 0],
       ],
       previousInput: [
-        30, 30, 30, 0.5235987901687622, 0.5235987901687622, 0.5235987901687622,
+        30, 30, 30, 0.009138522669672966, 0.009138522669672966,
+        0.009138522669672966,
       ],
     });
   });

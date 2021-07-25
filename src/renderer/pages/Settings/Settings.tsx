@@ -10,8 +10,8 @@ interface Props {}
 
 const Settings = (props: Props) => {
   return (
-    <PageWrapper>
-      <Heading variant="h3" textAlign="center" mb={4}>
+    <PageWrapper p={6}>
+      <Heading mt={4} mb={4}>
         Settings
       </Heading>
       <Heading variant="h5" mb={2}>

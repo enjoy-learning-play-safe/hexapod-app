@@ -4,39 +4,12 @@ import { Reducer } from 'react';
 import { AsyncActionHandlers } from 'use-reducer-async';
 import Types from './types';
 import { gcode } from '_/renderer/formulae/gcode';
-import {
-  baseCoordsTestData,
-  constants,
-  newAxesTestData,
-  newAxesTestData30,
-  platformCoordsBasisTestData,
-  platformCoordsHomeTestData,
-  platformCoordsTestData,
-  previousInputTestData,
-} from '_/renderer/fixtures/testFixtures';
-import delay from 'delay';
+import update from 'immutability-helper';
 
 export const asyncActionHandlers: AsyncActionHandlers<
   Reducer<State, Action>,
   AsyncAction
 > = {
-  // todo: add init+home here
-  [Types.INIT_ARDUINO]:
-    ({ dispatch }) =>
-    async (action) => {
-      // step 1: math stuff:
-      // todo
-      dispatch({
-        type: Types.INNER_INITIALIZE_STATE,
-      });
-
-      // step 2: flush serialport
-      // todo
-
-      // step 3: write gcode to serialport
-      // todo
-    },
-
   [Types.SET_AXES]:
     ({ dispatch, getState }) =>
     async (action) => {
@@ -68,6 +41,24 @@ export const asyncActionHandlers: AsyncActionHandlers<
       // step 2: send the gcode via serialport
       // todo: move serial port code to some function within the control context (thus replacing the serialportContext context)
     },
+  [Types.APPLY_CONFIG]:
+    ({ dispatch, getState }) =>
+    async (action) => {
+      // step 1: calculate new tensors
+      const newConfig = update(getState().config, { $merge: action.payload });
+
+      console.log('newConfig', newConfig);
+
+      const calculated = applyConfigCalc(action.payload);
+
+      console.log('calculatedConfig', calculated);
+
+      // step 2: store in state
+      // dispatch({
+      //   type: Types.INNER_SET_CONFIG,
+      //   payload: { calculated },
+      // });
+    },
 };
 
 const pushToArduino = async (
@@ -92,7 +83,7 @@ const pushToArduino = async (
       calculated.platform.coords,
       newAxes,
       calculated.previousInput,
-      calculated.platform.coordsBasis,
+      config.platform.coordsBasis,
       config.platform.homeCoords,
       config.fixedRods.len,
       config.base.coords,
@@ -121,4 +112,8 @@ const pushToArduino = async (
   //
   // step 2: send the gcode via serialport
   // todo: move serial port code to some function within the control context (thus replacing the serialportContext context)
+};
+
+const applyConfigCalc = async (payload: State['config']) => {
+  // step 1a) calculate base coords from base angles and base radius
 };

@@ -1,51 +1,61 @@
-import { Flex, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import {
+  Flex,
+  FormErrorMessage,
+  FormLabel,
+  FormControl,
+  Input,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Button,
+  VStack,
+  HStack,
+  Text,
+  Heading,
+} from '@chakra-ui/react';
+import { useForm, Controller } from 'react-hook-form';
+import update from 'immutability-helper';
 
-import { useHistory, useLocation } from 'react-router';
+import { Context as ControlContext } from '_renderer/context/ControlContext';
 
-interface TabProps {
-  children: React.ReactNode;
-  href: string;
-}
+const AxisConfig = () => {
+  const { state, dispatch } = useContext(ControlContext);
 
-const Tab = (props: TabProps) => {
-  const { children, href } = props;
-  const history = useHistory();
-
-  const active = useLocation().pathname === href;
-
-  const handleClick = () => {
-    history.push(href);
-  };
+  const { control, handleSubmit, register } = useForm({
+    defaultValues: {
+      base_radius: state.config.base.radius,
+    },
+  });
 
   return (
-    <Flex
-      as="a"
-      cursor="pointer"
-      py={1}
-      borderRadius="md"
-      mx={2}
-      justifyContent="center"
-      bg={active ? 'brand.500' : 'gray.700'}
-      flex={1}
-      onClick={handleClick}
+    <VStack
+      as="form"
+      alignItems="flex-start"
+      p={6}
+      onSubmit={handleSubmit((data) => alert(JSON.stringify(data, null, 2)))}
     >
-      <Text fontWeight="medium">{children}</Text>
-    </Flex>
-  );
-};
+      <Heading>Config</Heading>
+      <Controller
+        control={control}
+        name="base_radius"
+        render={({ field: { name, ...restField } }) => (
+          <HStack>
+            <FormLabel my={0}>Radius</FormLabel>
+            <NumberInput {...restField}>
+              <NumberInputField name={name} />
+            </NumberInput>
+            <HStack></HStack>
+          </HStack>
+        )}
+      />
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Props {}
-
-const AxisConfig = (props: Props) => {
-  return (
-    <Flex p={4} flexDirection="column">
-      <Flex>
-        <Tab href="/axis-config">Axis Assignment</Tab>
-        <Tab href="/axis-config/limiting">Axis Limiting</Tab>
-      </Flex>
-    </Flex>
+      <Button type="submit" colorScheme="teal">
+        Submit
+      </Button>
+    </VStack>
   );
 };
 
