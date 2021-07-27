@@ -153,7 +153,7 @@ const initialConfig: Config = {
     pitch: 30,
     yaw: 30,
   },
-  delayDuration: 120,
+  delayDuration: 0,
 };
 
 const initialAxes: Axes = {
