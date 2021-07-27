@@ -27,11 +27,22 @@ export const gcode = async (
 
   const startPose = platformCoords;
 
+  console.log('startPoseArray', await startPose.array());
+
   const { x, y, z } = newAxes;
 
   const roll = toRadians(newAxes.roll);
-  const pitch = toRadians(newAxes.roll);
-  const yaw = toRadians(newAxes.roll);
+  const pitch = toRadians(newAxes.pitch);
+  const yaw = toRadians(newAxes.yaw);
+
+  const newAxesRadians: NewAxes = {
+    x,
+    y,
+    z,
+    roll,
+    pitch,
+    yaw,
+  };
 
   const rotation = tf.matMul(
     rotationSimple(roll, pitch, yaw),
@@ -60,7 +71,7 @@ export const gcode = async (
 
   // todo: call interpolate() here
   const interpolated = await interpolate(
-    newAxes,
+    newAxesRadians,
     previousInput,
     slicingNumber,
     platformCoordsBasis,
@@ -73,7 +84,7 @@ export const gcode = async (
   const { finalValue } = interpolated;
   const { gcodeString } = finalValue ?? {};
 
-  const newPreviousInput = tf.tensor1d(Object.values(newAxes));
+  const newPreviousInput = tf.tensor1d(Object.values(newAxesRadians));
 
   console.log('newPreviousInput', await newPreviousInput.array());
 

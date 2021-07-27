@@ -1,4 +1,4 @@
-import { AxesNumberOptional } from './state';
+import { AxesNumberOptional, State } from './state';
 import Types from './types';
 
 export type InnerSetStateAxes = {
@@ -25,6 +25,13 @@ export type SetLiveInput = {
 };
 
 //
+
+export type ApplyConfig = {
+  type: Types.APPLY_CONFIG;
+  payload: State['config'];
+};
+
+//
 //
 //
 
@@ -35,18 +42,17 @@ export type InnerAction =
   | { type: Types.INNER_INITIALIZE_STATE }
   | { type: Types.INNER_SET_CALCULATED; payload: {} }
   | { type: Types.INNER_SET_NEW_CALC; payload: {} }
-  | { type: Types.INNER_SET_NEW_STORE; payload: {} };
+  | { type: Types.INNER_SET_NEW_STORE; payload: {} }
+  | { type: Types.INNER_SET_CONFIG; payload: {} };
 
 export type AsyncAction =
-  | {
-      type: Types.INIT_ARDUINO;
-    }
   | {
       type: Types.SET_AXES;
       payload: { axes: AxesNumberOptional };
     }
   | { type: Types.PUSH_TO_ARDUINO }
-  | { type: Types.RESET_AXES };
+  | { type: Types.RESET_AXES }
+  | ApplyConfig;
 
 export type OuterAction = SetLiveInput;
 

@@ -44,10 +44,18 @@ export const interpolate = async (
       ])
     );
 
-    const rotated = tf.matMul(
-      rotationSimple(intermediate.roll, intermediate.pitch, intermediate.yaw),
-      platformCoordsBasis
+    const rotatedSimple = rotationSimple(
+      intermediate.roll,
+      intermediate.pitch,
+      intermediate.yaw
     );
+
+    console.log('introll', intermediate.roll);
+    console.log('intpitch', intermediate.pitch);
+    console.log('intyaw', intermediate.yaw);
+    console.log('coordsbasis', await platformCoordsBasis.array());
+
+    const rotated = tf.matMul(rotatedSimple, platformCoordsBasis);
 
     const intermediatePlatformCoords = tf
       .stack([
@@ -75,7 +83,7 @@ export const interpolate = async (
 
     // todo: write to serial
     delayDuration && (await delay(delayDuration));
-    await serial.write(gcodeString ?? '');
+    // await serial.write(gcodeString ?? '');
 
     finalValue = { gcodeString };
   }
