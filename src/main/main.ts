@@ -8,6 +8,7 @@ import * as url from 'url';
 import { BrowserWindow, app, ipcMain } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
 
 const SerialPort = require('serialport');
@@ -91,7 +92,7 @@ let mainWindow: Electron.BrowserWindow | null;
 
 async function createWindow(): Promise<void> {
   if (process.env.NODE_ENV !== 'production') {
-    await installExtension(REACT_DEVELOPER_TOOLS)
+    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
       .then((name: string) => console.log(`Added Extension: ${name}`))
       .catch((err: PromiseRejectionEvent) =>
         console.log('An error occurred: ', err)

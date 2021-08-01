@@ -1,5 +1,8 @@
 import React, { createContext, Reducer, useReducer } from 'react';
 import { useReducerAsync } from 'use-reducer-async';
+import { Provider as ReduxProvider } from 'react-redux';
+
+import store from './store';
 
 import {
   Context as SerialportContext,
@@ -60,11 +63,13 @@ const Providers = (props: Props) => {
 
   return (
     <>
-      <SerialportContext.Provider value={serialInitialContextValue}>
-        <ControlContext.Provider value={controlContextValue}>
-          {children}
-        </ControlContext.Provider>
-      </SerialportContext.Provider>
+      <ReduxProvider store={store}>
+        <SerialportContext.Provider value={serialInitialContextValue}>
+          <ControlContext.Provider value={controlContextValue}>
+            {children}
+          </ControlContext.Provider>
+        </SerialportContext.Provider>
+      </ReduxProvider>
     </>
   );
 };

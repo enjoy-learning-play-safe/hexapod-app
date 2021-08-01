@@ -18,6 +18,7 @@ import {
 import SliderCenteredFilledTrack from '../../components/SliderCenteredFilledTrack';
 import { Context as ControlContext } from '_renderer/context/ControlContext';
 import ActionTypes from '_/renderer/context/ControlContext/types';
+import { minBy } from 'lodash';
 
 interface Props {
   axisName: string;
@@ -32,6 +33,8 @@ interface Props {
 const ControlSlider = (props: Props): JSX.Element => {
   const {
     axisName,
+    min,
+    max,
     sliderValue,
     setSliderValue,
     setSliderValueOnEndChange,
@@ -48,8 +51,6 @@ const ControlSlider = (props: Props): JSX.Element => {
     setSliderValueOnEndChange(val);
   };
 
-  const limit = axisName.length === 1 ? 100 : 45;
-
   return (
     <Box alignSelf="stretch" mb={6}>
       <Flex alignItems="center">
@@ -58,8 +59,8 @@ const ControlSlider = (props: Props): JSX.Element => {
         </Heading>
         <Flex flexDir="column" flex={1} ml={4} my={4} mr={4}>
           <Slider
-            min={0 - limit}
-            max={limit}
+            min={min}
+            max={max}
             aria-label="slider-ex-2"
             colorScheme="brand"
             defaultValue={sliderValue}
@@ -81,7 +82,7 @@ const ControlSlider = (props: Props): JSX.Element => {
               </Box>
             </SliderThumb>
             <SliderTrack>
-              <SliderCenteredFilledTrack value={sliderValue} limit={limit} />
+              <SliderCenteredFilledTrack value={sliderValue} limit={max} />
             </SliderTrack>
           </Slider>
           <Box mt={-6} h={8} alignSelf="center">
@@ -96,11 +97,11 @@ const ControlSlider = (props: Props): JSX.Element => {
       </Flex>
       <Flex mt={-10} height={7}>
         <Text ml={14} mt={5} fontSize="0.75em" fontWeight="medium">
-          -{limit}
+          {min}
         </Text>
         <Spacer />
         <Text mr={5} mt={5} fontSize="0.75em" fontWeight="medium">
-          +{limit}
+          +{min}
         </Text>
       </Flex>
     </Box>

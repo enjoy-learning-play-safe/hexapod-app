@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import {
   Flex,
   FormErrorMessage,
@@ -18,24 +18,51 @@ import {
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
 import update from 'immutability-helper';
+import { useDispatch } from 'react-redux';
 
 import { Context as ControlContext } from '_renderer/context/ControlContext';
+import { applyOptions } from '_/renderer/store/ducks/control/actions';
+import { Options } from '_/renderer/store/ducks/control/types';
+import { initialOptions } from '_/renderer/store/ducks/control/reducer';
+
+type FormValues = {
+  base_radius: string;
+};
 
 const AxisConfig = () => {
-  const { state, dispatch } = useContext(ControlContext);
+  const { state } = useContext(ControlContext); // ! remove this
+
+  const dispatch = useDispatch();
+
+  const defaultValues: FormValues = {
+    base_radius: state.config.base.radius.toString(),
+  };
 
   const { control, handleSubmit, register } = useForm({
-    defaultValues: {
-      base_radius: state.config.base.radius,
-    },
+    defaultValues,
   });
+
+  const handleSubmitClick = (data: FormValues) => {
+    // console.debug(JSON.stringify(data, null, 2));
+
+    const options: Options = {
+      ...initialOptions,
+      base: {
+        radius: parseFloat(data.base_radius),
+      },
+    };
+
+    console.log(options);
+
+    dispatch(applyOptions(options));
+  };
 
   return (
     <VStack
       as="form"
       alignItems="flex-start"
       p={6}
-      onSubmit={handleSubmit((data) => alert(JSON.stringify(data, null, 2)))}
+      onSubmit={handleSubmit((data) => handleSubmitClick(data))}
     >
       <Heading>Config</Heading>
       <Controller

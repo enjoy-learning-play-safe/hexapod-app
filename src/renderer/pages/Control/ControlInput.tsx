@@ -14,6 +14,8 @@ import {
 } from '_renderer/context/ControlContext';
 import { AxesNumber, AxisData } from '_/renderer/context/ControlContext/state';
 import { IoRefreshOutline, IoSaveOutline } from 'react-icons/io5';
+import { useSelector } from 'react-redux';
+import { State as ControlState } from '_/renderer/store/ducks/control/types';
 
 type AxesArrayItem = {
   key: Axis;
@@ -21,8 +23,12 @@ type AxesArrayItem = {
 };
 
 const ControlInput = () => {
-  const { state: controlState, dispatch: controlDispatch } =
-    useContext(ControlContext);
+  const {
+    // state: controlState,
+    dispatch: controlDispatch,
+  } = useContext(ControlContext);
+
+  const controlState: ControlState = useSelector((state: any) => state.control); // ! dont use any type
 
   const updateAxis = async (axis: ControlAxis, value: number) => {
     const newAxes = { [axis]: value } as AxesNumber;
