@@ -31,7 +31,7 @@ export function* handleApplyOptions(action: Action): SagaIterator {
 
     console.log({ config, calculated });
 
-    yield put(setApplyOptions(config, calculated));
+    yield put(setApplyOptions(options, config, calculated));
   } catch (err) {
     console.error(err);
   } finally {

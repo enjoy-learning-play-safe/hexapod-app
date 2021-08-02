@@ -121,11 +121,14 @@ const initialAxes: Axes = {
 //   },
 // };
 
-const { config: initialConfig, calculated: initialCalculated } =
-  calcFromOptions(initialOptions);
+const {
+  config: initialConfig,
+  calculated: initialCalculated,
+  axes: newInitialAxes,
+} = calcFromOptions(initialOptions, initialAxes);
 
 export const initialState: State = {
-  axes: initialAxes,
+  axes: newInitialAxes,
   liveInput: false,
   options: initialOptions,
   config: initialConfig,
@@ -135,8 +138,8 @@ export const initialState: State = {
 const reducer = (state = initialState, action: ReducerAction) => {
   switch (action.type) {
     case ActionTypes.SET_APPLY_OPTIONS:
-      const { config, calculated } = action;
-      return { ...state, config, calculated };
+      const { options, config, calculated } = action;
+      return { ...state, options, config, calculated };
     default:
       return state;
   }

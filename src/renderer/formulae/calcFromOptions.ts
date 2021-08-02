@@ -1,6 +1,14 @@
-import { Options, Config, Calculated } from '../store/ducks/control/types';
+import produce from 'immer';
 
-const calcFromOptions = (options: Options) => {
+import {
+  Options,
+  Config,
+  Calculated,
+  Axes,
+  Axis,
+} from '../store/ducks/control/types';
+
+const calcFromOptions = (options: Options, axes: Axes) => {
   const platformAngles = [
     0,
     Math.PI / 3,
@@ -75,9 +83,19 @@ const calcFromOptions = (options: Options) => {
     },
   };
 
+  //
+
+  const newAxes = produce(axes, (draftAxes) => {
+    Object.keys(draftAxes).map((key: Axis) => {
+      draftAxes[key].min = -options.range[key];
+      draftAxes[key].max = options.range[key];
+    });
+  });
+
   return {
     config,
     calculated,
+    axes: newAxes,
   };
 };
 

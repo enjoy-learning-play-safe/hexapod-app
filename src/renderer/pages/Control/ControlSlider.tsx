@@ -101,7 +101,7 @@ const ControlSlider = (props: Props): JSX.Element => {
         </Text>
         <Spacer />
         <Text mr={5} mt={5} fontSize="0.75em" fontWeight="medium">
-          +{min}
+          +{max}
         </Text>
       </Flex>
     </Box>

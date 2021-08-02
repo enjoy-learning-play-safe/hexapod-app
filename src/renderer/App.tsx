@@ -7,6 +7,10 @@ import theme from './config/theme';
 import Layout from './Layout';
 import Providers from './Providers';
 
+import { enableAllPlugins } from 'immer';
+
+enableAllPlugins();
+
 declare global {
   // add electron to the window interface
   interface Window {

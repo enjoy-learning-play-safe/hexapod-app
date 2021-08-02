@@ -1,21 +1,44 @@
-import { ActionTypes, Config, Options, Calculated } from './types';
+import {
+  ActionTypes,
+  Config,
+  Options,
+  Calculated,
+  AxesNumberOptional,
+} from './types';
 
 // ? init
 
 // apply config
+
 export const applyOptions = (options: Options) => ({
   type: ActionTypes.APPLY_OPTIONS,
   options,
 });
 
-export const setApplyOptions = (config: Config, calculated: Calculated) => ({
+export const setApplyOptions = (
+  options: Options,
+  config: Config,
+  calculated: Calculated
+) => ({
   type: ActionTypes.SET_APPLY_OPTIONS,
+  options,
   config,
   calculated,
 });
 
 // home
 
-// set
+// set Axes
+
+export const updateAxes = (axes: AxesNumberOptional) => ({
+  type: ActionTypes.UPDATE_AXES,
+  axes,
+});
+
+export const setUpdateAxes = () => ({
+  type: ActionTypes.SET_UPDATE_AXES,
+});
+
+// write to arduino
 
 // reset

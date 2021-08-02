@@ -27,6 +27,13 @@ import { initialOptions } from '_/renderer/store/ducks/control/reducer';
 
 type FormValues = {
   base_radius: string;
+
+  range_x: string;
+  range_y: string;
+  range_z: string;
+  range_roll: string;
+  range_pitch: string;
+  range_yaw: string;
 };
 
 const AxisConfig = () => {
@@ -36,6 +43,13 @@ const AxisConfig = () => {
 
   const defaultValues: FormValues = {
     base_radius: state.config.base.radius.toString(),
+
+    range_x: state.config.range.x.toString(),
+    range_y: state.config.range.y.toString(),
+    range_z: state.config.range.z.toString(),
+    range_roll: state.config.range.roll.toString(),
+    range_pitch: state.config.range.pitch.toString(),
+    range_yaw: state.config.range.yaw.toString(),
   };
 
   const { control, handleSubmit, register } = useForm({
@@ -49,6 +63,14 @@ const AxisConfig = () => {
       ...initialOptions,
       base: {
         radius: parseFloat(data.base_radius),
+      },
+      range: {
+        x: parseFloat(data.range_x),
+        y: parseFloat(data.range_y),
+        z: parseFloat(data.range_z),
+        roll: parseFloat(data.range_roll),
+        pitch: parseFloat(data.range_pitch),
+        yaw: parseFloat(data.range_yaw),
       },
     };
 
@@ -65,6 +87,8 @@ const AxisConfig = () => {
       onSubmit={handleSubmit((data) => handleSubmitClick(data))}
     >
       <Heading>Config</Heading>
+
+      <SectionHeading>Base</SectionHeading>
       <Controller
         control={control}
         name="base_radius"
@@ -79,11 +103,56 @@ const AxisConfig = () => {
         )}
       />
 
-      <Button type="submit" colorScheme="teal">
-        Submit
+      <SectionHeading>Range</SectionHeading>
+      {[
+        'range_x',
+        'range_y',
+        'range_z',
+        'range_roll',
+        'range_pitch',
+        'range_yaw',
+      ].map((axis) => (
+        <Controller
+          key={axis}
+          control={control}
+          name={
+            axis as
+              | 'range_x'
+              | 'range_y'
+              | 'range_z'
+              | 'range_roll'
+              | 'range_pitch'
+              | 'range_yaw'
+          }
+          render={({ field: { name, ...restField } }) => (
+            <HStack>
+              <FormLabel my={0} w={12}>
+                {axis.slice(6, 7).toUpperCase() + axis.slice(7)}
+              </FormLabel>
+              <NumberInput {...restField}>
+                <NumberInputField name={name} />
+              </NumberInput>
+              <HStack></HStack>
+            </HStack>
+          )}
+        />
+      ))}
+
+      <Button mt={4} type="submit" colorScheme="teal">
+        Apply
       </Button>
     </VStack>
   );
 };
 
 export default AxisConfig;
+
+type SectionHeadingProps = {
+  children: React.ReactNode;
+};
+
+const SectionHeading = (props: SectionHeadingProps) => (
+  <Heading as="h3" variant="h3">
+    {props.children}
+  </Heading>
+);

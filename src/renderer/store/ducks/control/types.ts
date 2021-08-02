@@ -1,16 +1,17 @@
-import { Tensor1D, Tensor2D } from '@tensorflow/tfjs';
-
 // * Action Types
 export enum ActionTypes {
   //
   SET_APPLY_OPTIONS = '@control/SET_APPLY_OPTIONS',
+  SET_UPDATE_AXES = '@control/SET_UPDATE_AXES',
 
   // sagas
   APPLY_OPTIONS = '@control/APPLY_OPTIONS',
+  UPDATE_AXES = '@control/UPDATE_AXES',
 }
 
 export type ReducerAction = {
   type: ActionTypes.SET_APPLY_OPTIONS;
+  options: Options;
   config: Config;
   calculated: Calculated;
 };
