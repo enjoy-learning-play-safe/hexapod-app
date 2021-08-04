@@ -15,6 +15,7 @@ type Action = {
 };
 
 export function* handleWriteToArduino(action: Action): any {
+  console.log('action', action);
   const controlState: State = yield select((state) => state.control);
 
   const t0 = performance.now();

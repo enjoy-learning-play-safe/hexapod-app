@@ -16,18 +16,6 @@ import {
   asyncActionHandlers as serialportAsyncActionHandlers,
 } from './context/SerialportContext';
 
-import {
-  Context as ControlContext,
-  State as ControlState,
-  Action as ControlAction,
-  AsyncAction as ControlAsyncAction,
-  OuterAction as ControlOuterAction,
-  ContextValue as ControlContextValue,
-  reducer as controlReducer,
-  initialState as controlInitialState,
-  asyncActionHandlers as controlAsyncActionHandlers,
-} from './context/ControlContext';
-
 interface Props {
   children: React.ReactNode;
 }
@@ -48,26 +36,11 @@ const Providers = (props: Props) => {
     dispatch: serialportDispatch,
   };
 
-  // * Control
-
-  const [controlState, controlDispatch] = useReducerAsync<
-    Reducer<ControlState, ControlAction>,
-    ControlAsyncAction,
-    ControlAsyncAction | ControlOuterAction
-  >(controlReducer, controlInitialState, controlAsyncActionHandlers);
-
-  const controlContextValue: ControlContextValue = {
-    state: controlState,
-    dispatch: controlDispatch,
-  };
-
   return (
     <>
       <ReduxProvider store={store}>
         <SerialportContext.Provider value={serialInitialContextValue}>
-          <ControlContext.Provider value={controlContextValue}>
-            {children}
-          </ControlContext.Provider>
+          {children}
         </SerialportContext.Provider>
       </ReduxProvider>
     </>

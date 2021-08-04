@@ -53,3 +53,10 @@ export const setCalculated = (calculated: Calculated) => ({
 // write to arduino
 
 // reset
+
+// live input
+
+export const setLiveInput = (liveInput?: Boolean) => ({
+  type: ActionTypes.SET_LIVE_INPUT,
+  ...(liveInput ? { liveInput } : {}),
+});

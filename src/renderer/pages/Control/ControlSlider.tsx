@@ -16,9 +16,6 @@ import {
 
 // eslint-disable-next-line max-len
 import SliderCenteredFilledTrack from '../../components/SliderCenteredFilledTrack';
-import { Context as ControlContext } from '_renderer/context/ControlContext';
-import ActionTypes from '_/renderer/context/ControlContext/types';
-import { minBy } from 'lodash';
 
 interface Props {
   axisName: string;

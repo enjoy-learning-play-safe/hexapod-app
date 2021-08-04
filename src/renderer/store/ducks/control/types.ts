@@ -4,6 +4,7 @@ export enum ActionTypes {
   SET_APPLY_OPTIONS = '@control/SET_APPLY_OPTIONS',
   SET_UPDATE_AXES = '@control/SET_UPDATE_AXES',
   SET_CALCULATED = '@control/SET_CALCULATED',
+  SET_LIVE_INPUT = 'SET_LIVE_INPUT',
 
   // sagas
   APPLY_OPTIONS = '@control/APPLY_OPTIONS',
@@ -14,7 +15,8 @@ export enum ActionTypes {
 export type ReducerAction =
   | SetApplyOptionsAction
   | SetUpdateAxesAction
-  | SetCalculatedAction;
+  | SetCalculatedAction
+  | SetLiveInputAction;
 
 export type SetApplyOptionsAction = {
   type: ActionTypes.SET_APPLY_OPTIONS;
@@ -32,6 +34,11 @@ export type SetUpdateAxesAction = {
 export type SetCalculatedAction = {
   type: ActionTypes.SET_CALCULATED;
   calculated: Calculated;
+};
+
+export type SetLiveInputAction = {
+  type: ActionTypes.SET_LIVE_INPUT;
+  liveInput?: boolean;
 };
 
 // * State Types

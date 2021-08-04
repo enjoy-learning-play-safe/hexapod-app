@@ -20,10 +20,12 @@ type Action = {
 
 export function* handleUpdateAxes(action: Action): any {
   try {
+    console.log('action', action);
+
     // get state
     let controlState: State = yield select((state) => state.control);
 
-    // update state sync
+    // // update state sync
     const { axes: axesNumber } = action;
 
     const newAxes: Axes = update(
@@ -46,7 +48,7 @@ export function* handleUpdateAxes(action: Action): any {
     };
 
     if (controlState.liveInput) {
-      yield putResolve(handleWriteToArduino(arduinoAction));
+      yield call(handleWriteToArduino, arduinoAction); // ! error!!!!
     }
   } catch (err) {
     console.error(err);

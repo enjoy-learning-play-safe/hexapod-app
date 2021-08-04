@@ -1,6 +1,6 @@
+import calcFromOptions from '_/renderer/formulae/calcFromOptions';
 import { SagaIterator } from 'redux-saga';
 import { cancelled, put, select } from 'redux-saga/effects';
-import calcFromOptions from '_/renderer/formulae/calcFromOptions';
 
 import { setApplyOptions } from './../../../ducks/control/actions';
 import {

@@ -6,9 +6,9 @@ const matMul = (matA: number[][], matB: number[][]) => {
     matB.map((row) => row[colIndex])
   );
 
-  return matA.map((matArow, rowIndex) =>
+  return matA.map((matArow) =>
     matBtranspose.map(
-      (matBcolumn, columnIndex) =>
+      (matBcolumn) =>
         //
         matArow
           .map((matAelement, index) => matAelement * matBcolumn[index])

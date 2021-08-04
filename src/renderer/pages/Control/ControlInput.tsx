@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { Button, Flex, Icon, Spacer } from '@chakra-ui/react';
 
@@ -6,16 +6,15 @@ import ControlSlider from './ControlSlider';
 import LoadConfigMenu from './LoadConfigMenu';
 import _ from 'lodash';
 
-import {
-  Context as ControlContext,
-  Types as ControlTypes,
-  Axis as ControlAxis,
-  Axis,
-} from '_renderer/context/ControlContext';
-import { AxesNumber, AxisData } from '_/renderer/context/ControlContext/state';
 import { IoRefreshOutline, IoSaveOutline } from 'react-icons/io5';
-import { useSelector } from 'react-redux';
-import { State as ControlState } from '_/renderer/store/ducks/control/types';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  AxesNumber,
+  Axis,
+  AxisData,
+  State as ControlState,
+} from '_/renderer/store/ducks/control/types';
+import { updateAxes } from '_/renderer/store/ducks/control/actions';
 
 type AxesArrayItem = {
   key: Axis;
@@ -23,29 +22,28 @@ type AxesArrayItem = {
 };
 
 const ControlInput = () => {
-  const {
-    // state: controlState,
-    dispatch: controlDispatch,
-  } = useContext(ControlContext);
+  const dispatch = useDispatch();
 
   const controlState: ControlState = useSelector((state: any) => state.control); // ! dont use any type
 
-  const updateAxis = async (axis: ControlAxis, value: number) => {
+  const updateAxis = async (axis: Axis, value: number) => {
+    console.log('updateAxis', axis, value);
     const newAxes = { [axis]: value } as AxesNumber;
-    controlDispatch({
-      type: ControlTypes.SET_AXES,
-      payload: { axes: newAxes },
-    });
+    // controlDispatch({
+    //   type: ControlTypes.SET_AXES,
+    //   payload: { axes: newAxes },
+    // });
+    dispatch(updateAxes(newAxes));
   };
 
   const resetAxes = () => {
-    controlDispatch({ type: ControlTypes.RESET_AXES });
+    // controlDispatch({ type: ControlTypes.RESET_AXES });
   };
 
   const axes: AxesArrayItem[] = Object.entries(controlState.axes).map(
     ([key, value]) => {
       return {
-        key: key as ControlAxis,
+        key: key as Axis,
         value,
       };
     }

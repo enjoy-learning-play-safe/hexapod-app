@@ -12,6 +12,7 @@ import {
   SetApplyOptionsAction,
   SetUpdateAxesAction,
   SetCalculatedAction,
+  SetLiveInputAction,
 } from './types';
 
 // * sane defaults
@@ -147,7 +148,8 @@ const reducer = (state = initialState, action: ReducerAction) => {
       return reducerSetUpdateAxes(state, action);
     case ActionTypes.SET_CALCULATED:
       return reducerSetCalculated(state, action);
-
+    case ActionTypes.SET_LIVE_INPUT:
+      return reducerSetLiveInput(state, action);
     default:
       return state;
   }
@@ -174,4 +176,10 @@ const reducerSetUpdateAxes = (state: State, action: SetUpdateAxesAction) => {
 const reducerSetCalculated = (state: State, action: SetCalculatedAction) => {
   const { calculated } = action;
   return { ...state, calculated };
+};
+
+const reducerSetLiveInput = (state: State, action: SetLiveInputAction) => {
+  const newBool = action.liveInput;
+
+  return { ...state, liveInput: newBool || !state.liveInput };
 };

@@ -18,9 +18,8 @@ import {
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
 import update from 'immutability-helper';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Context as ControlContext } from '_renderer/context/ControlContext';
 import { applyOptions } from '_/renderer/store/ducks/control/actions';
 import { Options } from '_/renderer/store/ducks/control/types';
 import { initialOptions } from '_/renderer/store/ducks/control/reducer';
@@ -37,7 +36,7 @@ type FormValues = {
 };
 
 const AxisConfig = () => {
-  const { state } = useContext(ControlContext); // ! remove this
+  const state = useSelector((store: any) => store.control); // ! dont use any type
 
   const dispatch = useDispatch();
 
