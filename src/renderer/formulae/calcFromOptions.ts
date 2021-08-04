@@ -86,7 +86,8 @@ const calcFromOptions = (options: Options, axes: Axes) => {
   //
 
   const newAxes = produce(axes, (draftAxes) => {
-    Object.keys(draftAxes).map((key: Axis) => {
+    console.log('axes', axes);
+    Object.keys(axes).map((key: Axis) => {
       draftAxes[key].min = -options.range[key];
       draftAxes[key].max = options.range[key];
     });

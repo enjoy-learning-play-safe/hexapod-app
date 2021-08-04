@@ -4,6 +4,7 @@ import {
   Options,
   Calculated,
   AxesNumberOptional,
+  Axes,
 } from './types';
 
 // ? init
@@ -18,12 +19,14 @@ export const applyOptions = (options: Options) => ({
 export const setApplyOptions = (
   options: Options,
   config: Config,
-  calculated: Calculated
+  calculated: Calculated,
+  axes: Axes
 ) => ({
   type: ActionTypes.SET_APPLY_OPTIONS,
   options,
   config,
   calculated,
+  axes,
 });
 
 // home
@@ -35,8 +38,16 @@ export const updateAxes = (axes: AxesNumberOptional) => ({
   axes,
 });
 
-export const setUpdateAxes = () => ({
+export const setUpdateAxes = (axes: Axes) => ({
   type: ActionTypes.SET_UPDATE_AXES,
+  axes,
+});
+
+// set Calculated
+
+export const setCalculated = (calculated: Calculated) => ({
+  type: ActionTypes.SET_CALCULATED,
+  calculated,
 });
 
 // write to arduino

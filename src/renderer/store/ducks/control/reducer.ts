@@ -1,3 +1,4 @@
+import { setCalculated } from './actions';
 import calcFromOptions from '_/renderer/formulae/calcFromOptions';
 
 import {
@@ -8,6 +9,9 @@ import {
   Calculated,
   ActionTypes,
   ReducerAction,
+  SetApplyOptionsAction,
+  SetUpdateAxesAction,
+  SetCalculatedAction,
 } from './types';
 
 // * sane defaults
@@ -138,11 +142,36 @@ export const initialState: State = {
 const reducer = (state = initialState, action: ReducerAction) => {
   switch (action.type) {
     case ActionTypes.SET_APPLY_OPTIONS:
-      const { options, config, calculated } = action;
-      return { ...state, options, config, calculated };
+      return reducerSetApplyOptions(state, action);
+    case ActionTypes.SET_UPDATE_AXES:
+      return reducerSetUpdateAxes(state, action);
+    case ActionTypes.SET_CALCULATED:
+      return reducerSetCalculated(state, action);
+
     default:
       return state;
   }
 };
 
 export default reducer;
+
+const reducerSetApplyOptions = (
+  state: State,
+  action: SetApplyOptionsAction
+) => {
+  const { options, config, calculated, axes } = action;
+  return { ...state, options, config, calculated, axes };
+};
+
+const reducerSetUpdateAxes = (state: State, action: SetUpdateAxesAction) => {
+  const { axes } = action;
+  return {
+    ...state,
+    axes,
+  };
+};
+
+const reducerSetCalculated = (state: State, action: SetCalculatedAction) => {
+  const { calculated } = action;
+  return { ...state, calculated };
+};

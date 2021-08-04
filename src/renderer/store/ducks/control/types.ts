@@ -3,16 +3,34 @@ export enum ActionTypes {
   //
   SET_APPLY_OPTIONS = '@control/SET_APPLY_OPTIONS',
   SET_UPDATE_AXES = '@control/SET_UPDATE_AXES',
+  SET_CALCULATED = '@control/SET_CALCULATED',
 
   // sagas
   APPLY_OPTIONS = '@control/APPLY_OPTIONS',
   UPDATE_AXES = '@control/UPDATE_AXES',
+  WRITE_TO_ARDUINO = '@control/WRITE_TO_ARDUINO',
 }
 
-export type ReducerAction = {
+export type ReducerAction =
+  | SetApplyOptionsAction
+  | SetUpdateAxesAction
+  | SetCalculatedAction;
+
+export type SetApplyOptionsAction = {
   type: ActionTypes.SET_APPLY_OPTIONS;
   options: Options;
   config: Config;
+  calculated: Calculated;
+  axes: Axes;
+};
+
+export type SetUpdateAxesAction = {
+  type: ActionTypes.SET_UPDATE_AXES;
+  axes: Axes;
+};
+
+export type SetCalculatedAction = {
+  type: ActionTypes.SET_CALCULATED;
   calculated: Calculated;
 };
 
