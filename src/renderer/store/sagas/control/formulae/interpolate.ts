@@ -50,6 +50,9 @@ export const interpolate = async (
       intermediate.yaw
     );
 
+    console.log('intx', intermediate.x);
+    console.log('inty', intermediate.y);
+    console.log('intz', intermediate.z);
     console.log('introll', intermediate.roll);
     console.log('intpitch', intermediate.pitch);
     console.log('intyaw', intermediate.yaw);
