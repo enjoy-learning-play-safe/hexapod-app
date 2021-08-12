@@ -32,6 +32,10 @@ ipcMain.handle('serialport', async (event, data) => {
       return SerialPort.list();
     case 'open':
       const { port: openPort } = payload;
+
+      const portClosed = isPortClosed(port)
+      if (portClosed) return portClosed
+
       let openError;
       port = new SerialPort(
         openPort,
@@ -58,11 +62,19 @@ ipcMain.handle('serialport', async (event, data) => {
       }
     case 'close':
       console.log('CLOSING PORT');
+      const portClosed2 = isPortClosed(port)
+      if (portClosed2) return portClosed2
       return port.close();
     case 'isOpen':
+      const portClosed3 = isPortClosed(port)
+      if (portClosed3) return portClosed3
       return port?.isOpen ? port.isOpen() : false;
     case 'write':
       const { message } = payload;
+      
+      const portClosed4 = isPortClosed(port)
+      if (portClosed4) return portClosed4
+
       port.write(message);
       const writeResponse = port.read();
       console.log('writeResponse', writeResponse);
@@ -71,20 +83,35 @@ ipcMain.handle('serialport', async (event, data) => {
       return port;
     case 'flush':
       console.log('FLUSHING PORT');
+      const portClosed5 = isPortClosed(port)
+      if (portClosed5) return portClosed5
       return port.flush();
     case 'drain':
       console.log('DRAINING PORT');
+      const portClosed6 = isPortClosed(port)
+      if (portClosed6) return portClosed6
       return port.drain();
     case 'pause':
       console.log('PAUSING PORT');
+      const portClosed7 = isPortClosed(port)
+      if (portClosed7) return portClosed7
       return port.pause();
     case 'resume':
       console.log('RESUMING PORT');
+      const portClosed8 = isPortClosed(port)
+      if (portClosed8) return portClosed8
       return port.resume();
     default:
       console.log('NO CASE SWITCH METHOD EXISTS FOR', action);
   }
 });
+
+const isPortClosed = (port: any) => {
+  if (!port) {
+    return { status: 'error', error: 'no open port was found' };
+  }
+  return false
+};
 
 // Main Window
 
