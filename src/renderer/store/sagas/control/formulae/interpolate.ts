@@ -34,6 +34,7 @@ export const interpolate = async (
   });
 
   const axesArray = Object.entries(newAxes);
+  console.log('newAxes', newAxes);
 
   const prevInputArray = previousInput;
 
@@ -41,6 +42,7 @@ export const interpolate = async (
 
   for (let i = 1; i <= slicingNumber; i++) {
     const intermediate = Object.fromEntries(
+      // ! bug here!
       axesArray.map(([axis, value], index) => [
         axis,
         (((value as number) - prevInputArray[index]) / slicingNumber) * i +

@@ -10,6 +10,7 @@ import {
   platformCoordsHomeTestData,
   constants,
   baseCoordsTestData,
+  newAxesTestData,
 } from '../../../../fixtures/testFixtures';
 
 describe('#interpolate', () => {
@@ -22,7 +23,7 @@ describe('#interpolate', () => {
       };
 
       const interpolated = await interpolate(
-        newAxesTestData30,
+        newAxesTestData,
         previousInputTestData,
         2,
         platformCoordsBasisTestData,
