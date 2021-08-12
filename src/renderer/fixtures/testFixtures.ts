@@ -1,6 +1,4 @@
-import * as tf from '@tensorflow/tfjs';
-import { Tensor2D } from '@tensorflow/tfjs';
-
+import roundTo from 'round-to';
 import { toRadians } from './../formulae/toRadians';
 
 export const constants = {
@@ -15,14 +13,14 @@ export const constants = {
   delayDuration: 120,
 };
 
-export const platformAnglesTestData = tf.tensor1d([
+export const platformAnglesTestData = [
   0,
   Math.PI / 3,
   (2 * Math.PI) / 3,
   Math.PI,
   (4 * Math.PI) / 3,
   (5 * Math.PI) / 3,
-]);
+];
 
 export const newAxesTestData = {
   x: 0,
@@ -42,68 +40,67 @@ export const newAxesTestData30 = {
   yaw: toRadians(30),
 };
 
-export const previousInputTestData = tf.tensor1d([
+export const previousInputTestData = [
   0,
   0,
   0,
   toRadians(0),
   toRadians(0),
   toRadians(0),
-]);
+];
 
-export const platformCoordsXYTestData = tf.stack([
-  platformAnglesTestData.cos().mul(constants.platformRadius),
-  platformAnglesTestData.sin().mul(constants.platformRadius),
-]) as Tensor2D;
+export const platformCoordsXYTestData = [
+  platformAnglesTestData.map((e) =>
+    roundTo(Math.cos(e) * constants.platformRadius, 12)
+  ),
+  platformAnglesTestData.map((e) =>
+    roundTo(Math.sin(e) * constants.platformRadius, 12)
+  ),
+];
 
-export const platformCoordsBasisTestData = tf.stack([
-  ...tf.unstack(platformCoordsXYTestData),
-  tf.zeros([6]),
-]) as Tensor2D;
+export const platformCoordsBasisTestData = [
+  ...platformCoordsXYTestData,
+  new Array(6).fill(0),
+];
 
 ``;
-export const b_leg2xTestData = platformCoordsXYTestData.arraySync()[0][1];
-export const b_leg3xTestData = platformCoordsXYTestData.arraySync()[0][2];
+export const b_leg2xTestData = platformCoordsXYTestData[0][1];
+export const b_leg3xTestData = platformCoordsXYTestData[0][2];
 export const b_leg23yTestData =
   (constants.baseRadius ** 2 - b_leg2xTestData ** 2) ** 0.5;
 
 export const l2aTestData = Math.atan2(b_leg23yTestData, b_leg2xTestData);
 export const l3aTestData = Math.atan2(b_leg23yTestData, b_leg3xTestData);
 
-export const baseAnglesTestData = tf.tensor1d([
+export const baseAnglesTestData = [
   l3aTestData + (4 * Math.PI) / 3,
   l2aTestData,
   l3aTestData,
   l2aTestData + (2 * Math.PI) / 3,
   l3aTestData + (2 * Math.PI) / 3,
   l2aTestData + (4 * Math.PI) / 3,
-]);
+];
 
-export const baseCoordsTestData = tf.stack([
-  tf.cos(baseAnglesTestData).mul(constants.baseRadius),
-  tf.sin(baseAnglesTestData).mul(constants.baseRadius),
-]) as Tensor2D;
+export const baseCoordsTestData = [
+  baseAnglesTestData.map((e) => Math.cos(e) * constants.baseRadius),
+  baseAnglesTestData.map((e) => Math.sin(e) * constants.baseRadius),
+];
 
 export const homeHeightTestData =
   Math.abs(
     constants.fixedRodsLength ** 2 -
-      (baseCoordsTestData.arraySync()[0][0] -
-        platformCoordsXYTestData.arraySync()[0][0]) **
-        2 -
-      (baseCoordsTestData.arraySync()[1][0] -
-        platformCoordsXYTestData.arraySync()[1][0]) **
-        2
+      (baseCoordsTestData[0][0] - platformCoordsXYTestData[0][0]) ** 2 -
+      (baseCoordsTestData[1][0] - platformCoordsXYTestData[1][0]) ** 2
   ) **
     0.5 +
   constants.actuatorHome;
 
-export const platformCoordsHomeTestData = tf.stack([
-  ...tf.unstack(platformCoordsXYTestData),
-  tf.ones([6]).mul(homeHeightTestData),
-]) as Tensor2D;
+export const platformCoordsHomeTestData = [
+  ...platformCoordsXYTestData,
+  new Array(6).fill(homeHeightTestData),
+];
 
-export const platformCoordsTestData = tf.stack([
-  // translate upward by 10 units
-  ...tf.unstack(platformCoordsXYTestData),
-  tf.ones([6]).mul(homeHeightTestData).add(10),
-]) as Tensor2D;
+export const platformCoordsTestData = [
+  ...platformCoordsXYTestData,
+  new Array(6).fill(homeHeightTestData + 10),
+];

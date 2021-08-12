@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import roundTo from 'round-to';
 import delay from 'delay';
 
@@ -23,8 +27,8 @@ export const interpolate = async (
     newAxes,
     previousInput: previousInput,
     slicingNumber,
-    platformCoordsBasis: platformCoordsBasis,
-    platformCoordsHome: platformCoordsHome,
+    platformCoordsBasis,
+    platformCoordsHome,
     fixedRodsLength,
     baseCoords,
   });
