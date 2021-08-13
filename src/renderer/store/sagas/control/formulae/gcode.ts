@@ -91,8 +91,7 @@ export const gcode = async (
 
   console.log('newPreviousInput', newPreviousInput);
 
-  const newPlatformCoordsBasis = platformCoordsBasis; // ! change this
-
+  const newPlatformCoordsBasis = platformCoordsBasis; // ! this is constant !
   // todo: write final position via serial (is this necessary though?)
 
   await serial.write(gcodeString ?? ''); // ? is this duped?

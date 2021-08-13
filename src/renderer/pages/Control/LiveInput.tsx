@@ -3,7 +3,10 @@ import { Flex, Fade, Button, Text, Switch, Icon } from '@chakra-ui/react';
 
 import { IoArrowUpOutline } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLiveInput } from '_/renderer/store/ducks/control/actions';
+import {
+  setLiveInput,
+  writeToArduino,
+} from '_/renderer/store/ducks/control/actions';
 
 const LiveInput = () => {
   const dispatch = useDispatch();
@@ -13,7 +16,7 @@ const LiveInput = () => {
   const { liveInput } = controlState;
 
   const handleClickSendValues = () => {
-    // dispatch(setLiveInput());
+    dispatch(writeToArduino());
   };
 
   const handleChangeLiveInput = () => {

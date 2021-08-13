@@ -52,6 +52,10 @@ export const setCalculated = (calculated: Calculated) => ({
 
 // write to arduino
 
+export const writeToArduino = () => ({
+  type: ActionTypes.WRITE_TO_ARDUINO,
+});
+
 // reset
 
 // live input

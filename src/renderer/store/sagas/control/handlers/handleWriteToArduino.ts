@@ -9,13 +9,16 @@ import { call, put, select } from 'redux-saga/effects';
 import { gcode } from '../formulae/gcode';
 import { setCalculated } from '_/renderer/store/ducks/control/actions';
 
-type Action = {
+export type Action = {
   type: any;
   axes: AxesNumberOptional;
 };
 
-export function* handleWriteToArduino(action: Action): any {
-  console.log('action', action);
+export function* handleWriteToArduino(action?: Action): any {
+  console.log(
+    'action',
+    action || 'no optional action was passed to the generator function'
+  );
   const controlState: State = yield select((state) => state.control);
 
   const t0 = performance.now();

@@ -48,7 +48,7 @@ export function* handleUpdateAxes(action: Action): any {
     };
 
     if (controlState.liveInput) {
-      yield call(handleWriteToArduino, arduinoAction); // ! error!!!!
+      yield call(handleWriteToArduino, arduinoAction);
     }
   } catch (err) {
     console.error(err);
