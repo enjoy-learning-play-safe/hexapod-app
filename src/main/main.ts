@@ -17,8 +17,30 @@ const Ready = require('@serialport/parser-ready');
 
 // * IPC
 
-let port: any; // TODO: convert to class
-const portParser = new Readline({ delimiter: '\r\n' });
+let port: any = {
+  on: () => {},
+  pipe: () => {}
+}; // TODO: convert to class
+
+// The open event is always emitted
+port.on('open', function() {
+  // open logic
+  console.log("Port is open")
+})
+
+port.on('readable', function () {
+  console.log('Data:', port.read())
+})
+
+port.on('data', function (data: any) {
+  console.log('Data:', data)
+})
+
+// const portParser = new Readline({ delimiter: '\r\n' });
+const portParser = new Readline();
+port.pipe(portParser)
+
+portParser.on('data', console.log)
 
 ipcMain.handle('serialport', async (event, data) => {
   // console.log('ipc-serialport -> event', event); // verbose!
@@ -33,8 +55,8 @@ ipcMain.handle('serialport', async (event, data) => {
     case 'open':
       const { port: openPort } = payload;
 
-      const portClosed = isPortClosed(port)
-      if (portClosed) return portClosed
+      // const portClosed = isPortClosed(port)
+      // if (portClosed) return portClosed
 
       let openError;
       port = new SerialPort(
@@ -105,6 +127,8 @@ ipcMain.handle('serialport', async (event, data) => {
       console.log('NO CASE SWITCH METHOD EXISTS FOR', action);
   }
 });
+
+
 
 const isPortClosed = (port: any) => {
   if (!port) {

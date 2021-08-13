@@ -143,7 +143,7 @@ export type Config = {
 export type Calculated = {
   previousInput: number[];
   platform: {
-    angles: number[];
+    angles: number[]; // todo: make this constant
     coords: number[][];
   };
 };

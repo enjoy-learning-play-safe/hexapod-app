@@ -2,6 +2,7 @@ import {
   ActionTypes,
   AxesNumber,
   AxesNumberOptional,
+  Calculated,
   State,
 } from './../../../ducks/control/types';
 import { SagaIterator } from 'redux-saga';
@@ -55,5 +56,14 @@ export function* handleWriteToArduino(action?: Action): any {
 
   console.log(`⏱ Call to calculate gcode took ${t1 - t0} milliseconds.`);
 
-  yield put(setCalculated(calculated));
+  const newCalculated: Calculated = {
+    ...calculated,
+    previousInput,
+    platform: {
+      ...calculated.platform,
+      coords: platformCoords
+    },
+  }
+
+  yield put(setCalculated(newCalculated));
 }

@@ -144,11 +144,11 @@ export const asyncActionHandlers: AsyncActionHandlers<
           await window.electron.ipcRenderer.invoke('serialport', {
             action: 'write',
             payload: {
-              message: 'G0 X150 Y150 Z150 A150 B150 C150\r\n',
+              message: 'G0 X120 Y120 Z120 A120 B120 C120\r\n',
             },
           });
         });
-      console.log('react:  HOME - G0 xyzabc');
+      console.log('react:  HOME - G0 X120 Y120 Z120 A120 B120 C120');
       dispatch({ type: 'SYNC_HOME' });
     },
   WRITE:

@@ -26,8 +26,8 @@ export const initialOptions: Options = {
   },
   actuator: {
     min: 0,
-    max: 300,
-    home: 150,
+    max: 240,
+    home: 120,
     precision: 3,
   },
   fixedRods: {
@@ -49,7 +49,7 @@ export const initialOptions: Options = {
   range: {
     x: 100,
     y: 100,
-    z: 150,
+    z: 120,
     roll: 30, // 0.524 radians
     pitch: 30,
     yaw: 30,
@@ -174,7 +174,7 @@ const reducerSetUpdateAxes = (state: State, action: SetUpdateAxesAction) => {
 };
 
 const reducerSetCalculated = (state: State, action: SetCalculatedAction) => {
-  const { calculated } = action;
+  const { calculated, } = action;
   return { ...state, calculated };
 };
 
