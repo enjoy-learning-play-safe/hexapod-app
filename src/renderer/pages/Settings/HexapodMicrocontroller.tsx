@@ -30,7 +30,6 @@ const HexapodMicrocontroller = (props: Props) => {
   const handleClickConnectSerialport = async () => {
     // todo: handle ipcRenderer here (after adding ipcMain)
     // setConnectionState(!connectionState);
-    await window.electron.ipcRenderer.invoke('serialport', 'myData');
     if (connected) {
       dispatch({ type: 'OPEN', port: portPath });
     } else {

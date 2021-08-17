@@ -14,7 +14,7 @@ import {
   AxisData,
   State as ControlState,
 } from '_/renderer/store/ducks/control/types';
-import { updateAxes } from '_/renderer/store/ducks/control/actions';
+import { updateAxes, rese } from '_/renderer/store/ducks/control/actions';
 
 type AxesArrayItem = {
   key: Axis;
@@ -36,8 +36,9 @@ const ControlInput = () => {
     dispatch(updateAxes(newAxes));
   };
 
-  const resetAxes = () => {
+  const handleResetAllAxesClick = () => {
     // controlDispatch({ type: ControlTypes.RESET_AXES });
+    // dispatch();
   };
 
   const axes: AxesArrayItem[] = Object.entries(controlState.axes).map(
@@ -72,7 +73,10 @@ const ControlInput = () => {
       })}
       <Spacer />
       <Flex alignSelf="stretch" mt={4}>
-        <Button onClick={resetAxes} leftIcon={<Icon as={IoRefreshOutline} />}>
+        <Button
+          onClick={handleResetAllAxesClick}
+          leftIcon={<Icon as={IoRefreshOutline} />}
+        >
           Reset All Axes
         </Button>
         <Spacer />

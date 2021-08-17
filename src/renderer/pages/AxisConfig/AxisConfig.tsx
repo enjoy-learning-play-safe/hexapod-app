@@ -174,6 +174,7 @@ const AxisConfig = () => {
         ].map((item) => (
           <Controller
             control={control}
+            key={item}
             name={
               item as
                 | 'actuator_min'

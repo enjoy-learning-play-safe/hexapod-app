@@ -19,6 +19,14 @@ declare global {
 }
 
 function App() {
+  window.electron.ipcRenderer.on(
+    'serialport-listen',
+    (event: any, message: any) => {
+      console.log(message);
+      // todo: handle this in state
+    }
+  );
+
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>

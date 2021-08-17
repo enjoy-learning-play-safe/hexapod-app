@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('electron', {
     send: (channel: string, ...args: any) => ipcRenderer.send(channel, ...args),
     postMessage: (channel: string, ...args: any) =>
       ipcRenderer(channel, ...args),
+    on: (channel: string, ...args: any) => ipcRenderer.on(channel, ...args),
   },
 });
 
