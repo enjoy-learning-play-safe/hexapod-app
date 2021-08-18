@@ -24,7 +24,7 @@ import {
 
 export const initialOptions: Options = {
   base: {
-    radius: 123.7,
+    radius: 125,
   },
   platform: {
     radius: 75,
@@ -36,7 +36,7 @@ export const initialOptions: Options = {
     precision: 3,
   },
   fixedRods: {
-    len: 210,
+    len: 220,
     count: 6,
   },
   slice: {
