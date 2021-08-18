@@ -13,6 +13,7 @@ export enum ActionTypes {
   SET_M114 = '@control/SET_M114',
   SET_PLANNER_BUFFER = '@control/SET_PLANNER_BUFFER',
   SET_SLICED_ARRAY = '@control/SET_SLICED_ARRAY',
+  APPEND_SLICED_ARRAY = '@control/APPEND_SLICED_ARRAY',
 }
 
 export type ReducerAction =
@@ -22,7 +23,8 @@ export type ReducerAction =
   | SetLiveInputAction
   | SetM114Action
   | SetPlannerBufferAction
-  | SetSlicedArrayAction;
+  | SetSlicedArrayAction
+  | AppendSlicedArray;
 
 export type SetApplyOptionsAction = {
   type: ActionTypes.SET_APPLY_OPTIONS;
@@ -59,7 +61,12 @@ export type SetPlannerBufferAction = {
 
 export type SetSlicedArrayAction = {
   type: ActionTypes.SET_SLICED_ARRAY;
-  slicedArray: { [k: string]: number };
+  slicedArray: number[];
+};
+
+export type AppendSlicedArray = {
+  type: ActionTypes.APPEND_SLICED_ARRAY;
+  slice: number[];
 };
 
 // * State Types

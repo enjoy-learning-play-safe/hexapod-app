@@ -17,6 +17,7 @@ import {
   SetM114Action,
   SetPlannerBufferAction,
   SetSlicedArrayAction,
+  AppendSlicedArray,
 } from './types';
 
 // * sane defaults
@@ -149,6 +150,8 @@ const reducer = (state = initialState, action: ReducerAction) => {
       return reducerSetPlannerBuffer(state, action);
     case ActionTypes.SET_SLICED_ARRAY:
       return reducerSetSlicedArray(state, action);
+    case ActionTypes.APPEND_SLICED_ARRAY:
+      return reducerAppendSlicedArray(state, action);
     default:
       return state;
   }
@@ -212,6 +215,16 @@ const reducerSetSlicedArray = (state: State, action: SetSlicedArrayAction) => {
     micro: {
       ...state.micro,
       sliced: action.slicedArray,
+    },
+  };
+};
+
+const reducerAppendSlicedArray = (state: State, action: AppendSlicedArray) => {
+  return {
+    ...state,
+    micro: {
+      ...state.micro,
+      sliced: [...state.micro.sliced, action.slice],
     },
   };
 };

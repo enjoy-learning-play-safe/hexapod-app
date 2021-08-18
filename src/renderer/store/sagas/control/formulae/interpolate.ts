@@ -1,9 +1,9 @@
+import { appendSlicedArray } from './../../../ducks/control/actions';
 /**
  * @jest-environment jsdom
  */
 
 import roundTo from 'round-to';
-import delay from 'delay';
 
 import serial from '../../../../utils/serialport';
 
@@ -11,8 +11,10 @@ import { solveActuator } from './solveActuator';
 import { rotationSimple } from './rotationSimple';
 import matMul from './matMul';
 import { AxesNumber } from '_/renderer/store/ducks/control/types';
+import { call, delay, put } from 'redux-saga/effects';
+import { SagaIterator } from 'redux-saga';
 
-export const interpolate = async (
+export function* interpolate(
   newAxes: AxesNumber,
   previousInput: number[],
   slicingNumber: number,
@@ -22,7 +24,7 @@ export const interpolate = async (
   baseCoords: number[][],
   delayDuration: number,
   precision = 3
-) => {
+): any {
   console.log('interpolate overArgs', {
     newAxes,
     previousInput: previousInput,
@@ -48,7 +50,7 @@ export const interpolate = async (
         (((value as number) - prevInputArray[index]) / slicingNumber) * i +
           prevInputArray[index],
       ])
-    );
+    ) as AxesNumber;
 
     const rotatedSimple = rotationSimple(
       intermediate.roll,
@@ -56,13 +58,13 @@ export const interpolate = async (
       intermediate.yaw
     );
 
-    console.log('intx', intermediate.x);
-    console.log('inty', intermediate.y);
-    console.log('intz', intermediate.z);
-    console.log('introll', intermediate.roll);
-    console.log('intpitch', intermediate.pitch);
-    console.log('intyaw', intermediate.yaw);
-    console.log('coordsbasis', platformCoordsBasis);
+    // console.log('intx', intermediate.x);
+    // console.log('inty', intermediate.y);
+    // console.log('intz', intermediate.z);
+    // console.log('introll', intermediate.roll);
+    // console.log('intpitch', intermediate.pitch);
+    // console.log('intyaw', intermediate.yaw);
+    // console.log('coordsbasis', platformCoordsBasis);
 
     const rotated = matMul(rotatedSimple, platformCoordsBasis);
 
@@ -86,18 +88,23 @@ export const interpolate = async (
       precision
     ).map((num) => (precision ? roundTo(num, precision) : num));
 
-    const gcodeString = `G0 X${legs[0]} Y${legs[1]} Z${legs[2]} A${legs[3]} B${legs[4]} C${legs[5]}`;
+    const slice = legs;
+
+    yield put(appendSlicedArray({ axes: intermediate, actuators: slice }));
+
+    // todo: push slice to state
+
+    const gcodeString = `G0 X${legs[0]} Y${legs[1]} Z${legs[2]} A${legs[3]} B${legs[4]} C${legs[5]}}`;
 
     console.log('gcodeString', gcodeString);
 
     // todo: write to serial
-    delayDuration && (await delay(delayDuration));
-    await serial.write(gcodeString ?? '');
-
-    await serial.write('M114');
+    // delayDuration && (yield delay(delayDuration)); // todo: uncomment this line
+    const stringToWrite = `\r\n${gcodeString ?? ''}`;
+    yield call(serial.write, stringToWrite);
 
     finalValue = { gcodeString };
-    await delay(500); // TODO: remove this forced delay
+    // yield delay(500); // TODO: remove this forced delay
   }
   return { finalValue };
-};
+}
