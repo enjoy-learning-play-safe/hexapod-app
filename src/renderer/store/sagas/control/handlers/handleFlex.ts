@@ -64,7 +64,7 @@ export function* handleFlex(action: Action): any {
 
     yield put(setCalculated(newCalculated));
 
-    yield delay(1000);
+    yield delay(2000);
 
     console.log('starting gcode routine 2 (rotatingFlex)');
 
@@ -78,7 +78,7 @@ export function* handleFlex(action: Action): any {
     );
     console.log('ending gcode routine 2 (rotatingFlex)');
 
-    yield delay(2000);
+    yield delay(5000);
 
     const homeAxes: AxesNumber = {
       x: 0,
@@ -107,7 +107,7 @@ export function* handleFlex(action: Action): any {
       config.base.coords,
       options.slice.maxChangePerSlice,
       options.slice.minSlicePerMovement,
-      delayDuration
+      delayDuration / 5
     );
 
     console.log('ending gcode routine 3');
