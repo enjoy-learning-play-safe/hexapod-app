@@ -14,6 +14,7 @@ export enum ActionTypes {
   SET_PLANNER_BUFFER = '@control/SET_PLANNER_BUFFER',
   SET_SLICED_ARRAY = '@control/SET_SLICED_ARRAY',
   APPEND_SLICED_ARRAY = '@control/APPEND_SLICED_ARRAY',
+  FLEX = '@control/FLEX',
 }
 
 export type ReducerAction =
