@@ -63,6 +63,7 @@ const ControlSlider = (props: Props): JSX.Element => {
             defaultValue={sliderValue}
             value={sliderValue}
             onChange={handleSliderChange}
+            // onChangeEnd={handleSliderChange}
             // onChangeEnd={handleSliderChangeEnd}
           >
             <SliderThumb>

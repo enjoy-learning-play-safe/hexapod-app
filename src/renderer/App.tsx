@@ -6,8 +6,7 @@ import theme from './config/theme';
 import Layout from './Layout';
 
 import { enableAllPlugins } from 'immer';
-import { useDispatch } from 'react-redux';
-import { setM114, setPlannerBuffer } from './store/ducks/control/actions';
+import Listeners from './Listeners';
 
 enableAllPlugins();
 
@@ -19,36 +18,9 @@ declare global {
 }
 
 function App() {
-  const dispatch = useDispatch();
-
-  window.electron.ipcRenderer.on(
-    'serialport-listen',
-    (event: any, message: any) => {
-      console.log('ipc listener:', message);
-      // todo: handle this in state
-    }
-  );
-
-  window.electron.ipcRenderer.on(
-    'serialport-listen-m114',
-    (event: any, message: any) => {
-      console.log('m154 ipc: ', message);
-      // todo: handle this in state
-      dispatch(setM114(message));
-    }
-  );
-
-  window.electron.ipcRenderer.on(
-    'serialport-listen-pb',
-    (event: any, message: any) => {
-      console.log('pb ipc: ', message);
-      // todo: handle this in state
-      dispatch(setPlannerBuffer(message));
-    }
-  );
-
   return (
     <BrowserRouter>
+      <Listeners />
       <Layout />
     </BrowserRouter>
   );
