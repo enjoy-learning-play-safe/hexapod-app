@@ -14,7 +14,7 @@ import {
   AxisData,
   State as ControlState,
 } from '_/renderer/store/ducks/control/types';
-import { updateAxes, rese } from '_/renderer/store/ducks/control/actions';
+import { updateAxes } from '_/renderer/store/ducks/control/actions';
 
 type AxesArrayItem = {
   key: Axis;

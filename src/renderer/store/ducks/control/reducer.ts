@@ -7,12 +7,16 @@ import {
   Options,
   Config,
   Calculated,
+  Micro,
   ActionTypes,
   ReducerAction,
   SetApplyOptionsAction,
   SetUpdateAxesAction,
   SetCalculatedAction,
   SetLiveInputAction,
+  SetM114Action,
+  SetPlannerBufferAction,
+  SetSlicedArrayAction,
 } from './types';
 
 // * sane defaults
@@ -108,23 +112,11 @@ const initialAxes: Axes = {
   },
 };
 
-// const initialConfig: Config = {
-//   base: {
-//     coords: tf.zeros([2, 6]),
-//   },
-//   platform: {
-//     homeCoords: tf.zeros([3, 6]),
-//     coordsBasis: tf.zeros([3, 6]),
-//   },
-// };
-
-// const initialCalculated: Calculated = {
-//   previousInput: tf.zeros([6]),
-//   platform: {
-//     angles: tf.zeros([6]),
-//     coords: tf.zeros([3, 6]),
-//   },
-// };
+const initialMicro: Micro = {
+  m114: 'X0.00 Y0.00 Z0.00 A0.00 B0.00 C0.00',
+  plannerBuffer: 'P64 B4',
+  sliced: [],
+};
 
 const {
   config: initialConfig,
@@ -138,6 +130,7 @@ export const initialState: State = {
   options: initialOptions,
   config: initialConfig,
   calculated: initialCalculated,
+  micro: initialMicro,
 };
 
 const reducer = (state = initialState, action: ReducerAction) => {
@@ -150,6 +143,12 @@ const reducer = (state = initialState, action: ReducerAction) => {
       return reducerSetCalculated(state, action);
     case ActionTypes.SET_LIVE_INPUT:
       return reducerSetLiveInput(state, action);
+    case ActionTypes.SET_M114:
+      return reducerSetM114(state, action);
+    case ActionTypes.SET_PLANNER_BUFFER:
+      return reducerSetPlannerBuffer(state, action);
+    case ActionTypes.SET_SLICED_ARRAY:
+      return reducerSetSlicedArray(state, action);
     default:
       return state;
   }
@@ -174,7 +173,7 @@ const reducerSetUpdateAxes = (state: State, action: SetUpdateAxesAction) => {
 };
 
 const reducerSetCalculated = (state: State, action: SetCalculatedAction) => {
-  const { calculated, } = action;
+  const { calculated } = action;
   return { ...state, calculated };
 };
 
@@ -182,4 +181,37 @@ const reducerSetLiveInput = (state: State, action: SetLiveInputAction) => {
   const newBool = action.liveInput;
 
   return { ...state, liveInput: newBool || !state.liveInput };
+};
+
+const reducerSetM114 = (state: State, action: SetM114Action) => {
+  return {
+    ...state,
+    micro: {
+      ...state.micro,
+      m114: action.m114Response,
+    },
+  };
+};
+
+const reducerSetPlannerBuffer = (
+  state: State,
+  action: SetPlannerBufferAction
+) => {
+  return {
+    ...state,
+    micro: {
+      ...state.micro,
+      plannerBuffer: action.pb,
+    },
+  };
+};
+
+const reducerSetSlicedArray = (state: State, action: SetSlicedArrayAction) => {
+  return {
+    ...state,
+    micro: {
+      ...state.micro,
+      sliced: action.slicedArray,
+    },
+  };
 };

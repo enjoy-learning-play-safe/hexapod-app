@@ -54,9 +54,12 @@ export function* handleUpdateAxes(action: Action): any {
     console.error(err);
   } finally {
     if (yield cancelled()) {
-      console.log('handleUpdateAxes generator was cancelled');
+      console.log(
+        '🚨 SAGA CANCELLED: handleUpdateAxes generator was cancelled'
+      );
       // yield put(/* smth */);
+    } else {
+      console.log('✅ SAGA FINISHED: handleUpdateAxes finished');
     }
-    console.log('SAGA - handleUpdateAxes finished');
   }
 }

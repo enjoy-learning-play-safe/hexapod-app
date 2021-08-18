@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import theme from './config/theme';
 import Layout from './Layout';
-import Providers from './Providers';
 
 import { enableAllPlugins } from 'immer';
+import { useDispatch } from 'react-redux';
+import { setM114, setPlannerBuffer } from './store/ducks/control/actions';
 
 enableAllPlugins();
 
@@ -19,22 +19,38 @@ declare global {
 }
 
 function App() {
+  const dispatch = useDispatch();
+
   window.electron.ipcRenderer.on(
     'serialport-listen',
     (event: any, message: any) => {
-      console.log(message);
+      console.log('ipc listener:', message);
       // todo: handle this in state
     }
   );
 
+  window.electron.ipcRenderer.on(
+    'serialport-listen-m114',
+    (event: any, message: any) => {
+      console.log('m114 ipc: ', message);
+      // todo: handle this in state
+      dispatch(setM114(message));
+    }
+  );
+
+  window.electron.ipcRenderer.on(
+    'serialport-listen-pb',
+    (event: any, message: any) => {
+      console.log('pb ipc: ', message);
+      // todo: handle this in state
+      dispatch(setPlannerBuffer(message));
+    }
+  );
+
   return (
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <Providers>
-          <Layout />
-        </Providers>
-      </BrowserRouter>
-    </ChakraProvider>
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
   );
 }
 

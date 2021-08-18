@@ -4,19 +4,25 @@ export enum ActionTypes {
   SET_APPLY_OPTIONS = '@control/SET_APPLY_OPTIONS',
   SET_UPDATE_AXES = '@control/SET_UPDATE_AXES',
   SET_CALCULATED = '@control/SET_CALCULATED',
-  SET_LIVE_INPUT = 'SET_LIVE_INPUT',
+  SET_LIVE_INPUT = '@control/SET_LIVE_INPUT',
 
   // sagas
   APPLY_OPTIONS = '@control/APPLY_OPTIONS',
   UPDATE_AXES = '@control/UPDATE_AXES',
   WRITE_TO_ARDUINO = '@control/WRITE_TO_ARDUINO',
+  SET_M114 = '@control/SET_M114',
+  SET_PLANNER_BUFFER = '@control/SET_PLANNER_BUFFER',
+  SET_SLICED_ARRAY = '@control/SET_SLICED_ARRAY',
 }
 
 export type ReducerAction =
   | SetApplyOptionsAction
   | SetUpdateAxesAction
   | SetCalculatedAction
-  | SetLiveInputAction;
+  | SetLiveInputAction
+  | SetM114Action
+  | SetPlannerBufferAction
+  | SetSlicedArrayAction;
 
 export type SetApplyOptionsAction = {
   type: ActionTypes.SET_APPLY_OPTIONS;
@@ -39,6 +45,21 @@ export type SetCalculatedAction = {
 export type SetLiveInputAction = {
   type: ActionTypes.SET_LIVE_INPUT;
   liveInput?: boolean;
+};
+
+export type SetM114Action = {
+  type: ActionTypes.SET_M114;
+  m114Response: string;
+};
+
+export type SetPlannerBufferAction = {
+  type: ActionTypes.SET_PLANNER_BUFFER;
+  pb: string;
+};
+
+export type SetSlicedArrayAction = {
+  type: ActionTypes.SET_SLICED_ARRAY;
+  slicedArray: { [k: string]: number };
 };
 
 // * State Types
@@ -148,10 +169,17 @@ export type Calculated = {
   };
 };
 
+export type Micro = {
+  m114: string;
+  plannerBuffer: string;
+  sliced: { [k: string]: number }[];
+};
+
 export type State = {
   axes: Axes;
   liveInput: boolean;
   options: Options; // user defined settings
   config: Config; // based on options
   calculated: Calculated; //  final calculated output
+  micro: Micro; // response from microcontroller
 };

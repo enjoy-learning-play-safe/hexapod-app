@@ -5,6 +5,7 @@ import {
   Calculated,
   AxesNumberOptional,
   Axes,
+  SetPlannerBufferAction,
 } from './types';
 
 // ? init
@@ -63,4 +64,20 @@ export const writeToArduino = () => ({
 export const setLiveInput = (liveInput?: Boolean) => ({
   type: ActionTypes.SET_LIVE_INPUT,
   ...(liveInput ? { liveInput } : {}),
+});
+
+// microcontroller responses
+export const setM114 = (m114Response: string) => ({
+  type: ActionTypes.SET_M114,
+  m114Response,
+});
+
+export const setPlannerBuffer = (pb: string) => ({
+  type: ActionTypes.SET_PLANNER_BUFFER,
+  pb,
+});
+
+export const setSlicedArray = (slicedArray: { [k: string]: number }) => ({
+  type: ActionTypes.SET_SLICED_ARRAY,
+  slicedArray,
 });

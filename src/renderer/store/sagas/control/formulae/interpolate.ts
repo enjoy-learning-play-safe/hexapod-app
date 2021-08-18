@@ -94,7 +94,10 @@ export const interpolate = async (
     delayDuration && (await delay(delayDuration));
     await serial.write(gcodeString ?? '');
 
+    await serial.write('M114');
+
     finalValue = { gcodeString };
+    await delay(500); // TODO: remove this forced delay
   }
   return { finalValue };
 };

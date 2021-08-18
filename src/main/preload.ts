@@ -12,8 +12,9 @@ contextBridge.exposeInMainWorld('electron', {
       await ipcRenderer.invoke(channel, ...args),
     send: (channel: string, ...args: any) => ipcRenderer.send(channel, ...args),
     postMessage: (channel: string, ...args: any) =>
-      ipcRenderer(channel, ...args),
+      ipcRenderer.postMessage(channel, ...args),
     on: (channel: string, ...args: any) => ipcRenderer.on(channel, ...args),
+    once: (channel: string, ...args: any) => ipcRenderer.once(channel, ...args),
   },
 });
 

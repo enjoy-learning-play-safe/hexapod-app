@@ -87,7 +87,14 @@ ipcMain.handle('serialport', async (event, data) => {
       // add event emitter subscription here:
       portParser.on('data', (data: any) => {
         console.log('portParserData', data);
-        mainWindow?.webContents.send('serialport-listen', data);
+
+        if (data.slice(0, 2) === 'X:') {
+          mainWindow?.webContents.send('serialport-listen-m114', data);
+        } else if (data.slice(0, 4) === 'ok P') {
+          mainWindow?.webContents.send('serialport-listen-pb', data);
+        } else {
+          mainWindow?.webContents.send('serialport-listen', data);
+        }
       });
 
       if (openError) {

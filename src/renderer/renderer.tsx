@@ -6,7 +6,9 @@ import 'normalize.css';
 import '../../public/style.css';
 import 'focus-visible/dist/focus-visible';
 
-import { ColorModeScript } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import Providers from './Providers';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -17,7 +19,11 @@ import theme from './config/theme';
 ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <App />
+    <ChakraProvider theme={theme}>
+      <Providers>
+        <App />
+      </Providers>
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('app')
 );
