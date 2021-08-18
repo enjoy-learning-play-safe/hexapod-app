@@ -32,7 +32,7 @@ function App() {
   window.electron.ipcRenderer.on(
     'serialport-listen-m114',
     (event: any, message: any) => {
-      console.log('m114 ipc: ', message);
+      console.log('m154 ipc: ', message);
       // todo: handle this in state
       dispatch(setM114(message));
     }

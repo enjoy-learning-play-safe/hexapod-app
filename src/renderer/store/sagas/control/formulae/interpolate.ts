@@ -100,7 +100,8 @@ export function* interpolate(
 
     // todo: write to serial
     // delayDuration && (yield delay(delayDuration)); // todo: uncomment this line
-    const stringToWrite = `\r\n${gcodeString ?? ''}`;
+    const stringToWrite = gcodeString ?? '';
+    yield delay(10);
     yield call(serial.write, stringToWrite);
 
     finalValue = { gcodeString };
