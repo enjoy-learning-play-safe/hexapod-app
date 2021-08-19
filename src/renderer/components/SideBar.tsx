@@ -11,6 +11,8 @@ import {
   IoBagHandle,
   IoGameController,
   IoBook,
+  IoBarbell,
+  IoApps,
 } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -70,6 +72,10 @@ const SideBar = (props: Props) => {
       <SidebarItem href="/control">
         <Icon as={IoGameController} />
         Control
+      </SidebarItem>
+      <SidebarItem href="/flex">
+        <Icon as={IoApps} />
+        Application
       </SidebarItem>
       <SidebarItem href="/axis-config">
         <Icon as={IoAnalytics} />

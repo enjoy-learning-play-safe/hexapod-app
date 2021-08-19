@@ -1,4 +1,4 @@
-import { AxesNumber } from './../../../ducks/control/types';
+import { AxesNumber, State } from './../../../ducks/control/types';
 import serial from '../../../../utils/serialport';
 
 import { interpolate } from './interpolate';
@@ -7,7 +7,9 @@ import { slicingNumberGenerator } from './slicingNumberGenerator';
 import { toRadians } from './toRadians';
 import matMul from './matMul';
 
-export const gcode = async (
+import { call, select } from 'redux-saga/effects';
+
+export function* gcode(
   platformCoords: number[][],
   newAxes: AxesNumber,
   previousInput: number[],
@@ -19,7 +21,7 @@ export const gcode = async (
   minSlicePerMovement: number,
   delayDuration: number,
   precision?: number
-) => {
+): any {
   console.log('gcodeArgs', {
     platformCoords: platformCoords,
   });
@@ -73,7 +75,8 @@ export const gcode = async (
   );
 
   // todo: call interpolate() here
-  const interpolated = await interpolate(
+  const interpolated = yield call(
+    interpolate,
     newAxesRadians,
     previousInput,
     slicingNumber,
@@ -94,7 +97,7 @@ export const gcode = async (
   const newPlatformCoordsBasis = platformCoordsBasis; // ! this is constant !
   // todo: write final position via serial (is this necessary though?)
 
-  await serial.write(gcodeString ?? ''); // ? is this duped?
+  yield call(serial.write, gcodeString ?? ''); // ? is this duped?
 
   return {
     platformCoords: newPlatformCoords,
@@ -102,4 +105,4 @@ export const gcode = async (
     platformCoordsBasis: newPlatformCoordsBasis,
     gcodeString: gcodeString,
   };
-};
+}

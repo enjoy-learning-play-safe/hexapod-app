@@ -17,13 +17,14 @@ import {
   SetM114Action,
   SetPlannerBufferAction,
   SetSlicedArrayAction,
+  AppendSlicedArray,
 } from './types';
 
 // * sane defaults
 
 export const initialOptions: Options = {
   base: {
-    radius: 123.7,
+    radius: 125,
   },
   platform: {
     radius: 75,
@@ -35,7 +36,7 @@ export const initialOptions: Options = {
     precision: 3,
   },
   fixedRods: {
-    len: 210,
+    len: 220,
     count: 6,
   },
   slice: {
@@ -149,6 +150,8 @@ const reducer = (state = initialState, action: ReducerAction) => {
       return reducerSetPlannerBuffer(state, action);
     case ActionTypes.SET_SLICED_ARRAY:
       return reducerSetSlicedArray(state, action);
+    case ActionTypes.APPEND_SLICED_ARRAY:
+      return reducerAppendSlicedArray(state, action);
     default:
       return state;
   }
@@ -212,6 +215,16 @@ const reducerSetSlicedArray = (state: State, action: SetSlicedArrayAction) => {
     micro: {
       ...state.micro,
       sliced: action.slicedArray,
+    },
+  };
+};
+
+const reducerAppendSlicedArray = (state: State, action: AppendSlicedArray) => {
+  return {
+    ...state,
+    micro: {
+      ...state.micro,
+      sliced: [...state.micro.sliced, action.slice],
     },
   };
 };

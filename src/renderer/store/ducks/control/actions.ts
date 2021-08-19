@@ -5,7 +5,7 @@ import {
   Calculated,
   AxesNumberOptional,
   Axes,
-  SetPlannerBufferAction,
+  AxesNumber,
 } from './types';
 
 // ? init
@@ -77,7 +77,21 @@ export const setPlannerBuffer = (pb: string) => ({
   pb,
 });
 
-export const setSlicedArray = (slicedArray: { [k: string]: number }) => ({
+export const setSlicedArray = (slicedArray: number[]) => ({
   type: ActionTypes.SET_SLICED_ARRAY,
   slicedArray,
+});
+
+export const appendSlicedArray = (slice: {
+  axes: AxesNumber;
+  actuators: number[];
+}) => ({
+  type: ActionTypes.APPEND_SLICED_ARRAY,
+  slice,
+});
+
+// flex
+
+export const flex = () => ({
+  type: ActionTypes.FLEX,
 });
