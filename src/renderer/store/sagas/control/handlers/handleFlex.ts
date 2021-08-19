@@ -49,7 +49,12 @@ export function* handleFlex(action: Action): any {
         options.slice.minSlicePerMovement,
         delayDuration / 5
       );
-    console.log('ending gcode routine 1');
+    console.log('ending gcode routine 1', {
+      gcodeString,
+      platformCoords,
+      previousInput,
+      platformCoordsBasis,
+    });
 
     const newCalculated: Calculated = {
       ...calculated,
@@ -92,10 +97,10 @@ export function* handleFlex(action: Action): any {
     console.log('starting gcode routine 3');
 
     const {
-      gcodeString2,
-      platformCoords2,
-      previousInput2,
-      platformCoordsBasis2,
+      gcodeString: gcodeString2,
+      platformCoords: platformCoords2,
+      previousInput: previousInput2,
+      platformCoordsBasis: platformCoordsBasis2,
     } = yield call(
       gcode,
       newCalculated.platform.coords,
@@ -110,7 +115,12 @@ export function* handleFlex(action: Action): any {
       delayDuration / 5
     );
 
-    console.log('ending gcode routine 3');
+    console.log('ending gcode routine 3', {
+      gcodeString2,
+      platformCoords2,
+      previousInput2,
+      platformCoordsBasis2,
+    });
 
     // handle calc here
 

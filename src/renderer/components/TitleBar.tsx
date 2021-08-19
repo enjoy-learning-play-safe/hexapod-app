@@ -19,7 +19,7 @@ const TitleBar = (props: Props) => {
     >
       <Text fontWeight="600" color="black">
         <Icon as={IoGameController} mr={2} mb={1} boxSize="1.25em" />
-        AluMata Controller
+        Hexapod Controller
       </Text>
     </Flex>
   );
