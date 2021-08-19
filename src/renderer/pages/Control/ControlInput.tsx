@@ -39,6 +39,16 @@ const ControlInput = () => {
   const handleResetAllAxesClick = () => {
     // controlDispatch({ type: ControlTypes.RESET_AXES });
     // dispatch();
+    dispatch(
+      updateAxes({
+        x: 0,
+        y: 0,
+        z: 0,
+        roll: 0,
+        pitch: 0,
+        yaw: 0,
+      })
+    );
   };
 
   const axes: AxesArrayItem[] = Object.entries(controlState.axes).map(
