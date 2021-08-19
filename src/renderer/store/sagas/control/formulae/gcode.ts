@@ -1,33 +1,34 @@
-import * as tf from '@tensorflow/tfjs';
-import { Tensor2D, Tensor1D } from '@tensorflow/tfjs';
-import { interpolate } from './interpolate';
+import { AxesNumber, State } from './../../../ducks/control/types';
+import serial from '../../../../utils/serialport';
 
+import { interpolate } from './interpolate';
 import { rotationSimple } from './rotationSimple';
 import { slicingNumberGenerator } from './slicingNumberGenerator';
 import { toRadians } from './toRadians';
-import { NewAxes } from './types';
-import serial from '../utils/serialport';
+import matMul from './matMul';
 
-export const gcode = async (
-  platformCoords: Tensor2D,
-  newAxes: NewAxes,
-  previousInput: Tensor1D,
-  platformCoordsBasis: Tensor2D,
-  platformCoordsHome: Tensor2D,
+import { call, select } from 'redux-saga/effects';
+
+export function* gcode(
+  platformCoords: number[][],
+  newAxes: AxesNumber,
+  previousInput: number[],
+  platformCoordsBasis: number[][],
+  platformCoordsHome: number[][],
   fixedRodsLength: number,
-  baseCoords: Tensor2D,
+  baseCoords: number[][],
   maxChangePerSlice: number,
   minSlicePerMovement: number,
   delayDuration: number,
   precision?: number
-) => {
+): any {
   console.log('gcodeArgs', {
-    platformCoords: await platformCoords.array(),
+    platformCoords: platformCoords,
   });
 
   const startPose = platformCoords;
 
-  console.log('startPoseArray', await startPose.array());
+  console.log('startPoseArray', startPose);
 
   const { x, y, z } = newAxes;
 
@@ -35,7 +36,7 @@ export const gcode = async (
   const pitch = toRadians(newAxes.pitch);
   const yaw = toRadians(newAxes.yaw);
 
-  const newAxesRadians: NewAxes = {
+  const newAxesRadians: AxesNumber = {
     x,
     y,
     z,
@@ -44,23 +45,27 @@ export const gcode = async (
     yaw,
   };
 
-  const rotation = tf.matMul(
+  const rotation = matMul(
     rotationSimple(roll, pitch, yaw),
     platformCoordsBasis
   );
 
-  const newPlatformCoords = tf
-    .stack([
-      rotation.gather(0).add(x),
-      rotation.gather(1).add(y),
-      rotation.gather(2).add(z),
-    ])
-    .sub(platformCoordsBasis)
-    .add(platformCoordsHome) as Tensor2D;
+  const newPlatformCoords = [
+    rotation[0].map((element) => element + x),
+    rotation[1].map((element) => element + y),
+    rotation[2].map((element) => element + z),
+  ].map((row, rowIndex) =>
+    row.map(
+      (element, columnIndex) =>
+        element -
+        platformCoordsBasis[rowIndex][columnIndex] +
+        platformCoordsHome[rowIndex][columnIndex]
+    )
+  );
 
   const endPose = newPlatformCoords;
 
-  const slicingNumber = await slicingNumberGenerator(
+  const slicingNumber = slicingNumberGenerator(
     startPose,
     endPose,
     fixedRodsLength,
@@ -70,7 +75,8 @@ export const gcode = async (
   );
 
   // todo: call interpolate() here
-  const interpolated = await interpolate(
+  const interpolated = yield call(
+    interpolate,
     newAxesRadians,
     previousInput,
     slicingNumber,
@@ -84,15 +90,14 @@ export const gcode = async (
   const { finalValue } = interpolated;
   const { gcodeString } = finalValue ?? {};
 
-  const newPreviousInput = tf.tensor1d(Object.values(newAxesRadians));
+  const newPreviousInput = Object.values(newAxesRadians);
 
-  console.log('newPreviousInput', await newPreviousInput.array());
+  console.log('newPreviousInput', newPreviousInput);
 
-  const newPlatformCoordsBasis = platformCoordsBasis; // ! change this
-
+  const newPlatformCoordsBasis = platformCoordsBasis; // ! this is constant !
   // todo: write final position via serial (is this necessary though?)
 
-  await serial.write(gcodeString ?? '');
+  yield call(serial.write, gcodeString ?? ''); // ? is this duped?
 
   return {
     platformCoords: newPlatformCoords,
@@ -100,4 +105,4 @@ export const gcode = async (
     platformCoordsBasis: newPlatformCoordsBasis,
     gcodeString: gcodeString,
   };
-};
+}

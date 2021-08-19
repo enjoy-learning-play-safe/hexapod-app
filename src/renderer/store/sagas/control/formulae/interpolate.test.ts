@@ -2,16 +2,16 @@
  * @jest-environment jsdom
  */
 
+import { interpolate } from './interpolate';
 import {
-  constants,
-  newAxesTestData,
+  newAxesTestData30,
   previousInputTestData,
   platformCoordsBasisTestData,
   platformCoordsHomeTestData,
+  constants,
   baseCoordsTestData,
-  newAxesTestData30,
-} from './../fixtures/testFixtures';
-import { interpolate } from './interpolate';
+  newAxesTestData,
+} from '../../../../fixtures/testFixtures';
 
 describe('#interpolate', () => {
   describe('interpolate()', () => {

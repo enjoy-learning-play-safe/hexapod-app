@@ -1,25 +1,26 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Flex, Fade, Button, Text, Switch, Icon } from '@chakra-ui/react';
 
-import {
-  Context as ControlContext,
-  Types as ControlTypes,
-  Axis as ControlAxis,
-} from '_renderer/context/ControlContext';
 import { IoArrowUpOutline } from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setLiveInput,
+  writeToArduino,
+} from '_/renderer/store/ducks/control/actions';
 
 const LiveInput = () => {
-  const { state: controlState, dispatch: controlDispatch } =
-    useContext(ControlContext);
+  const dispatch = useDispatch();
+
+  const controlState = useSelector((store: any) => store.control);
 
   const { liveInput } = controlState;
 
   const handleClickSendValues = () => {
-    controlDispatch({ type: ControlTypes.PUSH_TO_ARDUINO });
+    dispatch(writeToArduino());
   };
 
   const handleChangeLiveInput = () => {
-    controlDispatch({ type: ControlTypes.SET_LIVE_INPUT, payload: !liveInput });
+    dispatch(setLiveInput(!liveInput));
   };
 
   return (

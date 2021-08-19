@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Debug from './pages/Debug';
 import Settings from './pages/Settings';
 import UserGuide from './pages/UserGuide';
+import FlexScreen from './pages/FlexScreen';
 
 const Router: React.FC = () => {
   return (
@@ -17,6 +18,9 @@ const Router: React.FC = () => {
       </Route>
       <Route path="/control">
         <Control />
+      </Route>
+      <Route path="/flex">
+        <FlexScreen />
       </Route>
       <Route path="/axis-config">
         <AxisConfig />

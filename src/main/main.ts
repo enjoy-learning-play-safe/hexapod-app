@@ -8,16 +8,51 @@ import * as url from 'url';
 import { BrowserWindow, app, ipcMain } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
 
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const Ready = require('@serialport/parser-ready');
 
+let mainWindow: Electron.BrowserWindow | null;
+
 // * IPC
 
-let port: any; // TODO: convert to class
-const portParser = new Readline({ delimiter: '\r\n' });
+let port: any;
+
+// let port: any = {
+//   on: () => {},
+//   pipe: () => {},
+// }; // TODO: convert to class
+
+// let port = new SerialPort('/dev/tty.usbserial-142310', {
+//   baudRate: 250000,
+// });
+
+console.log('reporting in from main.ts');
+
+// const portParser = new Readline({ delimiter: '\r\n' });
+// const portParser = new Readline();
+// port.pipe(portParser);
+
+// portParser.once('data', (data: any) => {
+//   console.log('portParserData', data);
+// });
+
+// The open event is always emitted
+// port.once('open', function () {
+//   // open logic
+//   console.log('Port is open');
+// });
+
+// port.on('readable', function () {
+//   console.log('ReadableData:', port.read());
+// });
+
+// port.on('data', function (data: any) {
+//   console.log('Data:', data);
+// });
 
 ipcMain.handle('serialport', async (event, data) => {
   // console.log('ipc-serialport -> event', event); // verbose!
@@ -32,8 +67,8 @@ ipcMain.handle('serialport', async (event, data) => {
     case 'open':
       const { port: openPort } = payload;
 
-      const portClosed = isPortClosed(port)
-      if (portClosed) return portClosed
+      // const portClosed = isPortClosed(port)
+      // if (portClosed) return portClosed
 
       let openError;
       port = new SerialPort(
@@ -47,11 +82,20 @@ ipcMain.handle('serialport', async (event, data) => {
         }
       );
 
-      const parser = port.pipe(new Ready({ delimiter: 'READY' }));
-      parser.on('ready', () =>
-        console.log('the ready byte sequence has been received')
-      );
-      parser.on('data', console.log); // all data after READY is received
+      const portParser = port.pipe(new Readline());
+
+      // add event emitter subscription here:
+      portParser.on('data', (data: any) => {
+        console.log('portParserData', data);
+
+        if (data.slice(0, 2) === 'X:') {
+          mainWindow?.webContents.send('serialport-listen-m114', data);
+        } else if (data.slice(0, 4) === 'ok P') {
+          mainWindow?.webContents.send('serialport-listen-pb', data);
+        } else {
+          mainWindow?.webContents.send('serialport-listen', data);
+        }
+      });
 
       if (openError) {
         return { status: 'error', error: openError };
@@ -61,44 +105,47 @@ ipcMain.handle('serialport', async (event, data) => {
       }
     case 'close':
       console.log('CLOSING PORT');
-      const portClosed2 = isPortClosed(port)
-      if (portClosed2) return portClosed2
+      const portClosed2 = isPortClosed(port);
+      if (portClosed2) return portClosed2;
       return port.close();
     case 'isOpen':
-      const portClosed3 = isPortClosed(port)
-      if (portClosed3) return portClosed3
+      const portClosed3 = isPortClosed(port);
+      if (portClosed3) return portClosed3;
       return port?.isOpen ? port.isOpen() : false;
     case 'write':
       const { message } = payload;
-      
-      const portClosed4 = isPortClosed(port)
-      if (portClosed4) return portClosed4
+
+      const portClosed4 = isPortClosed(port);
+      if (portClosed4) return portClosed4;
 
       port.write(message);
       const writeResponse = port.read();
       console.log('writeResponse', writeResponse);
       return { writeResponse };
     case 'override':
-      return port;
+      // return port;
+      const portObjKeys = Object.keys(port);
+      return portObjKeys;
+
     case 'flush':
       console.log('FLUSHING PORT');
-      const portClosed5 = isPortClosed(port)
-      if (portClosed5) return portClosed5
+      const portClosed5 = isPortClosed(port);
+      if (portClosed5) return portClosed5;
       return port.flush();
     case 'drain':
       console.log('DRAINING PORT');
-      const portClosed6 = isPortClosed(port)
-      if (portClosed6) return portClosed6
+      const portClosed6 = isPortClosed(port);
+      if (portClosed6) return portClosed6;
       return port.drain();
     case 'pause':
       console.log('PAUSING PORT');
-      const portClosed7 = isPortClosed(port)
-      if (portClosed7) return portClosed7
+      const portClosed7 = isPortClosed(port);
+      if (portClosed7) return portClosed7;
       return port.pause();
     case 'resume':
       console.log('RESUMING PORT');
-      const portClosed8 = isPortClosed(port)
-      if (portClosed8) return portClosed8
+      const portClosed8 = isPortClosed(port);
+      if (portClosed8) return portClosed8;
       return port.resume();
     default:
       console.log('NO CASE SWITCH METHOD EXISTS FOR', action);
@@ -109,16 +156,14 @@ const isPortClosed = (port: any) => {
   if (!port) {
     return { status: 'error', error: 'no open port was found' };
   }
-  return false
+  return false;
 };
 
 // Main Window
 
-let mainWindow: Electron.BrowserWindow | null;
-
 async function createWindow(): Promise<void> {
   if (process.env.NODE_ENV !== 'production') {
-    await installExtension(REACT_DEVELOPER_TOOLS)
+    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
       .then((name: string) => console.log(`Added Extension: ${name}`))
       .catch((err: PromiseRejectionEvent) =>
         console.log('An error occurred: ', err)

@@ -1,11 +1,14 @@
 import React from 'react';
 
-import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import theme from './config/theme';
 import Layout from './Layout';
-import Providers from './Providers';
+
+import { enableAllPlugins } from 'immer';
+import Listeners from './Listeners';
+
+enableAllPlugins();
 
 declare global {
   // add electron to the window interface
@@ -16,13 +19,10 @@ declare global {
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <Providers>
-          <Layout />
-        </Providers>
-      </BrowserRouter>
-    </ChakraProvider>
+    <BrowserRouter>
+      <Listeners />
+      <Layout />
+    </BrowserRouter>
   );
 }
 

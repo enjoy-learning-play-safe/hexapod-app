@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { calc, Flex, FlexProps } from '@chakra-ui/react';
 
 interface Props extends FlexProps {
   children: React.ReactNode;
@@ -15,6 +15,7 @@ const PageWrapper = (props: Props): JSX.Element => {
       p={4}
       overflowY="auto"
       overflowX="hidden"
+      maxHeight={'calc(100vh - 40px)'}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...passedProps}
     >

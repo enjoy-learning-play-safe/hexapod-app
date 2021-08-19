@@ -13,6 +13,7 @@ import {
 import PageWrapper from '../PageWrapper';
 import { ChangeEvent } from 'react';
 import { Context as SerialportContext } from '_/renderer/context/SerialportContext';
+import serial from '../../utils/serialport';
 
 interface Props {}
 
@@ -26,14 +27,15 @@ const Debug = (props: Props) => {
   const { state, dispatch } = useContext(SerialportContext);
 
   const handleRawInputSubmit = async () => {
-    dispatch({ type: 'WRITE', message: rawInputValue });
+    // dispatch({ type: 'WRITE', message: rawInputValue });
+    await serial.write(rawInputValue);
   };
 
-  const handleAnimateClick = () => {
-    for (let i = 100; i < 150; i++) {
-      dispatch({ type: 'WRITE', message: 'G0 Z' + i });
-    }
-  };
+  // const handleAnimateClick = () => {
+  //   for (let i = 100; i < 150; i++) {
+  //     dispatch({ type: 'WRITE', message: 'G0 Z' + i });
+  //   }
+  // };
 
   return (
     <PageWrapper>
@@ -52,7 +54,7 @@ const Debug = (props: Props) => {
         </InputRightElement>
       </InputGroup>
 
-      <Button onClick={handleAnimateClick}>Animate</Button>
+      {/* <Button onClick={handleAnimateClick}>Animate</Button> */}
     </PageWrapper>
   );
 };

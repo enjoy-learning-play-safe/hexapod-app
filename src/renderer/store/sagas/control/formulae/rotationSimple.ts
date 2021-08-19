@@ -1,4 +1,4 @@
-import * as tf from '@tensorflow/tfjs';
+import roundTo from 'round-to';
 
 export const rotationSimple = (roll: number, pitch: number, yaw: number) => {
   const cpsi = Math.cos(yaw);
@@ -8,7 +8,7 @@ export const rotationSimple = (roll: number, pitch: number, yaw: number) => {
   const stheta = Math.sin(pitch);
   const sphi = Math.sin(roll);
 
-  const rotation = tf.tensor2d([
+  const rotation = [
     [
       cpsi * ctheta,
       cpsi * stheta * sphi - spsi * cphi,
@@ -20,7 +20,9 @@ export const rotationSimple = (roll: number, pitch: number, yaw: number) => {
       spsi * stheta * cphi - cpsi * sphi,
     ],
     [-stheta, ctheta * sphi, ctheta * cphi],
-  ]);
+  ];
 
-  return rotation;
+  const rotationRounded = rotation.map((row) => row.map((e) => roundTo(e, 16)));
+
+  return rotationRounded; // 3x3 matrix
 };
