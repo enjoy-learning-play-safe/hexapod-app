@@ -15,7 +15,7 @@ const FlexScreen = () => {
 
   return (
     <PageWrapper>
-      <Button onClick={handleClickCasualFlex}>Microscope Scanning</Button>
+      <Button onClick={handleClickCasualFlex}>Microscope Inspection</Button>
     </PageWrapper>
   );
 };
