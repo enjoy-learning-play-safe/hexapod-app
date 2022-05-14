@@ -65,10 +65,10 @@ interface Props {}
 const SideBar = (props: Props) => {
   return (
     <Flex flex="0 0 13em" flexDirection="column" px={2} pt={2} bg="gray.900">
-      <SidebarItem href="/">
+      {/* <SidebarItem href="/">
         <Icon as={IoHome} />
         Home
-      </SidebarItem>
+      </SidebarItem> */}
       <SidebarItem href="/control">
         <Icon as={IoGameController} />
         Control
@@ -85,10 +85,10 @@ const SideBar = (props: Props) => {
         <Icon as={IoHammer} />
         Test/Debug
       </SidebarItem>
-      <SidebarItem href="">
+      {/* <SidebarItem href="">
         <Icon as={IoBagHandle} />
         Upgrade Hexapod
-      </SidebarItem>
+      </SidebarItem> */}
       <Spacer />
       <SidebarItem href="/user-guide">
         <Icon as={IoBook} />
