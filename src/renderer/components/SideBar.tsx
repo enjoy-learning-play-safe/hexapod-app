@@ -1,5 +1,5 @@
 // eslint-disable-next-line object-curly-newline
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Flex, Icon as ChakraIcon, Spacer, Text } from '@chakra-ui/react';
 // eslint-disable-next-line object-curly-newline
@@ -32,15 +32,16 @@ const Icon = (props: IconProps) => {
 interface SidebarItemProps {
   children: React.ReactNode;
   href: string;
+  onClick?: () => void;
 }
 
 const SidebarItem = (props: SidebarItemProps) => {
-  const { children, href } = props;
+  const { children, href, onClick } = props;
   const { pathname } = useLocation();
 
   const active = `/${pathname.split('/')[1]}` === href;
   return (
-    <Link to={href}>
+    <Link to={href} onClick={onClick}>
       <Flex
         my={2}
         py={2}
@@ -63,6 +64,7 @@ const SidebarItem = (props: SidebarItemProps) => {
 interface Props {}
 
 const SideBar = (props: Props) => {
+  const [settingsTapCount, setSettingsTapCount] = useState(0);
   return (
     <Flex flex="0 0 13em" flexDirection="column" px={2} pt={2} bg="gray.900">
       {/* <SidebarItem href="/">
@@ -77,14 +79,18 @@ const SideBar = (props: Props) => {
         <Icon as={IoApps} />
         Application
       </SidebarItem>
-      <SidebarItem href="/axis-config">
-        <Icon as={IoAnalytics} />
-        Axis Configuration
-      </SidebarItem>
-      <SidebarItem href="/debug">
-        <Icon as={IoHammer} />
-        Test/Debug
-      </SidebarItem>
+      {settingsTapCount >= 10 && (
+        <>
+          <SidebarItem href="/axis-config">
+            <Icon as={IoAnalytics} />
+            Axis Configuration
+          </SidebarItem>
+          <SidebarItem href="/debug">
+            <Icon as={IoHammer} />
+            Test/Debug
+          </SidebarItem>
+        </>
+      )}
       {/* <SidebarItem href="">
         <Icon as={IoBagHandle} />
         Upgrade Hexapod
@@ -94,7 +100,10 @@ const SideBar = (props: Props) => {
         <Icon as={IoBook} />
         User Guide
       </SidebarItem>
-      <SidebarItem href="/settings">
+      <SidebarItem
+        href="/settings"
+        onClick={() => setSettingsTapCount(settingsTapCount + 1)}
+      >
         <Icon as={IoCog} />
         Settings
       </SidebarItem>
