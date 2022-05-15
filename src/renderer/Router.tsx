@@ -4,7 +4,6 @@ import { Switch, Route } from 'react-router-dom';
 
 import AxisConfig from './pages/AxisConfig';
 import Control from './pages/Control';
-import Home from './pages/Home';
 import Debug from './pages/Debug';
 import Settings from './pages/Settings';
 import UserGuide from './pages/UserGuide';
@@ -14,9 +13,6 @@ const Router: React.FC = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <Home />
-      </Route>
-      <Route path="/control">
         <Control />
       </Route>
       <Route path="/flex">
@@ -35,7 +31,7 @@ const Router: React.FC = () => {
         <Settings />
       </Route>
       <Route path="*">
-        <Home />
+        <Control />
       </Route>
     </Switch>
   );
