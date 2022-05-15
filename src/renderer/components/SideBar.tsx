@@ -1,7 +1,13 @@
 // eslint-disable-next-line object-curly-newline
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Flex, Icon as ChakraIcon, Spacer, Text } from '@chakra-ui/react';
+import {
+  Flex,
+  Icon as ChakraIcon,
+  Spacer,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
 // eslint-disable-next-line object-curly-newline
 import {
   IoHome,
@@ -65,17 +71,33 @@ interface Props {}
 
 const SideBar = (props: Props) => {
   const [settingsTapCount, setSettingsTapCount] = useState(0);
+
+  const toast = useToast();
+
+  useEffect(() => {
+    if (settingsTapCount === 10) {
+      toast({
+        title: 'You are now a developer',
+        description: 'Debug tools have been enabled',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    }
+  }, [settingsTapCount]);
+
   return (
     <Flex flex="0 0 13em" flexDirection="column" px={2} pt={2} bg="gray.900">
       {/* <SidebarItem href="/">
         <Icon as={IoHome} />
         Home
       </SidebarItem> */}
-      <SidebarItem href="/control">
+      <SidebarItem href="/control" onClick={() => setSettingsTapCount(0)}>
         <Icon as={IoGameController} />
         Control
       </SidebarItem>
-      <SidebarItem href="/flex">
+      <SidebarItem href="/flex" onClick={() => setSettingsTapCount(0)}>
         <Icon as={IoApps} />
         Application
       </SidebarItem>
@@ -96,7 +118,7 @@ const SideBar = (props: Props) => {
         Upgrade Hexapod
       </SidebarItem> */}
       <Spacer />
-      <SidebarItem href="/user-guide">
+      <SidebarItem href="/user-guide" onClick={() => setSettingsTapCount(0)}>
         <Icon as={IoBook} />
         User Guide
       </SidebarItem>
