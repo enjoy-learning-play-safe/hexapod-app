@@ -1,9 +1,9 @@
 import roundTo from 'round-to';
-import { solveActuator } from './../formulae/solveActuator';
-import { rotationSimple } from './../formulae/rotationSimple';
-import { setCalculated } from './../../../ducks/control/actions';
+import { solveActuator } from '../formulae/solveActuator';
+import { rotationSimple } from '../formulae/rotationSimple';
+import { setCalculated } from '../../../ducks/control/actions';
 import { AxesNumber } from '_/renderer/store/ducks/control/types';
-import { ActionTypes, State, Calculated } from './../../../ducks/control/types';
+import { ActionTypes, State, Calculated } from '../../../ducks/control/types';
 import { call, cancelled, delay, select, put } from 'redux-saga/effects';
 import { gcode } from '../formulae/gcode';
 import matMul from '../formulae/matMul';
@@ -11,7 +11,7 @@ import serial from '../../../../utils/serialport';
 import asyncDelay from 'delay';
 
 type Action = {
-  type: ActionTypes.FLEX;
+  type: ActionTypes.CASUALFLEX;
 };
 
 export function* handleFlex(action: Action): any {
@@ -74,7 +74,7 @@ export function* handleFlex(action: Action): any {
     console.log('starting gcode routine 2 (rotatingFlex)');
 
     yield call(
-      reflex,
+      rotatingFlex,
       config.platform.coordsBasis,
       config.platform.homeCoords,
       options.fixedRods.len,
@@ -148,7 +148,7 @@ export function* handleFlex(action: Action): any {
   }
 }
 
-const reflex = async (
+const rotatingFlex = async (
   platformCoordsBasis: number[][],
   platformCoordsHome: number[][],
   fixedRodsLength: number,
@@ -159,19 +159,33 @@ const reflex = async (
   // todo
   let angle = 0;
   let n = 0;
-  let circlePlatformCoordinates = platformCoordsHome;
 
   for (let index = 180; index > 0; index -= 1) {
     n = n + 1;
     const change = Math.PI / 90;
     angle = angle + change;
-    const x_coor = Math.cos(angle) * 60;
-    const y_coor = Math.sin(angle) * 60;
-    const z_coor = 4;
+    const x_coor = Math.cos(angle) * 30;
+    const y_coor = Math.sin(angle) * 30;
 
+    const pitch = Math.cos(angle) * (-30 / 180) * Math.PI;
+    const roll = Math.sin(angle) * (30 / 180) * Math.PI;
+    const rott = matMul(rotationSimple(roll, pitch, 0), platformCoordsBasis);
+
+    const platformCoordinates = [
+      rott[0].map((i) => i + x_coor),
+      rott[1].map((i) => i + y_coor),
+      rott[2].map((i) => i + 0),
+    ].map((row, rowIndex) =>
+      row.map(
+        (element, columnIndex) =>
+          element -
+          platformCoordsBasis[rowIndex][columnIndex] +
+          platformCoordsHome[rowIndex][columnIndex]
+      )
+    );
 
     const legs = solveActuator(
-      circlePlatformCoordinates,
+      platformCoordinates,
       fixedRodsLength,
       baseCoords,
       precision

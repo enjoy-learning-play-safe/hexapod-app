@@ -15,6 +15,8 @@ export enum ActionTypes {
   SET_SLICED_ARRAY = '@control/SET_SLICED_ARRAY',
   APPEND_SLICED_ARRAY = '@control/APPEND_SLICED_ARRAY',
   FLEX = '@control/FLEX',
+  CASUALFLEX = "CASUALFLEX",
+  INSPECT = "INSPECT"
 }
 
 export type ReducerAction =

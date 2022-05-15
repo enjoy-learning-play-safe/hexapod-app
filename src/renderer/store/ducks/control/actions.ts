@@ -95,3 +95,7 @@ export const appendSlicedArray = (slice: {
 export const flex = () => ({
   type: ActionTypes.FLEX,
 });
+
+export const casualFlex = () => ({
+  type: ActionTypes.CASUALFLEX,
+});
