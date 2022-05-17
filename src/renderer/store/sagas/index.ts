@@ -1,6 +1,7 @@
 import { put, takeEvery, all } from 'redux-saga/effects';
 import {
   watchApplyOptions,
+  watchCasualFlex,
   watchFlex,
   watchUpdateAxes,
   watchWriteToArduino,
@@ -12,5 +13,6 @@ export default function* rootSaga() {
     watchUpdateAxes(),
     watchWriteToArduino(),
     watchFlex(),
+    watchCasualFlex(),
   ]);
 }

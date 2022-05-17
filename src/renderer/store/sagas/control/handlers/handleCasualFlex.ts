@@ -14,8 +14,8 @@ type Action = {
   type: ActionTypes.CASUALFLEX;
 };
 
-export function* handleFlex(action: Action): any {
-  console.log('running handleFlex');
+export function* handleCasualFlex(action: Action): any {
+  console.log('running handleCasualFlex');
   try {
     //
     const newAxes: AxesNumber = {
@@ -140,10 +140,10 @@ export function* handleFlex(action: Action): any {
     console.log(err);
   } finally {
     if (yield cancelled()) {
-      console.log('🚨 SAGA CANCELLED: handleFlex generator was cancelled');
+      console.log('🚨 SAGA CANCELLED: handleCasualFlex generator was cancelled');
       // yield put(/* smth */);
     } else {
-      console.log('✅ SAGA FINISHED: handleFlex finished');
+      console.log('✅ SAGA FINISHED: handleCasualFlex finished');
     }
   }
 }
