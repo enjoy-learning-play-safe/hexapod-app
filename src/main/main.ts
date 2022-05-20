@@ -15,6 +15,7 @@ const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const Ready = require('@serialport/parser-ready');
 
+
 let mainWindow: Electron.BrowserWindow | null;
 
 // * IPC
@@ -177,6 +178,7 @@ async function createWindow(): Promise<void> {
     backgroundColor: '#1A202C',
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
+    titleBarOverlay: true,
     trafficLightPosition: {
       x: 20,
       y: 27,
