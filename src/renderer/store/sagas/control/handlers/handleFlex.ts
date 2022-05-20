@@ -71,17 +71,17 @@ export function* handleFlex(action: Action): any {
 
     yield delay(2000);
 
-    console.log('starting gcode routine 2 (rotatingFlex)');
+    console.log('starting gcode routine 2 (flex)');
 
     yield call(
-      reflex,
+      flex,
       config.platform.coordsBasis,
       config.platform.homeCoords,
       options.fixedRods.len,
       config.base.coords,
       delayDuration
     );
-    console.log('ending gcode routine 2 (rotatingFlex)');
+    console.log('ending gcode routine 2 (flex)');
 
     yield delay(5000);
 
@@ -148,7 +148,7 @@ export function* handleFlex(action: Action): any {
   }
 }
 
-const reflex = async (
+const flex = async (
   platformCoordsBasis: number[][],
   platformCoordsHome: number[][],
   fixedRodsLength: number,
@@ -165,10 +165,15 @@ const reflex = async (
     n = n + 1;
     const change = Math.PI / 90;
     angle = angle + change;
-    const x_coor = Math.cos(angle) * 60;
-    const y_coor = Math.sin(angle) * 60;
-    const z_coor = 4;
-
+    const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
+    const y_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
+    const z_coor = Array(6).fill(1).map((i) => i * 0.5 * n);
+    circlePlatformCoordinates = [x_coor, y_coor, z_coor].map((row, rowIndex) =>
+    row.map(
+      (element, columnIndex) =>
+        element +
+        platformCoordsHome[rowIndex][columnIndex]
+    )); 
 
     const legs = solveActuator(
       circlePlatformCoordinates,
