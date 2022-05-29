@@ -15,8 +15,8 @@ module.exports = [
     plugins: [
       new CopyPlugin({
         patterns: [
-          // 'node_modules/serialport/build/Release/serialport.node',
-          'node_modules/@serialport/bindings-cpp/build/Release/bindings.node',
+          'node_modules/@serialport/bindings/build/Release/bindings.node',
+          // 'node_modules/@serialport/bindings-cpp/build/Release/bindings.node',
         ],
       }),
       new NormalModuleReplacementPlugin(

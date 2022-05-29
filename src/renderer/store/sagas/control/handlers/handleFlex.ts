@@ -166,8 +166,8 @@ const flex = async (
     const change = Math.PI / 90;
     angle = angle + change;
     const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
-    const y_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
-    const z_coor = Array(6).fill(1).map((i) => i * 0.5 * n);
+    const y_coor = Array(6).fill(1).map((i) => i * Math.sin(angle) * 60);
+    const z_coor = Array(6).fill(1).map((i) => i * 0.3 * n);
     circlePlatformCoordinates = [x_coor, y_coor, z_coor].map((row, rowIndex) =>
     row.map(
       (element, columnIndex) =>

@@ -6,12 +6,15 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
+    
 
 jobs:
   build-executables:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
