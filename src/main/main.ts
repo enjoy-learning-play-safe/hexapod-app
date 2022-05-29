@@ -177,7 +177,7 @@ async function createWindow(): Promise<void> {
     width: 1000,
     backgroundColor: '#1A202C',
     autoHideMenuBar: true,
-    titleBarStyle: 'hidden',
+    titleBarStyle: 'default',
     titleBarOverlay: true,
     trafficLightPosition: {
       x: 20,
