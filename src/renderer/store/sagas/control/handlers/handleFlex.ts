@@ -19,11 +19,11 @@ export function* handleFlex(action: Action): any {
   try {
     //
     const newAxes: AxesNumber = {
-      x: 11,
+      x: 0,
       y: 0,
       z: 4,
       roll: 0,
-      pitch: -30,
+      pitch: 0,
       yaw: 0,
     };
 
