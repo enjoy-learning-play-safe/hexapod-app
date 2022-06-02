@@ -27,7 +27,7 @@ export function* handleFlex(action: Action): any {
       yaw: 0,
     };
 
-    const delayDuration = 80;
+    const delayDuration = 40;
 
     const controlState: State = yield select((state) => state.control);
 
@@ -161,9 +161,9 @@ const flex = async (
   let n = 0;
   let circlePlatformCoordinates = platformCoordsHome;
 
-  for (let index = 90; index > 0; index -= 1) {
+  for (let index = 180; index > 0; index -= 1) {
     n = n + 1;
-    const change = Math.PI / 45;
+    const change = Math.PI / 90;
     angle = angle + change;
     const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
     const y_coor = Array(6).fill(1).map((i) => i * Math.sin(angle) * 60);
@@ -196,13 +196,13 @@ const flex = async (
     n = 0;
     circlePlatformCoordinates = platformCoordsHome;
 
-  for (let index = 90; index > 0; index -= 1) {
+  for (let index = 180; index > 0; index -= 1) {
     n = n + 1;
-    const change = Math.PI / 45;
+    const change = Math.PI / 90;
     angle = angle - change;
     const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
     const y_coor = Array(6).fill(1).map((i) => i * Math.sin(angle) * 60);
-    const z_coor = Array(6).fill(1).map((i) => i * 90 - 0.3 * n);
+    const z_coor = Array(6).fill(1).map((i) => i * 54 - 0.3 * n);
     circlePlatformCoordinates = [x_coor, y_coor, z_coor].map((row, rowIndex) =>
     row.map(
       (element, columnIndex) =>
