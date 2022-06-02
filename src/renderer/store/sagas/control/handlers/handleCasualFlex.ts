@@ -160,9 +160,9 @@ const rotatingFlex = async (
   let angle = 0;
   let n = 0;
 
-  for (let index = 180; index > 0; index -= 1) {
+  for (let index = 90; index > 0; index -= 1) {
     n = n + 1;
-    const change = Math.PI / 90;
+    const change = Math.PI / 45;
     angle = angle + change;
     const x_coor = Math.cos(angle) * 30;
     const y_coor = Math.sin(angle) * 30;
