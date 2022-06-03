@@ -19,7 +19,7 @@ export function* handleFlex(action: Action): any {
   try {
     //
     const newAxes: AxesNumber = {
-      x: 11,
+      x: 60,
       y: 0,
       z: 0,
       roll: 0,
@@ -202,7 +202,7 @@ const flex = async (
     angle = angle - change;
     const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
     const y_coor = Array(6).fill(1).map((i) => i * Math.sin(angle) * 60);
-    const z_coor = Array(6).fill(1).map((i) => i * 54 - 0.3 * n);
+    const z_coor = Array(6).fill(1).map((i) => i * 54 - 0.3 * n); 
     circlePlatformCoordinates = [x_coor, y_coor, z_coor].map((row, rowIndex) =>
     row.map(
       (element, columnIndex) =>

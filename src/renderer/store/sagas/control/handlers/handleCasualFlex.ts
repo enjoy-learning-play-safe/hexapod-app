@@ -19,9 +19,9 @@ export function* handleCasualFlex(action: Action): any {
   try {
     //
     const newAxes: AxesNumber = {
-      x: 11,
+      x: 30,
       y: 0,
-      z: 4,
+      z: 0,
       roll: 0,
       pitch: -30,
       yaw: 0,
