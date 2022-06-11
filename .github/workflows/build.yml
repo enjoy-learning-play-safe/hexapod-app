@@ -22,9 +22,9 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      # - name: Add msbuild to PATH
-      #   if: runner.os == 'Windows' # only setup if windows
-      #   uses: microsoft/setup-msbuild@v1.1
+      - name: Add msbuild to PATH
+        if: runner.os == 'Windows' # only setup if windows
+        uses: microsoft/setup-msbuild@v1.1
 
       - name: Setup Node env
         uses: actions/setup-node@v2
