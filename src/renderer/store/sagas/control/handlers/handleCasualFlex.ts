@@ -1,9 +1,9 @@
 import roundTo from 'round-to';
-import { solveActuator } from './../formulae/solveActuator';
-import { rotationSimple } from './../formulae/rotationSimple';
-import { setCalculated } from './../../../ducks/control/actions';
+import { solveActuator } from '../formulae/solveActuator';
+import { rotationSimple } from '../formulae/rotationSimple';
+import { setCalculated } from '../../../ducks/control/actions';
 import { AxesNumber } from '_/renderer/store/ducks/control/types';
-import { ActionTypes, State, Calculated } from './../../../ducks/control/types';
+import { ActionTypes, State, Calculated } from '../../../ducks/control/types';
 import { call, cancelled, delay, select, put } from 'redux-saga/effects';
 import { gcode } from '../formulae/gcode';
 import matMul from '../formulae/matMul';
@@ -11,23 +11,23 @@ import serial from '../../../../utils/serialport';
 import asyncDelay from 'delay';
 
 type Action = {
-  type: ActionTypes.FLEX;
+  type: ActionTypes.CASUALFLEX;
 };
 
-export function* handleFlex(action: Action): any {
-  console.log('running handleFlex');
+export function* handleCasualFlex(action: Action): any {
+  console.log('running handleCasualFlex');
   try {
     //
     const newAxes: AxesNumber = {
-      x: 60,
+      x: 30,
       y: 0,
       z: 0,
       roll: 0,
-      pitch: 0,
+      pitch: -30,
       yaw: 0,
     };
 
-    const delayDuration = 40;
+    const delayDuration = 80;
 
     const controlState: State = yield select((state) => state.control);
 
@@ -71,17 +71,17 @@ export function* handleFlex(action: Action): any {
 
     yield delay(2000);
 
-    console.log('starting gcode routine 2 (flex)');
+    console.log('starting gcode routine 2 (rotatingFlex)');
 
     yield call(
-      flex,
+      rotatingFlex,
       config.platform.coordsBasis,
       config.platform.homeCoords,
       options.fixedRods.len,
       config.base.coords,
       delayDuration
     );
-    console.log('ending gcode routine 2 (flex)');
+    console.log('ending gcode routine 2 (rotatingFlex)');
 
     yield delay(5000);
 
@@ -140,15 +140,15 @@ export function* handleFlex(action: Action): any {
     console.log(err);
   } finally {
     if (yield cancelled()) {
-      console.log('🚨 SAGA CANCELLED: handleFlex generator was cancelled');
+      console.log('🚨 SAGA CANCELLED: handleCasualFlex generator was cancelled');
       // yield put(/* smth */);
     } else {
-      console.log('✅ SAGA FINISHED: handleFlex finished');
+      console.log('✅ SAGA FINISHED: handleCasualFlex finished');
     }
   }
 }
 
-const flex = async (
+const rotatingFlex = async (
   platformCoordsBasis: number[][],
   platformCoordsHome: number[][],
   fixedRodsLength: number,
@@ -159,59 +159,33 @@ const flex = async (
   // todo
   let angle = 0;
   let n = 0;
-  let circlePlatformCoordinates = platformCoordsHome;
 
-  for (let index = 180; index > 0; index -= 1) {
+  for (let index = 90; index > 0; index -= 1) {
     n = n + 1;
-    const change = Math.PI / 90;
+    const change = Math.PI / 45;
     angle = angle + change;
-    const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
-    const y_coor = Array(6).fill(1).map((i) => i * Math.sin(angle) * 60);
-    const z_coor = Array(6).fill(1).map((i) => i * 0.3 * n);
-    circlePlatformCoordinates = [x_coor, y_coor, z_coor].map((row, rowIndex) =>
-    row.map(
-      (element, columnIndex) =>
-        element +
-        platformCoordsHome[rowIndex][columnIndex]
-    )); 
+    const x_coor = Math.cos(angle) * 30;
+    const y_coor = Math.sin(angle) * 30;
 
-    const legs = solveActuator(
-      circlePlatformCoordinates,
-      fixedRodsLength,
-      baseCoords,
-      precision
+    const pitch = Math.cos(angle) * (-30 / 180) * Math.PI;
+    const roll = Math.sin(angle) * (30 / 180) * Math.PI;
+    const rott = matMul(rotationSimple(roll, pitch, 0), platformCoordsBasis);
+
+    const platformCoordinates = [
+      rott[0].map((i) => i + x_coor),
+      rott[1].map((i) => i + y_coor),
+      rott[2].map((i) => i + 0),
+    ].map((row, rowIndex) =>
+      row.map(
+        (element, columnIndex) =>
+          element -
+          platformCoordsBasis[rowIndex][columnIndex] +
+          platformCoordsHome[rowIndex][columnIndex]
+      )
     );
 
-    const roundedLegs = legs.map((element) => roundTo(element, precision));
-
-    const output = `G0 X${legs[0]} Y${legs[1]} Z${legs[2]} A${legs[3]} B${legs[4]} C${legs[5]}`;
-
-    await asyncDelay(delayDuration);
-    await serial.write(output);
-  
-    console.log('output', output);
-  };
-// Start of reverse motion    
-    angle = 0;
-    n = 0;
-    circlePlatformCoordinates = platformCoordsHome;
-
-  for (let index = 180; index > 0; index -= 1) {
-    n = n + 1;
-    const change = Math.PI / 90;
-    angle = angle - change;
-    const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
-    const y_coor = Array(6).fill(1).map((i) => i * Math.sin(angle) * 60);
-    const z_coor = Array(6).fill(1).map((i) => i * 54 - 0.3 * n); 
-    circlePlatformCoordinates = [x_coor, y_coor, z_coor].map((row, rowIndex) =>
-    row.map(
-      (element, columnIndex) =>
-        element +
-        platformCoordsHome[rowIndex][columnIndex]
-    )); 
-
     const legs = solveActuator(
-      circlePlatformCoordinates,
+      platformCoordinates,
       fixedRodsLength,
       baseCoords,
       precision
@@ -226,4 +200,4 @@ const flex = async (
 
     console.log('output', output);
   }
-}
+};

@@ -2,6 +2,7 @@ import { takeLatest } from 'redux-saga/effects';
 
 import { ActionTypes } from '../../ducks/control/types';
 import { handleApplyOptions } from './handlers/handleApplyOptions';
+import { handleCasualFlex } from './handlers/handleCasualFlex';
 import { handleFlex } from './handlers/handleFlex';
 import { handleUpdateAxes } from './handlers/handleUpdateAxes';
 import { handleWriteToArduino } from './handlers/handleWriteToArduino';
@@ -20,4 +21,8 @@ export function* watchWriteToArduino() {
 
 export function* watchFlex() {
   yield takeLatest(ActionTypes.FLEX, handleFlex);
+}
+
+export function* watchCasualFlex() {
+  yield takeLatest(ActionTypes.CASUALFLEX, handleCasualFlex);
 }

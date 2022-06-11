@@ -23,7 +23,6 @@ const Control: FC = () => {
   return (
     <PageWrapper>
       <Flex mb={4} alignItems="center">
-        <SelectConfig />
         <Spacer />
         <Flex>
           <Button
