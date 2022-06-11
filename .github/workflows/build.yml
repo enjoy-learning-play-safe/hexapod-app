@@ -25,6 +25,11 @@ jobs:
       - name: Add msbuild to PATH
         if: runner.os == 'Windows' # only setup if windows
         uses: microsoft/setup-msbuild@v1.1
+      
+      - name: Set Sisual Studio version
+        if: runner.os == 'Windows' # only setup if windows
+        run: |
+          npm config set msvs_version 2017
 
       - name: Setup Node env
         uses: actions/setup-node@v2
