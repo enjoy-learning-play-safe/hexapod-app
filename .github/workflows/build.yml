@@ -16,15 +16,11 @@ jobs:
   build-executables:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-11, windows-2019, ubuntu-20.04]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-
-      # - name: Add msbuild to PATH
-      #   if: runner.os == 'Windows' # only setup if windows
-      #   uses: microsoft/setup-msbuild@v1.1
 
       - name: Setup Node env
         uses: actions/setup-node@v2
