@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import { Button, ButtonGroup, Spacer } from '@chakra-ui/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { casualFlex, flex } from '_/renderer/store/ducks/control/actions';
@@ -15,14 +15,16 @@ const FlexScreen = () => {
   };
   const handleClickFlex = () => {
     // todo: do flex
-    console.log('clicked casual flex button');
+    console.log('clicked flex button');
     dispatch(flex());
   };
 
   return (
     <PageWrapper>
-      <Button onClick={handleClickCasualFlex}>Rotational Motion</Button>
-      <Button onClick={handleClickFlex}>Translational Motion</Button>
+      <ButtonGroup spacing = '6'>
+        <Button onClick={handleClickCasualFlex}>Rotational Motion</Button>
+        <Button onClick={handleClickFlex}>Translational Motion</Button>
+      </ButtonGroup>
     </PageWrapper>
   );
 };

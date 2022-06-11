@@ -149,6 +149,7 @@ export function* handleFlex(action: Action): any {
 }
 
 const flex = async (
+  platformCoordsBasis: number[][],
   platformCoordsHome: number[][],
   fixedRodsLength: number,
   baseCoords: number[][],
