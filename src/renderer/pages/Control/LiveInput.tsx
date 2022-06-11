@@ -35,7 +35,7 @@ const LiveInput = () => {
           Send Values
         </Button>
       </Fade>
-      <Text fontWeight="medium" mr={2}>
+      {/* <Text fontWeight="medium" mr={2}>
         Live Input
       </Text>
       <Switch
@@ -43,7 +43,7 @@ const LiveInput = () => {
         isChecked={liveInput}
         onChange={handleChangeLiveInput}
         colorScheme="blue"
-      />
+      /> */}
     </Flex>
   );
 };
