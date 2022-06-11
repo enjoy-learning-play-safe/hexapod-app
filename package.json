@@ -36,7 +36,6 @@
     "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@tensorflow/tfjs": "^3.7.0",
     "delay": "^5.0.0",
     "focus-visible": "^5.2.0",
     "framer-motion": "^4",
