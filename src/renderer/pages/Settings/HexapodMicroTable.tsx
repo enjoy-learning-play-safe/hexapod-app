@@ -39,7 +39,7 @@ const HexapodMicroTable = (props: Props) => {
           <Th>path</Th>
           {/* <Th>productId</Th> */}
           <Th>vendorId</Th>
-          <Th>Connect</Th>
+          <Th size="sm">Connect</Th>
         </Tr>
       </Thead>
       <Tbody>
