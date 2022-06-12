@@ -30,7 +30,8 @@
     "rebuild:serialport": "electron-rebuild -f -w serialport",
     "clean": "rimraf dist/ node_modules/ out/ build/",
     "freshen": "yarn run clean && yarn install && yarn run rebuild:serialport",
-    "eslint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --fix --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.4",
@@ -83,7 +84,7 @@
     "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
@@ -93,6 +94,7 @@
     "lodash": "^4.17.21",
     "mocha": "^8.2.1",
     "postinstall-postinstall": "^2.1.0",
+    "prettier": "2.6.2",
     "react-refresh": "^0.10.0",
     "react-refresh-typescript": "^2.0.1",
     "release-it": "^14.10.0",
