@@ -19,9 +19,9 @@ export function* handleCasualFlex(action: Action): any {
   try {
     //
     const newAxes: AxesNumber = {
-      x: 30,
+      x: 11,
       y: 0,
-      z: 0,
+      z: 4,
       roll: 0,
       pitch: -30,
       yaw: 0,
@@ -160,9 +160,9 @@ const rotatingFlex = async (
   let angle = 0;
   let n = 0;
 
-  for (let index = 90; index > 0; index -= 1) {
+  for (let index = 180; index > 0; index -= 1) {
     n = n + 1;
-    const change = Math.PI / 45;
+    const change = Math.PI / 90;
     angle = angle + change;
     const x_coor = Math.cos(angle) * 30;
     const y_coor = Math.sin(angle) * 30;
