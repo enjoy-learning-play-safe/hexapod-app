@@ -6,7 +6,7 @@ import ControlSlider from './ControlSlider';
 import LoadConfigMenu from './LoadConfigMenu';
 import _ from 'lodash';
 
-import { IoRefreshOutline, IoSaveOutline } from 'react-icons/io5';
+import { IoHomeOutline, IoSaveOutline } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   AxesNumber,
@@ -85,15 +85,15 @@ const ControlInput = () => {
       <Flex alignSelf="stretch" mt={4}>
         <Button
           onClick={handleResetAllAxesClick}
-          leftIcon={<Icon as={IoRefreshOutline} />}
+          leftIcon={<Icon as={IoHomeOutline} />}
         >
-          Reset All Axes
+          Home Position
         </Button>
         <Spacer />
-        <Button mr="4" leftIcon={<Icon as={IoSaveOutline} />}>
+        {/* <Button mr="4" leftIcon={<Icon as={IoSaveOutline} />}>
           Save Config
-        </Button>
-        <LoadConfigMenu />
+        </Button> */}
+        {/* <LoadConfigMenu /> */}
       </Flex>
     </>
   );
