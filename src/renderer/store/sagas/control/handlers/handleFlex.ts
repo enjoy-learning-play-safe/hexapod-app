@@ -19,15 +19,15 @@ export function* handleFlex(action: Action): any {
   try {
     //
     const newAxes: AxesNumber = {
-      x: 60,
+      x: 11,
       y: 0,
-      z: 0,
+      z: 4,
       roll: 0,
-      pitch: 0,
+      pitch: -30,
       yaw: 0,
     };
 
-    const delayDuration = 40;
+    const delayDuration = 80;
 
     const controlState: State = yield select((state) => state.control);
 
@@ -188,42 +188,7 @@ const flex = async (
 
     await asyncDelay(delayDuration);
     await serial.write(output);
-  
-    console.log('output', output);
-  };
-// Start of reverse motion    
-    angle = 0;
-    n = 0;
-    circlePlatformCoordinates = platformCoordsHome;
-
-  for (let index = 180; index > 0; index -= 1) {
-    n = n + 1;
-    const change = Math.PI / 90;
-    angle = angle - change;
-    const x_coor = Array(6).fill(1).map((i) => i * Math.cos(angle) * 60);
-    const y_coor = Array(6).fill(1).map((i) => i * Math.sin(angle) * 60);
-    const z_coor = Array(6).fill(1).map((i) => i * 54 - 0.3 * n); 
-    circlePlatformCoordinates = [x_coor, y_coor, z_coor].map((row, rowIndex) =>
-    row.map(
-      (element, columnIndex) =>
-        element +
-        platformCoordsHome[rowIndex][columnIndex]
-    )); 
-
-    const legs = solveActuator(
-      circlePlatformCoordinates,
-      fixedRodsLength,
-      baseCoords,
-      precision
-    );
-
-    const roundedLegs = legs.map((element) => roundTo(element, precision));
-
-    const output = `G0 X${legs[0]} Y${legs[1]} Z${legs[2]} A${legs[3]} B${legs[4]} C${legs[5]}`;
-
-    await asyncDelay(delayDuration);
-    await serial.write(output);
 
     console.log('output', output);
   }
-}
+};
