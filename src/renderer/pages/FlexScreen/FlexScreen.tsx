@@ -21,7 +21,7 @@ const FlexScreen = () => {
 
   return (
     <PageWrapper>
-      <ButtonGroup spacing = '4'>
+      <ButtonGroup height='100%' spacing ='4'>
         <Button height='100%' width='50%' onClick={handleClickCasualFlex}>Rotational Motion</Button>
         <Button height='100%' width='50%' onClick={handleClickFlex}>Translational Motion</Button>
       </ButtonGroup>
