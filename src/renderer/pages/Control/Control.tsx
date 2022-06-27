@@ -36,7 +36,7 @@ const Control: FC = () => {
             onClick={handleHomeClick}
             leftIcon={<Icon as={IoRefreshOutline} />}
           >
-            Zero All Axes
+            Calibrate Axes
           </Button>
         </Flex>
         <Spacer />
