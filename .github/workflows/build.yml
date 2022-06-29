@@ -6,27 +6,21 @@ on:
   push:
     tags:
       - "v*.*.*"
-<<<<<<< HEAD
+
   workflow_dispatch:
     
-=======
       - "v*.*.*-*"
       - "v*.*.*-*.*"
   pull_request:
     branches:    
       - master
->>>>>>> 63568a3c29f6aa3c2fea6b3733e504c4bf4e0fe1
+
 
 jobs:
   build-executables:
     strategy:
       matrix:
-<<<<<<< HEAD
-        os: [macos-latest, windows-latest, ubuntu-latest]
-      fail-fast: false
-=======
         os: [macos-11, windows-2019, ubuntu-20.04]
->>>>>>> 63568a3c29f6aa3c2fea6b3733e504c4bf4e0fe1
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo

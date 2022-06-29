@@ -7,7 +7,7 @@ import { Context as SerialportContext } from '_/renderer/context/SerialportConte
 
 import LiveInput from './LiveInput';
 import SelectConfig from './SelectConfig';
-import { IoCodeWorkingOutline, IoHomeOutline } from 'react-icons/io5';
+import { IoCodeWorkingOutline, IoRefreshOutline } from 'react-icons/io5';
 
 const Control: FC = () => {
   const { state: serialportState, dispatch: serialportDispatch } =
@@ -34,9 +34,9 @@ const Control: FC = () => {
           </Button>
           <Button
             onClick={handleHomeClick}
-            leftIcon={<Icon as={IoHomeOutline} />}
+            leftIcon={<Icon as={IoRefreshOutline} />}
           >
-            Home
+            Calibrate Axes
           </Button>
         </Flex>
         <Spacer />
